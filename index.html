@@ -1,0 +1,3529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Visit Oman — The land that holds a thousand stories</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<!-- Manrope is requested as a variable axis (200..800) so the journey menu can
+     glide between regular and bold rather than snapping between two files. -->
+<link href="https://fonts.googleapis.com/css2?family=Fondamento&family=Libre+Baskerville:ital@0;1&family=Libre+Franklin&family=Mandali&family=Manrope:wght@200..800&display=swap" rel="stylesheet" />
+
+<style>
+/* =================================================================
+   MG-task — five Figma frames, one pinned stage
+
+     Frame 3  215:274   mountains / mosque / wadi   (white)
+     Frame 2  215:295   Wahiba dunes, Scene 2 video (dark)
+     Frame 3  215:357   Jebel Shams                 (#e4d4c2)
+     Frame 4  215:439   Wadi canyon                 (#0d1e1a)
+     Frame 5  215:516   Nizwa Fort                  (#e4d4c2)
+
+   Frames 1 and 2 share one set of artwork, so that transition is an
+   interpolation between the two boxes Figma defines. Frame 3 is a new
+   four-layer stack that rises from below while the dune ground sinks.
+   Frames 3 and 4 share the rocky layer, so it is the hinge between
+   them. Frame 5 has no shared layer, so the seam is made by direction
+   instead: the camera keeps travelling the same way it has since
+   frame 3, frame 4 leaves through the top and frame 5 rises from
+   below, both on one curve.
+
+   Every length is the raw Figma value x --u, so each frame is
+   pixel-exact at 1441px and scales proportionally.
+   ================================================================= */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #ffffff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.page { container-type: inline-size; width: 100%; }
+
+.frame {
+  --u: calc(100cqw / 1441);       /* one Figma pixel */
+  --nav-ink: rgb(0, 0, 0);        /* driven by JS across all three frames */
+  position: relative;
+  width: 100%;
+  background: #ffffff;
+}
+
+/* Scroll runway. One sticky stage carries all five frames. The runway
+   grew from 8.6 to 10.6 stage-heights for frame 5; every earlier
+   boundary was rescaled by 7.6/9.6 so the frames before it occupy
+   exactly the same scroll distance they always did.
+     0.0000 - 0.2138   frame 1 -> frame 2
+     0.2138 - 0.3088   frame 2 held (Scene 2 finishing)
+     0.3088 - 0.4908   frame 2 -> frame 3
+     0.4908 - 0.5621   frame 3 held
+     0.5621 - 0.7442   frame 3 -> frame 4  (the rocky layer rises)
+     0.7442 - 0.7900   frame 4 held
+     0.7900 - 0.9600   frame 4 -> frame 5  (the canyon leaves, Nizwa rises)
+     0.9600 - 1.0000   frame 5 held                                     */
+.track { position: relative; height: calc(829 * var(--u) * 10.6); }
+
+.stage {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: calc(829 * var(--u));
+  overflow: hidden;
+  background: #ffffff;
+}
+
+/* ================= frames 1 + 2 artwork ================= */
+
+.layer {
+  position: absolute;
+  transform-origin: 0 0;
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+.layer img { position: absolute; display: block; max-width: none; }
+
+/* Rectangle 2 — 215:296 — Wahiba ground (Scene 2 video) */
+.layer--dunes {
+  left: calc(-64 * var(--u));
+  top: 0;
+  width: calc(1523 * var(--u));
+  height: calc(881 * var(--u));
+  opacity: 0;
+  overflow: hidden;
+}
+.layer--dunes img,
+.layer--dunes video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* image 3 — 215:277 / 215:298 */
+.layer--sky {
+  left: calc(-206.063 * var(--u));
+  top: calc(-156 * var(--u));
+  width: calc(1892.900 * var(--u));
+  height: calc(1143.513 * var(--u));
+  opacity: 0.65;
+}
+.layer--sky .clip { position: absolute; inset: 0; overflow: hidden; }
+.layer--sky img { left: -0.02%; top: -5.22%; width: 100%; height: 110.47%; }
+.layer--sky .haze {
+  position: absolute; inset: 0;
+  background-image: linear-gradient(180deg,
+    rgba(255,255,255,0) 52.625%, rgb(255,255,255) 75.605%);
+}
+
+/* Object — 215:278 / 215:299 */
+.layer--cliff {
+  left: calc(-22.631 * var(--u));
+  top: calc(230.094 * var(--u));
+  width: calc(580.668 * var(--u));
+  height: calc(675.409 * var(--u));
+  overflow: hidden;
+}
+
+/* Object — 215:279 / 215:300 */
+.layer--mosque {
+  left: calc(481.581 * var(--u));
+  top: calc(318.722 * var(--u));
+  width: calc(988.239 * var(--u));
+  height: calc(584.792 * var(--u));
+  overflow: hidden;
+}
+.layer--mosque img { left: 0; top: 0; width: 100%; height: 100%; }
+
+/* ================= frame 3 artwork — 215:357 =================
+   Rotated layers use a bbox-sized container with the rotated child
+   centred inside, matching how Figma composes them.               */
+
+.l3 {
+  position: absolute;
+  will-change: transform, opacity;
+  pointer-events: none;
+  opacity: 0;
+}
+.l3 img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  display: block; max-width: none;
+}
+.l3 .rot { position: relative; flex: none; }
+
+/* image 9 — 226:110 — sky */
+.f3-sky {
+  left: calc(-63.936 * var(--u));
+  top: 0;
+  width: calc(1516.896 * var(--u));
+  height: calc(1004.700 * var(--u));   /* aspect 1170/775 */
+}
+.f3-sky img { object-fit: cover; }
+
+/* Object — 226:91 — the Jebel Shams massif, 1673x815 rotated 3.95deg */
+.f3-mountain {
+  left: calc(-191 * var(--u));
+  top: calc(2 * var(--u));
+  width: calc(1725.170 * var(--u));
+  height: calc(928.315 * var(--u));
+  display: flex; align-items: center; justify-content: center;
+}
+.f3-mountain .rot {
+  width: calc(1673 * var(--u));
+  height: calc(815 * var(--u));
+  transform: rotate(3.95deg);
+  background-image: linear-gradient(173.198deg,
+    rgba(255,255,255,0) 35.155%, rgb(247,222,206) 43.92%);
+}
+.f3-mountain img { object-fit: cover; object-position: bottom; }
+
+/* Object — 226:93 — mid ridge, 1573.92x522.02 rotated 5.87deg @ 70% */
+.f3-mid {
+  left: calc(-63.936 * var(--u));
+  top: calc(399 * var(--u));
+  width: calc(1619.148 * var(--u));
+  height: calc(680.306 * var(--u));
+  display: flex; align-items: center; justify-content: center;
+}
+.f3-mid .rot {
+  width: calc(1573.920 * var(--u));
+  height: calc(522.020 * var(--u));
+  transform: rotate(5.87deg);
+  opacity: 0.7;
+}
+.f3-mid img { object-fit: cover; object-position: bottom; }
+
+/* afadfas 1 — 215:391 / 226:113 — the rocky foreground.
+   Shared by frames 3 and 4 (byte-identical fill), so it is the hinge
+   the last transition turns on: it rises and grows from
+   (-6, 503) 1452x806  to  (-141, -321) 1587x881. */
+.f3-rocky {
+  left: calc(-6 * var(--u));
+  top: calc(503 * var(--u));
+  width: calc(1452 * var(--u));
+  height: calc(806 * var(--u));
+  transform-origin: 0 0;
+}
+.f3-rocky img { object-fit: cover; }
+
+/* ================= frame 4 artwork — 215:439 =================
+   Everything visible sits inside "Desktop - 4" (215:461, top 3),
+   flattened here since the rocky layer has to stay shared.       */
+
+/* image 8 — 215:462 — Wadi canyon pool */
+.f4-canyon {
+  left: calc(-57 * var(--u));
+  top: calc(-9 * var(--u));
+  width: calc(1553 * var(--u));
+  height: calc(879 * var(--u));
+}
+.f4-canyon img { object-fit: cover; }
+
+/* Group 2 — 215:463..469 — five stacked strips down the left edge */
+.f4-strips { left: 0; top: 0; width: 100%; height: 100%; }
+.f4-strips span {
+  position: absolute;
+  left: calc(34 * var(--u));
+  width: calc(31.817 * var(--u));
+  height: calc(102.107 * var(--u));
+  background-image: url("assets/f4-strip.png");
+  background-size: cover;
+  background-position: center;
+  opacity: 0.37;
+}
+.f4-strips span:nth-child(1) { top: calc(197.000 * var(--u)); }
+.f4-strips span:nth-child(2) { top: calc(299.623 * var(--u)); }
+.f4-strips span:nth-child(3) { top: calc(402.761 * var(--u)); }
+.f4-strips span:nth-child(4) { top: calc(504.546 * var(--u)); }
+.f4-strips span:nth-child(5) { top: calc(607.168 * var(--u)); }
+
+/* ================= frame 5 artwork — 215:516 =================
+   "image 7" (215:550) is a 1442x1081 box hung 22px above the board, so
+   the scene overflows the stage top and bottom. Three depth planes:
+   the outer wall and sky (far), Nizwa Fort (mid), the souq house at the
+   right edge (near) — the same far/mid/near stack frame 1 is built on. */
+
+/* Background — 215:517 — sky + outer wall. The box is the image's own
+   4:3 aspect (1442 / 1081.54), so the fill maps 1:1. */
+.f5-sky {
+  left: 0;
+  top: calc(-100.594 * var(--u));
+  width: calc(1442 * var(--u));
+  height: calc(1081.540 * var(--u));
+  transform-origin: 50% 100%;    /* dollies out from the horizon */
+}
+.f5-sky img { object-fit: cover; }
+
+/* Object — 215:551 — Nizwa Fort */
+.f5-fort {
+  left: calc(-29 * var(--u));
+  top: calc(253 * var(--u));
+  width: calc(1062 * var(--u));
+  height: calc(710 * var(--u));
+}
+.f5-fort img { left: 0; top: 0.02%; width: 99.99%; height: 99.97%; }
+
+/* Object — 215:553 — the souq house at the right edge */
+.f5-house {
+  left: calc(784 * var(--u));
+  top: calc(156 * var(--u));
+  width: calc(658 * var(--u));
+  height: calc(669 * var(--u));
+}
+.f5-house img { left: 0.06%; top: 0.01%; width: 99.94%; height: 99.98%; }
+
+/* The exposure lifting as the camera leaves the canyon shade for open
+   daylight. Sits above frame 5's artwork and below frame 4's, so it
+   warms only what is arriving. */
+.f5-bloom {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  background-image: linear-gradient(180deg, #cfe4f7 0%, #f0e2cf 100%);
+}
+
+/* Rectangle 2 — 215:474 — blurred nav scrim for frame 4 */
+.f4-scrim {
+  position: absolute;
+  left: calc(-2 * var(--u));
+  top: 0;
+  width: calc(1443 * var(--u));
+  height: calc(141 * var(--u));
+  opacity: 0;
+  pointer-events: none;
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+.f4-scrim img { position: absolute; inset: 0; width: 100%; height: 100%;
+                object-fit: cover; display: block; }
+
+/* ================= frame 1 headline ================= */
+
+.hero-type { position: absolute; inset: 0; will-change: transform, opacity; pointer-events: none; }
+
+.headline {                                   /* 215:284 */
+  position: absolute;
+  left: calc(353 * var(--u));
+  top: calc(230 * var(--u));
+  margin: 0;
+  font-family: "Libre Baskerville", serif;
+  font-size: calc(110 * var(--u));
+  line-height: normal;
+  letter-spacing: calc(-2.2 * var(--u));
+  color: #000;
+  white-space: nowrap;
+}
+
+.subhead {                                    /* 215:283 */
+  position: absolute;
+  left: calc(728 * var(--u));
+  top: calc(265 * var(--u));
+  width: calc(432 * var(--u));
+  margin: 0;
+  font-family: "Libre Baskerville", serif;
+  font-size: calc(32 * var(--u));
+  line-height: normal;
+  letter-spacing: calc(-0.64 * var(--u));
+  color: #000;
+  word-break: break-word;
+}
+
+/* ================= shared copy + reveal machinery ================= */
+
+.story, .story3, .story4, .story5 { position: absolute; inset: 0; pointer-events: none; }
+.story a, .story3 a, .story4 a, .story5 a { pointer-events: auto; }
+.story, .story3, .story4, .story5 { will-change: transform, opacity; }
+
+.line { display: block; overflow: hidden; padding-block: 0.14em; margin-block: -0.14em; }
+.line i {
+  display: block;
+  font-style: normal;
+  transform: translateY(118%);
+  transition: transform 1.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.is-revealed .line i { transform: none; }
+
+.r-fade {
+  opacity: 0;
+  transform: translateY(calc(26 * var(--u)));
+  filter: blur(10px);
+  transition: opacity 1s ease, transform 1.1s cubic-bezier(0.16,1,0.3,1), filter 1s ease;
+  transition-delay: 0.32s;
+}
+.is-revealed .r-fade { opacity: 1; transform: none; filter: blur(0); }
+
+/* The button waits for every line to land before it arrives.
+   Slowest copy is the 3-line label: last line starts at 0.42s and, on this
+   ease-out, has visually settled by ~0.95s. 1.0s clears it on all frames. */
+.r-pop {
+  opacity: 0;
+  transform: translateY(calc(18 * var(--u))) scale(0.94);
+  transition: opacity 0.8s ease, transform 0.9s cubic-bezier(0.16,1,0.3,1);
+  transition-delay: 1s;
+}
+.is-revealed .r-pop { opacity: 1; transform: none; }
+
+/* Explore Button — 215:304 / 215:375 */
+.explore {
+  position: absolute;
+  left: calc(1264 * var(--u));
+  top: calc(709 * var(--u));
+  height: calc(37 * var(--u));
+  display: flex;
+  align-items: center;
+  gap: calc(10 * var(--u));
+  padding: calc(14 * var(--u)) calc(20 * var(--u));
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: calc(999 * var(--u));
+  filter: drop-shadow(0 calc(6 * var(--u)) calc(8 * var(--u)) rgba(0,0,0,0.08));
+  text-decoration: none;
+}
+.explore span {
+  font-family: "Manrope", sans-serif;
+  font-weight: 700;
+  font-size: calc(16 * var(--u));
+  line-height: normal;
+  letter-spacing: calc(-0.32 * var(--u));
+  color: #111827;
+  white-space: nowrap;
+}
+.explore img {
+  display: block;
+  width: calc(18 * var(--u));
+  height: calc(18 * var(--u));
+  transition: transform 0.35s ease;
+}
+.explore:hover img { transform: translateX(calc(4 * var(--u))); }
+
+/* ---- frame 2 copy — 215:301 / 302 / 303 ---- */
+
+.quote {
+  position: absolute;
+  left: calc(260 * var(--u));
+  top: calc(307 * var(--u));
+  width: calc(403 * var(--u));
+  margin: 0;
+  font-family: "Libre Baskerville", serif;
+  font-size: calc(40 * var(--u));
+  line-height: normal;
+  letter-spacing: calc(-0.8 * var(--u));
+  color: #fff;
+}
+.label {
+  position: absolute;
+  left: calc(260 * var(--u));
+  top: calc(618 * var(--u));
+  width: calc(591 * var(--u));
+  height: calc(97 * var(--u));
+  margin: 0;
+  font-family: "Libre Franklin", sans-serif;
+  font-size: calc(16 * var(--u));
+  line-height: normal;
+  letter-spacing: calc(5.28 * var(--u));
+  text-transform: uppercase;
+  color: #fff;
+}
+.body {
+  position: absolute;
+  left: calc(891 * var(--u));
+  top: calc(618 * var(--u));
+  width: calc(493 * var(--u));
+  height: calc(136 * var(--u));
+  margin: 0;
+  font-family: "Libre Franklin", sans-serif;
+  font-size: calc(16 * var(--u));
+  line-height: normal;
+  letter-spacing: calc(-0.32 * var(--u));
+  color: #fff;
+  word-break: break-word;
+}
+
+/* ---- frame 3 copy — 215:372 / 374 / 379 — black on sand ---- */
+
+.quote3 {
+  position: absolute;
+  left: calc(284 * var(--u));
+  top: calc(307 * var(--u));
+  width: calc(406 * var(--u));
+  margin: 0;
+  font-family: "Libre Baskerville", serif;
+  font-size: calc(40 * var(--u));
+  line-height: normal;
+  letter-spacing: calc(-0.8 * var(--u));
+  color: #000;
+}
+.label3 {
+  position: absolute;
+  left: calc(284 * var(--u));
+  top: calc(463 * var(--u));
+  width: calc(591 * var(--u));
+  height: calc(97 * var(--u));
+  margin: 0;
+  font-family: "Libre Franklin", sans-serif;
+  font-size: calc(16 * var(--u));
+  line-height: normal;
+  letter-spacing: calc(5.28 * var(--u));
+  text-transform: uppercase;
+  color: #000;
+}
+.body3 {
+  position: absolute;
+  left: calc(818 * var(--u));
+  top: calc(466 * var(--u));
+  width: calc(457 * var(--u));
+  height: calc(136 * var(--u));
+  margin: 0;
+  font-family: "Libre Franklin", sans-serif;
+  font-size: calc(16 * var(--u));
+  line-height: normal;
+  letter-spacing: calc(-0.32 * var(--u));
+  color: #000;
+  word-break: break-word;
+}
+
+/* ---- frame 4 copy — 215:547 / 215:548 — white on canyon ---- */
+
+.quote4 {
+  position: absolute;
+  left: calc(284 * var(--u));
+  top: calc(307 * var(--u));
+  width: calc(482 * var(--u));
+  margin: 0;
+  font-family: "Libre Baskerville", serif;
+  font-size: calc(40 * var(--u));
+  line-height: normal;
+  letter-spacing: calc(-0.8 * var(--u));
+  color: #fff;
+}
+.body4 {
+  position: absolute;
+  left: calc(782 * var(--u));
+  top: calc(321 * var(--u));
+  width: calc(417 * var(--u));
+  height: calc(136 * var(--u));
+  margin: 0;
+  font-family: "Libre Franklin", sans-serif;
+  font-size: calc(16 * var(--u));
+  line-height: normal;
+  letter-spacing: calc(-0.32 * var(--u));
+  color: #fff;
+  word-break: break-word;
+}
+
+/* ---- frame 5 copy — 215:526 / 527 / 535 — white on the Nizwa sky ---- */
+
+.quote5 {
+  position: absolute;
+  left: calc(264 * var(--u));
+  top: calc(142 * var(--u));
+  width: calc(467 * var(--u));
+  margin: 0;
+  font-family: "Libre Baskerville", serif;
+  font-size: calc(40 * var(--u));
+  line-height: normal;
+  letter-spacing: calc(-0.8 * var(--u));
+  color: #fff;
+}
+.label5 {
+  position: absolute;
+  left: calc(264 * var(--u));
+  top: calc(274 * var(--u));
+  width: calc(320 * var(--u));
+  height: calc(97 * var(--u));
+  margin: 0;
+  font-family: "Libre Franklin", sans-serif;
+  font-size: calc(16 * var(--u));
+  line-height: normal;
+  letter-spacing: calc(5.28 * var(--u));
+  text-transform: uppercase;
+  color: #fff;
+}
+.body5 {
+  position: absolute;
+  left: calc(779 * var(--u));
+  top: calc(153 * var(--u));
+  width: calc(404 * var(--u));
+  height: calc(136 * var(--u));
+  margin: 0;
+  font-family: "Libre Franklin", sans-serif;
+  font-size: calc(16 * var(--u));
+  line-height: normal;
+  letter-spacing: calc(-0.32 * var(--u));
+  color: #fff;
+  word-break: break-word;
+}
+.body5 a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-skip-ink: none;
+  text-underline-position: from-font;
+}
+
+/* staggered entrances */
+.quote4 .line:nth-child(1) i { transition-delay: 0.02s; }
+.quote4 .line:nth-child(2) i { transition-delay: 0.11s; }
+.quote  .line:nth-child(1) i, .quote3 .line:nth-child(1) i,
+.quote5 .line:nth-child(1) i { transition-delay: 0.02s; }
+.quote  .line:nth-child(2) i, .quote3 .line:nth-child(2) i,
+.quote5 .line:nth-child(2) i { transition-delay: 0.11s; }
+.label  .line:nth-child(1) i, .label3 .line:nth-child(1) i,
+.label5 .line:nth-child(1) i { transition-delay: 0.28s; }
+.label  .line:nth-child(2) i, .label3 .line:nth-child(2) i,
+.label5 .line:nth-child(2) i { transition-delay: 0.35s; }
+.label  .line:nth-child(3) i, .label3 .line:nth-child(3) i { transition-delay: 0.42s; }
+
+/* ================= nav ================= */
+
+.nav-scrim {                                  /* 215:309 */
+  position: absolute;
+  left: calc(-2 * var(--u));
+  top: 0;
+  width: calc(1443 * var(--u));
+  height: calc(141 * var(--u));
+  opacity: 0;
+  pointer-events: none;
+}
+.nav-scrim img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.nav {                                        /* 215:285 / 215:310 */
+  position: absolute;
+  left: calc(23 * var(--u));
+  top: calc(24 * var(--u));
+  width: calc(1382 * var(--u));
+  height: calc(40 * var(--u));
+  display: flex;
+  align-items: center;
+  gap: calc(274 * var(--u));
+  z-index: 3;
+}
+
+.nav__logo {
+  flex-shrink: 0;
+  width: calc(65 * var(--u));
+  font-family: "Fondamento", cursive;
+  color: var(--nav-ink);
+  text-align: center;
+  letter-spacing: calc(-0.5 * var(--u));
+  white-space: nowrap;
+  text-decoration: none;
+}
+.nav__logo span { display: block; line-height: calc(15 * var(--u)); }
+.nav__logo .v { font-size: calc(21 * var(--u)); }
+.nav__logo .o { font-size: calc(25 * var(--u)); }
+
+.nav__links {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: calc(62 * var(--u));
+  width: calc(582 * var(--u));
+  font-family: "Manrope", sans-serif;
+  font-size: calc(18 * var(--u));
+  line-height: normal;
+  color: var(--nav-ink);
+  white-space: nowrap;
+}
+.nav__links a { flex-shrink: 0; color: inherit; text-decoration: none; transition: opacity 0.25s ease; }
+.nav__links a:hover { opacity: 0.6; }
+
+.nav__cta {
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  width: calc(187 * var(--u));
+  height: calc(40 * var(--u));
+  padding: calc(14 * var(--u)) calc(32 * var(--u)) calc(14 * var(--u)) calc(36 * var(--u));
+  background: #404463;
+  border-radius: calc(100 * var(--u));
+  overflow: clip;
+  font-family: "Mandali", sans-serif;
+  font-size: calc(12 * var(--u));
+  line-height: normal;
+  color: #efdfdf;
+  text-align: center;
+  text-decoration: none;
+  transition: background 0.25s ease;
+}
+.nav__cta:hover { background: #4d5175; }
+
+/* ================= scroll cue ================= */
+
+.cue {
+  position: absolute;
+  left: 50%; bottom: calc(28 * var(--u));
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center;
+  gap: calc(8 * var(--u));
+  font-family: "Libre Franklin", sans-serif;
+  font-size: calc(10 * var(--u));
+  letter-spacing: calc(3 * var(--u));
+  text-transform: uppercase;
+  color: #000;
+  pointer-events: none;
+}
+.cue::after {
+  content: "";
+  width: 1px; height: calc(34 * var(--u));
+  background: currentColor;
+  transform-origin: top;
+  animation: cue 2.1s cubic-bezier(0.7, 0, 0.3, 1) infinite;
+}
+@keyframes cue {
+  0%        { transform: scaleY(0); opacity: 0; }
+  35%       { transform: scaleY(1); opacity: 1; }
+  70%, 100% { transform: scaleY(0); opacity: 0; transform-origin: bottom; }
+}
+
+/* =================================================================
+   Choose your adventure — 257:30
+
+   A 1569x855 board rather than 1441x829, so it gets its own unit.
+   Figma parks two polaroids at the bottom right with the second one
+   already running off the edge, which is the design telling you the
+   strip continues. So it is built as a rail that keeps travelling:
+   same cards, same tilts, same shadows, just no longer parked. The
+   rail stays inside the right-hand zone Figma puts them in, which is
+   also what keeps a repeat from ever being on screen twice.
+   ================================================================= */
+
+.adv {
+  --w: calc(100cqw / 1569);      /* one Figma pixel on this board */
+  --k: 1;                        /* polaroid scale, raised on phones */
+  position: relative;
+  width: 100%;
+  height: calc(855 * var(--w));
+  background: #f9f4eb;
+  overflow: hidden;
+}
+
+.adv__title {                                  /* 257:32 */
+  position: absolute;
+  left: calc(183 * var(--w));
+  top: calc(149 * var(--w));
+  width: calc(602 * var(--w));
+  margin: 0;
+  font-family: "Libre Baskerville", serif;
+  font-weight: 400;
+  font-size: calc(57 * var(--w));
+  line-height: normal;
+  letter-spacing: calc(-1.14 * var(--w));
+  color: #000;
+}
+
+.adv__body {                                   /* 257:35 */
+  position: absolute;
+  left: calc(183 * var(--w));
+  top: calc(314 * var(--w));
+  width: calc(314 * var(--w));
+  margin: 0;
+  font-family: "Libre Franklin", sans-serif;
+  font-size: calc(16 * var(--w));
+  line-height: normal;
+  letter-spacing: calc(-0.32 * var(--w));
+  color: #000;
+  word-break: break-word;
+}
+
+.adv__map {                                    /* 257:37 — activities 1 */
+  position: absolute;
+  left: calc(756 * var(--w));
+  top: calc(36 * var(--w));
+  width: calc(783 * var(--w));
+  height: calc(783 * var(--w));
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+}
+
+/* ---- the rail ----
+   Both cards are centred on y 625.7 in Figma (489.75 + 274.226/2 and
+   492.81 + 263.356/2 agree to 2px), so the rail centres there too and
+   stays centred whatever --k does.
+
+   It spans the full board rather than only the right-hand zone Figma
+   parks the two cards in. That is a deliberate departure: the strip is
+   the section's subject once it moves, and it should read across the
+   whole width. Both ends are masked so cards dissolve instead of
+   clipping against the viewport edge. */
+.adv__rail {
+  position: absolute;
+  left: 0;
+  top: calc(625.7 * var(--w) - 170 * var(--w) * var(--k));
+  width: 100%;
+  height: calc(340 * var(--w) * var(--k));
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%);
+}
+
+.adv__track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  height: 100%;
+  animation: adv-drift 46s linear infinite;
+  will-change: transform;
+}
+/* The set is in the DOM twice, and every card carries its gap as a
+   right margin rather than the flex gap, so -50% lands exactly one
+   copy along and the seam is invisible. */
+@keyframes adv-drift {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+.adv__rail:hover .adv__track,
+.adv__rail:focus-within .adv__track { animation-play-state: paused; }
+/* nothing animates while the board is off screen */
+.adv--idle .adv__track { animation-play-state: paused; }
+
+.adv__title .line:nth-child(1) i { transition-delay: 0.02s; }
+.adv__title .line:nth-child(2) i { transition-delay: 0.11s; }
+
+/* ---- one polaroid ----
+   The 82 gap is not styling. A card and its duplicate sit exactly one
+   copy apart (6 cards + 6 gaps = 1863.4), and the rail is now the full
+   1569 board, so the copy has to stay wider than the window plus one
+   card (1569 + 235.58 = 1804.6) or a card and its twin can be on
+   screen at the same time. 58 no longer clears that; 82 does. */
+.pol {
+  position: relative;
+  flex: none;
+  margin: 0 calc(82 * var(--w) * var(--k)) 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pol__rot { transform: rotate(var(--rot)); }
+
+.pol__card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: calc(var(--gap) * var(--w) * var(--k));
+  width: calc(var(--pw) * var(--w) * var(--k));
+  padding: calc(var(--pad) * var(--w) * var(--k));
+  background: #fff;
+  border-radius: calc(var(--rad) * var(--w) * var(--k));
+  box-shadow: 0 calc(var(--shy) * var(--w) * var(--k))
+                calc(var(--shb) * var(--w) * var(--k)) rgba(0, 0, 0, 0.07);
+  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.55s ease;
+}
+
+.pol__photo {
+  position: relative;
+  flex: none;
+  width: 100%;
+  height: calc(var(--ph) * var(--w) * var(--k));
+  overflow: hidden;
+  background: #e8e2d8;
+}
+.pol__photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  max-width: none;
+}
+
+.pol figcaption {
+  width: 100%;
+  height: calc(var(--caph) * var(--w) * var(--k));
+  display: flex;
+  align-items: center;
+  font-family: "Manrope", sans-serif;
+  font-weight: 700;
+  font-size: calc(var(--cap) * var(--w) * var(--k));
+  line-height: 1;
+  letter-spacing: calc(var(--capls) * var(--w) * var(--k));
+  color: #000;
+  white-space: nowrap;
+}
+
+/* picked up to be looked at */
+.pol:hover { z-index: 2; }
+.pol:hover .pol__card {
+  transform: scale(1.07);
+  box-shadow: 0 calc(18 * var(--w) * var(--k))
+                calc(42 * var(--w) * var(--k)) rgba(0, 0, 0, 0.16);
+}
+
+/* Figma draws two polaroids and they are not the same size — the
+   portrait one (257:41) and the landscape one (257:47). Both are kept
+   verbatim and the six cards alternate between them, which is what
+   stops a rail of six reading as a grid. Tilt is per card, set inline.
+
+   Portrait — 257:41 / 42 / 43 */
+.pol--a {
+  --pw: 214.538; --pad: 10.502; --gap: 13.502; --ph: 207.787;
+  --caph: 22.504; --cap: 12.002; --capls: -0.24;  --rad: 6.001;
+  --shy: 6.751;   --shb: 14.253;
+}
+
+/* Landscape — 257:47 / 48 / 49 */
+.pol--b {
+  --pw: 235.582; --pad: 11.501; --gap: 14.787; --ph: 173.336;
+  --caph: 24.36;  --cap: 13.144; --capls: -0.2629; --rad: 6.572;
+  --shy: 7.393;   --shb: 31.217;
+}
+
+/* Figma crops the Desert Yoga fill by hand rather than using cover —
+   136% and pushed up and left to hold the figure against the dune.
+   Kept exactly, slight stretch and all, on that card only. */
+.pol--crop .pol__photo img {
+  inset: auto;
+  left: -20.74%;
+  top: -36.02%;
+  width: 136.02%;
+  height: 136.02%;
+  object-fit: fill;
+}
+
+/* ================= small screens ================= */
+@media (max-width: 700px) {
+  .nav { gap: 0; justify-content: space-between; }
+  .nav__links { display: none; }
+  .nav__logo { width: auto; }
+  .nav__logo .v { font-size: calc(48 * var(--u)); }
+  .nav__logo .o { font-size: calc(57 * var(--u)); }
+  .nav__logo span { line-height: calc(34 * var(--u)); }
+  .nav__cta {
+    width: calc(430 * var(--u)); height: calc(92 * var(--u));
+    font-size: calc(28 * var(--u)); border-radius: calc(230 * var(--u)); padding: 0;
+  }
+  .quote, .quote3 { font-size: calc(74 * var(--u)); width: calc(760 * var(--u)); }
+  .label, .label3 { font-size: calc(30 * var(--u)); width: calc(900 * var(--u));
+                    height: auto; letter-spacing: calc(9 * var(--u)); }
+  .body  { font-size: calc(30 * var(--u)); left: calc(260 * var(--u));
+           top: calc(430 * var(--u)); width: calc(920 * var(--u)); height: auto; }
+  .body3 { font-size: calc(30 * var(--u)); left: calc(284 * var(--u));
+           top: calc(300 * var(--u)); width: calc(900 * var(--u)); height: auto; }
+  .explore { left: calc(260 * var(--u)); top: calc(690 * var(--u));
+             height: calc(84 * var(--u)); padding: 0 calc(44 * var(--u));
+             gap: calc(20 * var(--u)); }
+  .explore span { font-size: calc(34 * var(--u)); }
+  .explore img  { width: calc(38 * var(--u)); height: calc(38 * var(--u)); }
+  .quote3 { top: calc(140 * var(--u)); }
+  .label3 { top: calc(500 * var(--u)); }
+  .quote4 { font-size: calc(74 * var(--u)); width: calc(880 * var(--u));
+            left: calc(284 * var(--u)); top: calc(200 * var(--u)); }
+  .body4  { font-size: calc(30 * var(--u)); left: calc(284 * var(--u));
+            top: calc(560 * var(--u)); width: calc(900 * var(--u)); height: auto; }
+  .quote5 { font-size: calc(74 * var(--u)); width: calc(880 * var(--u));
+            left: calc(264 * var(--u)); top: calc(150 * var(--u)); }
+  .label5 { font-size: calc(30 * var(--u)); width: calc(900 * var(--u));
+            left: calc(264 * var(--u)); top: calc(430 * var(--u));
+            height: auto; letter-spacing: calc(9 * var(--u)); }
+  .body5  { font-size: calc(30 * var(--u)); left: calc(264 * var(--u));
+            top: calc(560 * var(--u)); width: calc(900 * var(--u)); height: auto; }
+  .f4-strips span { display: none; }
+
+  /* the adventure board reflows to a taller portrait, the map drops
+     behind the copy as a watermark, and the rail goes full width */
+  .adv {
+    --w: calc(100cqw / 700);
+    --k: 1.35;
+    height: calc(1120 * var(--w));
+  }
+  .adv__title { left: calc(48 * var(--w)); top: calc(80 * var(--w));
+                width: calc(600 * var(--w)); font-size: calc(66 * var(--w));
+                letter-spacing: calc(-1.3 * var(--w)); }
+  .adv__body  { left: calc(48 * var(--w)); top: calc(330 * var(--w));
+                width: calc(560 * var(--w)); font-size: calc(26 * var(--w));
+                letter-spacing: calc(-0.5 * var(--w)); }
+  .adv__map   { left: calc(140 * var(--w)); top: calc(200 * var(--w));
+                width: calc(600 * var(--w)); height: calc(600 * var(--w));
+                opacity: 0.42; }
+  /* full width and both ends masked already; only the drop changes */
+  .adv__rail  { top: calc(620 * var(--w)); }
+}
+
+/* ================= reduced motion =================
+   No choreography: show the final frame settled and readable. */
+@media (prefers-reduced-motion: reduce) {
+  .track { height: calc(829 * var(--u)); }
+  .layer--sky, .layer--cliff, .layer--mosque, .layer--dunes,
+  .hero-type, .story, .story3, .story4, .nav-scrim, .f4-scrim, .cue,
+  .f3-sky, .f3-mountain, .f3-mid, .f3-rocky,
+  .f4-canyon, .f4-strips, .f5-bloom { display: none; }
+  .l3 { opacity: 1; }
+  .line i { transform: none; }
+  .r-fade, .r-pop { opacity: 1; transform: none; filter: none; }
+  .stage { background: #e4d4c2; }
+  .frame { --nav-ink: rgb(255, 255, 255); }
+  /* the rail parks where Figma parks it */
+  .adv__track { animation: none; }
+  .pol__card { transition: none; }
+}
+
+/* =================================================================
+   Journey — 239:32 — the first section under the pinned hero
+
+   One 1440x1742 Figma board, laid out the same way the hero is: every
+   length is the raw Figma value x --u, so it is pixel-exact at 1441px
+   and scales proportionally. Three beats, read top to bottom:
+
+     0    - 501    the closing statement, told word by word
+     519  - 567    the four reasons, a hairline-ruled strip
+     501  - 1431   "See where your journey could take you" — the ink
+                   sketch wipes in behind a five-way category menu and
+                   a rail of experience cards
+
+   The menu and the rail are one control: picking a category flies its
+   label up into the lead slot (FLIP) and re-deals the rail beneath it.
+   ================================================================= */
+
+.journey {
+  --u: calc(100cqw / 1441);
+  --ink: #000;
+  position: relative;
+  width: 100%;
+  height: calc(1742 * var(--u));
+  /* 239:32 is #fffdfd, but the coastline plate is an opaque PNG on its
+     own #fefcfc ground. One level apart is enough to draw a visible box
+     around a 1020px image, so the section takes the plate's white and
+     the seam stops existing. */
+  background: #fefcfc;
+  overflow: hidden;              /* the sketch and the rail bleed off the right */
+  isolation: isolate;
+}
+
+/* ---- image 11 — 239:45 — the Omani icon grid, ghosted ---- */
+.j-pattern {
+  position: absolute;
+  left: calc(-2 * var(--u));
+  top: calc(20 * var(--u));
+  width: calc(429 * var(--u));
+  height: calc(429 * var(--u));
+  object-fit: cover;
+  opacity: 0;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  transition: opacity 1.6s ease;
+  will-change: transform;
+}
+.j-pattern.in { opacity: 0.29; }
+
+/* ---- image 12 — 239:44 — the coastline sketch ----
+   Held back by a clip and released left to right, so it reads as being
+   drawn rather than faded in. */
+.j-sketch {
+  position: absolute;
+  left: calc(487 * var(--u));
+  top: calc(501 * var(--u));
+  width: calc(1020 * var(--u));
+  height: calc(626 * var(--u));
+  object-fit: contain;
+  object-position: bottom;
+  pointer-events: none;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 2.1s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, clip-path;
+}
+.j-sketch.in { clip-path: inset(0 0 0 0); }
+
+/* ---- 239:62 — the closing statement ----
+   Set word by word: each one is lit by the scroll position rather than
+   by a timer, so the sentence is told at the reader's own pace. */
+.j-lede {
+  position: absolute;
+  left: calc(480 * var(--u));
+  top: calc(173 * var(--u));
+  width: calc(745 * var(--u));
+  margin: 0;
+  font-family: "Libre Baskerville", serif;
+  font-size: calc(33 * var(--u));
+  line-height: calc(49 * var(--u));
+  letter-spacing: calc(-0.66 * var(--u));
+  color: var(--ink);
+}
+.j-lede .w {
+  display: inline-block;
+  opacity: 0.11;
+  filter: blur(5px);
+  transform: translateY(0.24em);
+  transition: opacity 0.62s ease, filter 0.62s ease,
+              transform 0.72s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.j-lede .w.lit { opacity: 1; filter: blur(0); transform: none; }
+
+/* ---- 239:72 — World-class safety / hospitality / architecture / variety ---- */
+.j-facts {
+  position: absolute;
+  left: calc(309 * var(--u));
+  top: calc(519 * var(--u));
+  width: calc(874 * var(--u));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: calc(55 * var(--u));
+}
+.j-facts li {
+  flex: none;
+  font-family: "Manrope", sans-serif;
+  font-weight: 400;
+  font-size: calc(14 * var(--u));
+  line-height: calc(25 * var(--u));
+  letter-spacing: calc(-0.28 * var(--u));
+  text-transform: uppercase;
+  color: var(--ink);
+  opacity: 0;
+  transform: translateY(calc(14 * var(--u)));
+  transition: opacity 0.9s ease, transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--d, 0s);
+}
+.j-facts li:nth-child(1) { width: calc(131 * var(--u)); }
+.j-facts li:nth-child(3) { width: calc(110 * var(--u)); }
+.j-facts li:nth-child(5) { width: calc(167 * var(--u)); }
+.j-facts li:nth-child(7) { width: calc(136 * var(--u)); }
+.j-facts .sep {
+  width: 0;
+  height: calc(48 * var(--u));
+  border-left: 1px solid rgba(0, 0, 0, 0.17);
+  transform: scaleY(0);
+  transform-origin: 50% 0;
+  transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+  transition-delay: var(--d, 0s);
+}
+.j-facts.in li { opacity: 1; transform: none; }
+.j-facts.in .sep { transform: scaleY(1); }
+
+/* ---- 239:57 — the section title ---- */
+.j-title {
+  position: absolute;
+  left: calc(133 * var(--u));
+  top: calc(728 * var(--u));
+  width: calc(602 * var(--u));
+  margin: 0;
+  font-family: "Libre Baskerville", serif;
+  font-weight: 400;
+  font-size: calc(43 * var(--u));
+  line-height: calc(59 * var(--u));
+  letter-spacing: calc(-0.86 * var(--u));
+  color: var(--ink);
+}
+.j-title .line:nth-child(2) i { transition-delay: 0.1s; }
+
+/* ================= the category menu — 239:59 =================
+   A 156x521 column. The chosen category sits at the top with its note
+   under it; the four it is not sit at the foot of the column. Picking
+   one swaps those two slots, and the labels fly between them. */
+
+.j-menu {
+  position: absolute;
+  left: calc(132 * var(--u));
+  top: calc(908 * var(--u));
+  width: calc(156 * var(--u));
+  height: calc(521 * var(--u));
+  display: flex;
+  flex-direction: column;
+}
+.j-menu__rest { margin-top: auto; }
+
+.j-cat {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: "Manrope", sans-serif;
+  /* both, deliberately: the variation axis is what glides, font-weight
+     is what still reads as bold if the variable file never arrives */
+  font-weight: 400;
+  font-variation-settings: "wght" 400;
+  font-size: calc(20 * var(--u));
+  line-height: calc(44 * var(--u));
+  letter-spacing: calc(-0.4 * var(--u));
+  color: var(--ink);
+  opacity: 0.5;
+  transition: opacity 0.45s ease, font-size 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              font-variation-settings 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.j-cat:hover, .j-cat:focus-visible { opacity: 0.9; }
+.j-cat:focus-visible { outline: 1px solid rgba(0,0,0,0.4); outline-offset: calc(4 * var(--u)); }
+.j-cat[aria-selected="true"] {
+  opacity: 1;
+  cursor: default;
+  font-size: calc(22 * var(--u));
+  font-weight: 700;
+  font-variation-settings: "wght" 700;
+  letter-spacing: calc(-0.44 * var(--u));
+}
+/* Mid-flight between the two slots. transform is deliberately absent
+   from the base rule, so removing this class is what lets the label be
+   jumped back to where it came from without animating the jump. */
+.j-cat.flip {
+  transition: transform 0.72s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.45s ease,
+              font-size 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              font-variation-settings 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.j-desc {
+  margin: calc(25 * var(--u)) 0 0;
+  width: calc(167 * var(--u));
+  font-family: "Manrope", sans-serif;
+  font-weight: 400;
+  font-size: calc(16 * var(--u));
+  line-height: calc(25 * var(--u));
+  letter-spacing: calc(-0.32 * var(--u));
+  color: var(--ink);
+  transition: opacity 0.5s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.j-desc.is-out { opacity: 0; transform: translateY(calc(-10 * var(--u))); }
+/* the incoming pose is jumped to, never transitioned to — see swapDesc() */
+.j-desc.is-in  { opacity: 0; transform: translateY(calc(14 * var(--u))); transition: none; }
+
+/* ================= the rail — 239:64 =================
+   Starts where Rectangle 3 starts and runs off the right edge of the
+   page, so there is always visibly more journey than fits. */
+
+.j-rail {
+  position: absolute;
+  left: calc(559 * var(--u));
+  top: calc(908 * var(--u));
+  right: 0;
+  height: calc(523 * var(--u));
+}
+.j-rail__vp {
+  height: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-snap-type: x proximity;
+  overscroll-behavior-x: contain;
+  cursor: grab;
+}
+.j-rail__vp::-webkit-scrollbar { display: none; }
+.j-rail__vp:focus-visible { outline: 1px solid rgba(0,0,0,0.4); outline-offset: calc(4 * var(--u)); }
+.j-rail__vp.dragging { cursor: grabbing; scroll-snap-type: none; }
+
+.j-track {
+  display: flex;
+  gap: calc(10 * var(--u));
+  height: 100%;
+  margin: 0;
+  padding: 0 calc(120 * var(--u)) 0 0;
+  list-style: none;
+}
+
+.j-card {
+  position: relative;
+  flex: none;
+  width: calc(367 * var(--u));
+  height: 100%;
+  overflow: hidden;
+  border-radius: calc(14 * var(--u));
+  scroll-snap-align: start;
+  background: linear-gradient(180deg, #b9d5ec 0%, #e7dac6 100%);
+  opacity: 0;
+  transform: translateY(calc(52 * var(--u)));
+  transition: opacity 0.85s ease, transform 1.05s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--d, 0s);
+}
+.j-rail.in .j-card { opacity: 1; transform: none; }
+.j-card.is-out {
+  opacity: 0;
+  transform: translateY(calc(-26 * var(--u))) scale(0.965);
+  transition-duration: 0.42s, 0.42s;
+}
+.j-card img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: scale(1.001);
+  transition: transform 1.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.j-card[data-fit="bottom"] img { object-position: bottom; }
+.j-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(180deg,
+    rgba(0, 0, 0, 0) 66.54%, rgba(0, 0, 0, 0.5) 85.66%);
+}
+.j-rail__vp:not(.dragging) .j-card:hover img { transform: scale(1.055); }
+
+.j-card__cap {                                  /* 239:83 / 239:80 */
+  position: absolute;
+  left: calc(34 * var(--u));
+  bottom: calc(28 * var(--u));
+  z-index: 1;
+  color: #fff;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.j-rail__vp:not(.dragging) .j-card:hover .j-card__cap {
+  transform: translateY(calc(-6 * var(--u)));
+}
+.j-card__cap b {
+  display: block;
+  font-family: "Manrope", sans-serif;
+  font-weight: 700;
+  font-variation-settings: "wght" 700;
+  font-size: calc(22 * var(--u));
+  line-height: calc(29 * var(--u));
+  letter-spacing: calc(-0.44 * var(--u));
+}
+.j-card__cap em {
+  display: block;
+  font-family: "Libre Baskerville", serif;
+  font-style: italic;
+  font-size: calc(16 * var(--u));
+  line-height: calc(30 * var(--u));
+  letter-spacing: calc(-0.32 * var(--u));
+  opacity: 0.92;
+}
+
+/* ---- rail controls: a progress hairline and two arrows ---- */
+.j-rail__ui {
+  position: absolute;
+  left: 0;
+  top: calc(563 * var(--u));
+  display: flex;
+  align-items: center;
+  gap: calc(28 * var(--u));
+  opacity: 0;
+  transition: opacity 0.9s ease 0.5s;
+}
+.j-rail.in .j-rail__ui { opacity: 1; }
+
+.j-bar {
+  position: relative;
+  width: calc(240 * var(--u));
+  height: 1px;
+  background: rgba(0, 0, 0, 0.14);
+}
+.j-bar i {
+  position: absolute;
+  left: 0;
+  top: calc(-1 * var(--u));
+  height: calc(3 * var(--u));
+  min-height: 2px;
+  background: var(--ink);
+  transform-origin: 0 50%;
+  transition: transform 0.35s ease, width 0.5s ease;
+}
+
+.j-nav { display: flex; gap: calc(10 * var(--u)); }
+.j-nav button {
+  width: calc(42 * var(--u));
+  height: calc(42 * var(--u));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid rgba(0, 0, 0, 0.16);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 0.35s ease, border-color 0.35s ease,
+              opacity 0.35s ease, transform 0.35s ease;
+}
+.j-nav button:hover:not(:disabled) { background: rgba(0, 0, 0, 0.05); transform: scale(1.06); }
+.j-nav button:disabled { opacity: 0.25; cursor: default; }
+.j-nav svg { width: calc(15 * var(--u)); height: calc(15 * var(--u)); min-width: 9px; min-height: 9px; }
+
+/* ================= journey — narrow screens =================
+   Below 900px the 1440 board stops being a board: it stacks, the menu
+   becomes a row of chips over the rail, and type leaves the --u grid
+   for clamp() — tied to the viewport but with a floor and a ceiling, so
+   it is neither 9px at 375 nor 41px at 899. */
+@media (max-width: 899px) {
+  .journey {
+    --gut: clamp(20px, 5.6vw, 44px);
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    padding: clamp(56px, 12vw, 104px) 0 clamp(72px, 15vw, 130px);
+  }
+  .j-lede, .j-facts, .j-title, .j-menu, .j-rail, .j-sketch {
+    position: static;
+    left: auto; top: auto; right: auto;
+    width: auto; height: auto;
+  }
+  .j-pattern {
+    left: calc(-6vw);
+    top: clamp(24px, 6vw, 60px);
+    width: min(78vw, 420px);
+    height: min(78vw, 420px);
+  }
+  .j-pattern.in { opacity: 0.15; }
+
+  .j-lede {
+    order: 1;
+    margin: 0 var(--gut);
+    font-size: clamp(20px, 5.3vw, 31px);
+    line-height: 1.48;
+    letter-spacing: -0.02em;
+  }
+  .j-facts {
+    order: 2;
+    margin: clamp(44px, 10vw, 84px) var(--gut) 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: clamp(18px, 4vw, 30px) clamp(16px, 4vw, 40px);
+  }
+  .j-facts li,
+  .j-facts li:nth-child(1), .j-facts li:nth-child(3),
+  .j-facts li:nth-child(5), .j-facts li:nth-child(7) {
+    width: auto;
+    font-size: 12px;
+    line-height: 1.55;
+    letter-spacing: 0.01em;
+  }
+  .j-facts .sep { display: none; }
+
+  .j-title {
+    order: 3;
+    margin: clamp(52px, 12vw, 100px) var(--gut) 0;
+    font-size: clamp(28px, 7.2vw, 43px);
+    line-height: 1.26;
+    letter-spacing: -0.02em;
+  }
+  .j-sketch {
+    order: 4;
+    align-self: flex-end;
+    width: min(112vw, 940px);
+    height: min(56vw, 420px);
+    margin: clamp(4px, 2vw, 20px) calc(var(--gut) * -1) 0 0;
+  }
+
+  .j-menu {
+    order: 5;
+    display: block;
+    margin: clamp(20px, 5vw, 44px) 0 0;
+  }
+  .j-menu__lead { margin: 0 var(--gut); }
+  .j-menu__rest {
+    display: flex;
+    gap: clamp(18px, 5vw, 34px);
+    margin: clamp(24px, 6vw, 44px) 0 0;
+    padding: 0 var(--gut);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .j-menu__rest::-webkit-scrollbar { display: none; }
+  .j-cat {
+    width: auto;
+    font-size: 16px;
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+  }
+  .j-cat[aria-selected="true"] { font-size: 21px; letter-spacing: -0.02em; }
+  .j-desc {
+    width: auto;
+    max-width: 34ch;
+    margin-top: 10px;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .j-rail { order: 6; margin-top: clamp(26px, 6vw, 48px); }
+  /* without the scroll padding, snapping pulls the first card flush to
+     the viewport edge and eats the gutter the track just paid for */
+  .j-rail__vp { height: auto; scroll-padding-left: var(--gut); }
+  .j-track { gap: 12px; padding: 0 var(--gut); height: auto; }
+  .j-menu__rest {
+    mask-image: linear-gradient(90deg, #000 calc(100% - 34px), transparent);
+  }
+  .j-card {
+    width: min(72vw, 300px);
+    height: auto;
+    aspect-ratio: 367 / 523;
+  }
+  .j-card__cap { left: 22px; bottom: 20px; }
+  .j-card__cap b { font-size: 19px; line-height: 1.3; }
+  .j-card__cap em { font-size: 15px; line-height: 1.6; }
+  .j-rail__ui {
+    position: static;
+    margin: clamp(22px, 5vw, 40px) var(--gut) 0;
+    gap: 20px;
+  }
+  .j-bar { width: min(48vw, 260px); }
+  .j-bar i { top: -1px; height: 2px; }
+  .j-nav { gap: 10px; }
+  .j-nav button { width: 40px; height: 40px; }
+  .j-nav svg { width: 15px; height: 15px; }
+}
+
+/* =================================================================
+   Useful info — "Everything You Need to Know."
+
+   A port of the shadcn `testimonials` block: a shadcn/embla Carousel of
+   `aspect-video` muted cards, two to a view on large screens, advancing
+   itself every four seconds and looping back to the first.
+
+   Ported into this project's stack (static page, hand-written CSS, no
+   build), so embla-carousel-react becomes a snap track driven by one
+   translate; the snap model is embla's own `trimSnaps` — one snap per
+   item, clamped so the last never scrolls past the end.
+
+   Light ground, as asked. The card/page relationship is shadcn's
+   bg-background over bg-muted, warmed to sit with the rest of the page.
+   ================================================================= */
+
+.read {
+  --u: calc(100cqw / 1441);
+  --card: #ece5d9;              /* bg-muted */
+  --muted-fg: rgba(29, 25, 20, 0.62);
+  position: relative;
+  width: 100%;
+  background: #f8f4ed;          /* bg-background */
+  color: #1d1914;
+  padding: calc(70 * var(--u)) 0 calc(150 * var(--u));
+  overflow: hidden;
+}
+
+.rd-wrap {
+  /* container mx-auto, aligned to the grid every section above uses */
+  position: relative;
+  z-index: 1;                   /* stays above the sketch tucked behind it */
+  padding: 0 calc(133 * var(--u));
+}
+
+/* ---- the marginalia sketch — a hand-drawn note taking shape, tucked
+   behind the copy on the right. The plate ships opaque on its own
+   near-white paper (measured ~ rgb(246,241,230), a hair off this
+   section's own #f8f4ed) — multiply drops that ground into the page
+   the same way the journey section's ink sketch does, leaving only the
+   line work, so no separate mask or cutout was needed. ---- */
+/* 252:56 — sits between the title and the note, and deliberately hangs
+   past the bottom of the header block so its lower third runs behind
+   the top of the cards. z-index 0 keeps it under .rd-wrap (z-index 1),
+   so the cards crop it; it stays a child of .read rather than of
+   .rd-wrap because .rd-wrap is a stacking context, which would isolate
+   the blend and leave the plate's paper sitting on the page as an
+   opaque square. */
+.rd-deco {
+  position: absolute;
+  z-index: 0;
+  left: calc(573 * var(--u));
+  top: calc(124 * var(--u));              /* 70u section padding + 54u */
+  width: calc(411 * var(--u));
+  height: calc(411 * var(--u));
+  object-fit: contain;
+  /* darken, not multiply. The plate ships opaque on ~rgb(246,241,230);
+     multiply drove that a further ~20 levels under the page and the
+     cards, printing a visible square. darken takes the per-channel
+     minimum, so the paper vanishes completely wherever the backdrop is
+     already darker than it — the whole card area — and leaves only a
+     2–7 level step against the lighter page, while the ink stays ink. */
+  mix-blend-mode: darken;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(calc(24 * var(--u))) scale(0.96);
+  transition: opacity 1.1s ease 0.22s,
+              transform 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.22s;
+}
+.read.in .rd-deco { opacity: 1; transform: none; }
+
+/* ---- header — 252:52 ----
+   The mockup board is 1569 wide against this page's 1441 grid, so every
+   figure below is the Figma value mapped through the card column, which
+   is the one thing both share: my_x = 133 + (fig_x - 175) * 0.9274. The
+   block is positioned rather than flowed because the sketch has to hang
+   past the bottom of it and over the cards, which no flow row can do. */
+.rd-head {
+  position: relative;
+  height: calc(360 * var(--u));           /* 252:59 card top, y 388 */
+}
+
+.rd-title {                               /* 252:58 */
+  position: absolute;
+  left: calc(7 * var(--u));
+  top: calc(138 * var(--u));
+  width: calc(558 * var(--u));
+  margin: 0;
+  font-family: "Libre Baskerville", serif;
+  font-weight: 400;
+  font-size: calc(53 * var(--u));
+  line-height: calc(64 * var(--u));
+  letter-spacing: calc(-1.06 * var(--u));
+}
+.rd-title .line:nth-child(2) i { transition-delay: 0.1s; }
+
+.rd-note {                                /* 252:67 */
+  position: absolute;
+  left: calc(884 * var(--u));
+  top: calc(146 * var(--u));
+  width: calc(291 * var(--u));
+  margin: 0;
+  font-family: "Manrope", sans-serif;
+  font-size: calc(15 * var(--u));
+  line-height: calc(20 * var(--u));
+  letter-spacing: calc(-0.3 * var(--u));
+  color: #1d1914;
+  opacity: 0;
+  transform: translateY(calc(14 * var(--u)));
+  transition: opacity 0.9s ease 0.12s,
+              transform 1s cubic-bezier(0.16, 1, 0.3, 1) 0.12s;
+}
+.read.in .rd-note { opacity: 1; transform: none; }
+
+.rd-all {                                 /* 252:69 */
+  position: absolute;
+  left: calc(885 * var(--u));
+  top: calc(223 * var(--u));
+  width: calc(231 * var(--u));
+  height: calc(35 * var(--u));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(10 * var(--u));
+  padding: 0;
+  border: 1px solid rgba(0, 0, 0, 0.56);
+  border-radius: calc(21 * var(--u));
+  font-family: "Manrope", sans-serif;
+  font-weight: 700;
+  font-size: calc(14 * var(--u));
+  letter-spacing: calc(-0.28 * var(--u));
+  color: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.4s ease, border-color 0.4s ease, color 0.4s ease;
+}
+.rd-all svg {
+  width: calc(15 * var(--u)); height: calc(15 * var(--u));
+  min-width: 11px; min-height: 11px;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.rd-all:hover { background: #1d1914; border-color: #1d1914; color: #f8f4ed; }
+.rd-all:hover svg { transform: translateX(calc(4 * var(--u))); }
+
+/* ---------------- the carousel ---------------- */
+
+.rd-car { position: relative; }
+.rd-car:focus-visible { outline: 1px solid rgba(29,25,20,0.4); outline-offset: calc(6 * var(--u)); }
+
+/* <div ref={carouselRef} className="overflow-hidden"> */
+.rd-vp { overflow: hidden; }
+
+/* CarouselContent — flex, -ml-4 */
+.rd-track {
+  display: flex;
+  margin: 0 0 0 calc(-16 * var(--u));
+  padding: 0;
+  list-style: none;
+  will-change: transform;
+}
+.rd-car.is-dragging .rd-track { transition: none; }
+
+/* CarouselItem — min-w-0 shrink-0 grow-0 basis-full, pl-4, lg:basis-1/2 */
+.rd-item {
+  min-width: 0;
+  flex: 0 0 100%;
+  padding-left: calc(16 * var(--u));
+}
+@media (min-width: 1024px) { .rd-item { flex-basis: 50%; } }
+
+/* the card — bg-muted rounded-md h-full p-6 aspect-video flex col justify-between */
+.rd-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  aspect-ratio: 16 / 9;
+  padding: calc(30 * var(--u));
+  border-radius: calc(8 * var(--u));
+  background: var(--card);
+  color: inherit;
+  text-decoration: none;
+  transition: background 0.45s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.rd-card:hover { background: #e4dbca; transform: translateY(calc(-6 * var(--u))); }
+.rd-card:focus-visible { outline: 1px solid rgba(29,25,20,0.5); outline-offset: calc(3 * var(--u)); }
+
+/* the lucide glyph — w-8 h-8 stroke-1 */
+.rd-ico {
+  flex: none;
+  width: calc(32 * var(--u));
+  height: calc(32 * var(--u));
+  min-width: 22px; min-height: 22px;
+  stroke: currentColor;
+  stroke-width: 1;
+  fill: none;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.rd-card:hover .rd-ico { transform: translateY(calc(-3 * var(--u))); }
+
+.rd-foot { display: flex; flex-direction: column; gap: calc(18 * var(--u)); }
+
+.rd-name {
+  margin: 0;
+  font-family: "Libre Baskerville", serif;
+  font-weight: 400;
+  font-size: calc(22 * var(--u));          /* text-xl */
+  line-height: calc(32 * var(--u));
+  letter-spacing: calc(-0.44 * var(--u));  /* tracking-tight */
+}
+.rd-sum {
+  max-width: calc(430 * var(--u));         /* max-w-xs, widened for the copy */
+  margin: calc(8 * var(--u)) 0 0;
+  font-family: "Manrope", sans-serif;
+  font-size: calc(16 * var(--u));
+  line-height: calc(26 * var(--u));
+  letter-spacing: calc(-0.32 * var(--u));
+  color: var(--muted-fg);
+}
+
+/* the byline row — flex gap-2 text-sm items-center.
+   The Avatar slot carries the article's index rather than a face: these
+   are guides, not opinions, and inventing an author to fill a circle
+   would be attributing them to someone who does not exist. */
+.rd-by {
+  display: flex;
+  align-items: center;
+  gap: calc(9 * var(--u));
+  margin: 0;
+  font-family: "Manrope", sans-serif;
+  font-size: calc(13 * var(--u));
+  letter-spacing: calc(0.9 * var(--u));
+  text-transform: uppercase;
+  color: var(--muted-fg);
+}
+.rd-av {                                    /* Avatar h-6 w-6 */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: calc(26 * var(--u));
+  height: calc(26 * var(--u));
+  min-width: 19px; min-height: 19px;
+  border-radius: 50%;
+  background: rgba(29, 25, 20, 0.1);
+  font-size: calc(11 * var(--u));
+  font-weight: 700;
+  letter-spacing: 0;
+  color: #1d1914;
+}
+.rd-arrow {
+  margin-left: auto;
+  display: flex;
+  opacity: 0;
+  transform: translateX(calc(-6 * var(--u)));
+  transition: opacity 0.45s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.rd-arrow svg { width: calc(17 * var(--u)); height: calc(17 * var(--u));
+                min-width: 12px; min-height: 12px; }
+.rd-card:hover .rd-arrow, .rd-card:focus-visible .rd-arrow { opacity: 0.8; transform: none; }
+
+/* ---------------- controls ---------------- */
+
+.rd-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(24 * var(--u));
+  margin-top: calc(36 * var(--u));
+}
+.rd-dots { display: flex; gap: calc(8 * var(--u)); }
+.rd-dots button {
+  width: calc(34 * var(--u));
+  min-width: 22px;
+  height: 2px;
+  padding: 0;
+  border: 0;
+  background: rgba(29, 25, 20, 0.16);
+  cursor: pointer;
+  transition: background 0.4s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+.rd-dots button[aria-current="true"] { background: #1d1914; transform: scaleY(2); }
+.rd-dots button:focus-visible { outline: 1px solid rgba(29,25,20,0.5); outline-offset: 5px; }
+
+/* CarouselPrevious / CarouselNext — h-8 w-8 rounded-full, outline variant */
+.rd-nav { display: flex; gap: calc(10 * var(--u)); }
+.rd-nav button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(38 * var(--u));
+  height: calc(38 * var(--u));
+  min-width: 30px; min-height: 30px;
+  padding: 0;
+  border: 1px solid rgba(29, 25, 20, 0.18);
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition: background 0.35s ease, opacity 0.35s ease, transform 0.35s ease;
+}
+.rd-nav button:hover:not(:disabled) { background: rgba(29,25,20,0.06); transform: scale(1.06); }
+.rd-nav button:disabled { opacity: 0.28; cursor: default; }
+.rd-nav svg { width: calc(15 * var(--u)); height: calc(15 * var(--u));
+              min-width: 12px; min-height: 12px; }
+
+.rd-live {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ================= useful info — narrow screens ================= */
+@media (max-width: 899px) {
+  .read {
+    --gut: clamp(20px, 5.6vw, 44px);
+    padding: clamp(64px, 14vw, 120px) 0;   /* py-20 */
+  }
+  .rd-wrap { padding: 0 var(--gut); }
+  /* the positioned board collapses back to a plain stack — there is no
+     room beside the title for a right-hand column at this width */
+  .rd-head { position: static; height: auto; margin-bottom: 26px; }
+  .rd-title, .rd-note, .rd-all {
+    position: static;
+    left: auto; top: auto;
+  }
+  .rd-title {
+    width: auto;
+    font-size: clamp(28px, 7.4vw, 46px);   /* text-3xl md:text-5xl */
+    line-height: 1.24;
+    letter-spacing: -0.028em;
+  }
+  .rd-note {
+    width: auto;
+    max-width: 38ch;
+    margin: clamp(16px, 4vw, 26px) 0 0;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--muted-fg);
+  }
+  .rd-all {
+    width: auto;
+    margin: clamp(20px, 5vw, 30px) 0 0;
+    height: 44px;
+    padding: 0 20px;
+    border-radius: 999px;
+    border-color: rgba(29, 25, 20, 0.35);
+    font-size: 14px;
+  }
+  .rd-all svg { width: 14px; height: 14px; }
+
+  /* smaller and back into the corner — the stacked mobile head has far
+     less clearance than the desktop board does */
+  .rd-deco {
+    left: auto;
+    right: -22px;
+    top: clamp(48px, 11vw, 90px);
+    width: clamp(120px, 34vw, 176px);
+    height: clamp(120px, 34vw, 176px);
+  }
+
+  .rd-track { margin-left: -12px; }
+  .rd-item { padding-left: 12px; }
+  .rd-card {
+    aspect-ratio: auto;
+    min-height: 250px;
+    padding: 22px;
+    border-radius: 8px;
+  }
+  .rd-foot { gap: 14px; }
+  .rd-name { font-size: 18px; line-height: 1.36; letter-spacing: -0.015em; }
+  .rd-sum { max-width: none; margin-top: 7px; font-size: 14px; line-height: 1.55; }
+  .rd-by { font-size: 11px; letter-spacing: 0.08em; gap: 8px; }
+  /* the index would otherwise inherit a --u size that collapses to ~3px */
+  .rd-av { width: 20px; height: 20px; font-size: 10px; }
+  .rd-ico { width: 26px; height: 26px; }
+  .rd-arrow { opacity: 0.5; transform: none; }
+  .rd-bar { margin-top: 24px; }
+  .rd-dots button { width: 24px; }
+}
+
+/* ---- useful info — reduced motion ----
+   No auto-advance and no sliding: the track becomes a plain scroller. */
+@media (prefers-reduced-motion: reduce) {
+  .rd-note { opacity: 1; transform: none; }
+  .rd-deco { opacity: 0.9; transform: rotate(-6deg); transition: none; }
+  .rd-track { transform: none !important; overflow-x: auto; }
+  .rd-vp { overflow: visible; }
+  .rd-card { transition: none; }
+  .rd-nav, .rd-dots { display: none; }
+}
+
+/* ---- journey — reduced motion: everything already arrived ---- */
+@media (prefers-reduced-motion: reduce) {
+  .j-pattern { opacity: 0.29; transition: none; }
+  .j-sketch { clip-path: none; transition: none; }
+  .j-lede .w { opacity: 1; filter: none; transform: none; transition: none; }
+  .j-facts li { opacity: 1; transform: none; }
+  .j-facts .sep { transform: scaleY(1); }
+  .j-card { opacity: 1; transform: none; }
+  .j-card.is-out { opacity: 0; }
+  .j-rail__ui { opacity: 1; }
+  .j-cat, .j-desc, .j-card, .j-card img, .j-card__cap, .j-pattern, .j-sketch {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* =================================================================
+   Footer
+
+   The same mark as the header, at the header's own metrics, on the
+   purple the GET IN TOUCH pill already uses (#404463 / #efdfdf) — so
+   it closes the page on a colour pair the design system already owns
+   rather than a new one.
+   ================================================================= */
+
+.foot {
+  --u: calc(100cqw / 1441);
+  position: relative;
+  width: 100%;
+  background: #404463;
+  color: #efdfdf;
+  /* 23 left / 36 right lines the mark and the last link up with the
+     two ends of the nav band above */
+  padding: calc(56 * var(--u)) calc(36 * var(--u)) calc(56 * var(--u)) calc(23 * var(--u));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(40 * var(--u));
+}
+
+.foot__logo {                                 /* 215:286, recoloured */
+  flex-shrink: 0;
+  width: calc(65 * var(--u));
+  font-family: "Fondamento", cursive;
+  color: #efdfdf;
+  text-align: center;
+  letter-spacing: calc(-0.5 * var(--u));
+  white-space: nowrap;
+  text-decoration: none;
+}
+.foot__logo span { display: block; line-height: calc(15 * var(--u)); }
+.foot__logo .v { font-size: calc(21 * var(--u)); }
+.foot__logo .o { font-size: calc(25 * var(--u)); }
+
+.foot__links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: calc(18 * var(--u)) calc(46 * var(--u));
+  font-family: "Manrope", sans-serif;
+  font-size: calc(16 * var(--u));
+  line-height: normal;
+}
+.foot__links a {
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.86;
+  transition: opacity 0.25s ease;
+}
+.foot__links a:hover { opacity: 1; }
+.foot__links a:focus-visible {
+  opacity: 1;
+  outline: 1px solid rgba(239, 223, 223, 0.7);
+  outline-offset: calc(6 * var(--u));
+}
+
+@media (max-width: 700px) {
+  .foot {
+    --u: calc(100cqw / 700);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: calc(34 * var(--u));
+    padding: calc(46 * var(--u)) calc(26 * var(--u));
+  }
+  .foot__logo { width: auto; text-align: left; }
+  .foot__logo span { line-height: calc(34 * var(--u)); }
+  .foot__logo .v { font-size: calc(44 * var(--u)); }
+  .foot__logo .o { font-size: calc(52 * var(--u)); }
+  .foot__links { font-size: calc(28 * var(--u));
+                 gap: calc(20 * var(--u)) calc(36 * var(--u)); }
+}
+</style>
+</head>
+
+<body>
+
+<div class="page">
+  <div class="frame">
+    <div class="track">
+      <div class="stage">
+
+        <!-- ---------- frame 2 ground — 215:296 ---------- -->
+        <div class="layer layer--dunes" data-node-id="215:296">
+          <video class="dunes-video" src="assets/Scene%202.mp4" poster="assets/f2-dunes.png"
+                 muted playsinline webkit-playsinline preload="auto" disablepictureinpicture></video>
+        </div>
+
+        <!-- ---------- frames 1+2 artwork — Group 5 ---------- -->
+        <div class="layer layer--sky" data-node-id="215:277">
+          <div class="clip"><img src="assets/layer-sky-mountains.png" alt="" /></div>
+          <div class="haze"></div>
+        </div>
+        <div class="layer layer--cliff" data-node-id="215:278">
+          <img src="assets/layer-cliff-wadi.png" alt="" />
+        </div>
+        <div class="layer layer--mosque" data-node-id="215:279">
+          <img src="assets/layer-mosque.png" alt="" />
+        </div>
+
+        <!-- ---------- frame 1 headline ---------- -->
+        <div class="hero-type">
+          <h1 class="headline" data-node-id="215:284">Oman</h1>
+          <p class="subhead" data-node-id="215:283">The land that holds a thousand stories. </p>
+        </div>
+
+        <!-- ---------- frame 2 copy ---------- -->
+        <div class="story">
+          <p class="quote" data-node-id="215:301">
+            <span class="line"><i>Where the silence</i></span>
+            <span class="line"><i>has a sound.</i></span>
+          </p>
+          <p class="label" data-node-id="215:302">
+            <span class="line"><i>Wahiba Sands,</i></span>
+            <span class="line"><i>Endless dunes,</i></span>
+            <span class="line"><i>ancient stillness</i></span>
+          </p>
+          <p class="body r-fade" data-node-id="215:303">Wahiba Sands, also called Sharqiya Sands, is a large and famous desert in Oman. It covers an area of 12,500 square kilometers with towering red and golden sand dunes that reach over 100 meters high.</p>
+          <a class="explore r-pop" href="#" data-node-id="215:304">
+            <span data-node-id="215:305">Explore</span>
+            <img src="assets/arrow-right.svg" alt="" data-node-id="215:306" />
+          </a>
+        </div>
+
+        <!-- ---------- frame 3 artwork — 215:357 ---------- -->
+        <div class="l3 f3-sky" data-node-id="226:110">
+          <img src="assets/f3-sky.png" alt="" />
+        </div>
+
+        <div class="l3 f3-mountain" data-node-id="226:91">
+          <div class="rot"><img src="assets/f3-mountain.png" alt="" /></div>
+        </div>
+
+        <div class="l3 f3-mid" data-node-id="226:93">
+          <div class="rot"><img src="assets/f3-mid.png" alt="" /></div>
+        </div>
+
+        <!-- ---------- frame 3 copy ---------- -->
+        <div class="story3">
+          <p class="quote3" data-node-id="215:372">
+            <span class="line"><i>The earth rises to</i></span>
+            <span class="line"><i>meet the sky.</i></span>
+          </p>
+          <p class="label3" data-node-id="215:374">
+            <span class="line"><i>Jebel Shams ,</i></span>
+            <span class="line"><i>The Grand Canyon</i></span>
+            <span class="line"><i>of Arabia</i></span>
+          </p>
+          <p class="body3 r-fade" data-node-id="215:379">The highest mountain in Oman. Often called the "Mountain of the Sun," it features the dramatic Wadi Ghul gorge, widely known as the Grand Canyon of Arabia. </p>
+          <a class="explore r-pop" href="#" data-node-id="215:375">
+            <span data-node-id="215:376">Explore</span>
+            <img src="assets/arrow-right.svg" alt="" data-node-id="215:377" />
+          </a>
+        </div>
+
+        <!-- ---------- frame 5 artwork — 215:516 ----------
+             Deliberately below frame 4's ground: frame 5 is already
+             sitting there, fully opaque and hidden, before the canyon
+             starts to leave. Nothing crossfades — the canyon rising off
+             the top is what uncovers it. -->
+        <div class="l3 f5-sky" data-node-id="215:517">
+          <img src="assets/f5-sky.png" alt="" />
+        </div>
+
+        <div class="l3 f5-fort" data-node-id="215:551">
+          <img src="assets/f5-fort.png" alt="" />
+        </div>
+
+        <div class="l3 f5-house" data-node-id="215:553">
+          <img src="assets/f5-house.png" alt="" />
+        </div>
+
+        <div class="f5-bloom"></div>
+
+        <!-- ---------- frame 4 ground — 215:439 — under the rocky layer ---------- -->
+        <div class="l3 f4-canyon" data-node-id="215:462">
+          <img src="assets/f4-canyon.png" alt="" />
+        </div>
+
+        <div class="l3 f4-strips" data-node-id="215:463">
+          <span data-node-id="215:464"></span>
+          <span data-node-id="215:465"></span>
+          <span data-node-id="215:466"></span>
+          <span data-node-id="215:468"></span>
+          <span data-node-id="215:469"></span>
+        </div>
+
+        <!-- afadfas 1 — 215:391 / 226:113 — shared by frames 3 and 4.
+             Above frame 3's copy, below frame 4's, exactly as Figma stacks it. -->
+        <div class="l3 f3-rocky" data-node-id="215:391">
+          <img src="assets/f3-rocky.png" alt="" />
+        </div>
+
+        <!-- ---------- frame 4 copy ---------- -->
+        <div class="story4">
+          <p class="quote4" data-node-id="215:547">
+            <span class="line"><i>And hides water where</i></span>
+            <span class="line"><i>you'd least expect it.</i></span>
+          </p>
+          <p class="body4 r-fade" data-node-id="215:548">A stunning canyon gorge in Oman featuring towering cliffs, emerald-green freshwater pools, and a hidden cave waterfall. Located about 1.5 to 2 hours by car from Muscat, it is one of the country's most famous natural outdoor</p>
+          <a class="explore r-pop" href="#" data-node-id="215:445">
+            <span data-node-id="215:446">Explore</span>
+            <img src="assets/arrow-right.svg" alt="" data-node-id="215:447" />
+          </a>
+        </div>
+
+        <!-- ---------- frame 5 copy — 215:516 ---------- -->
+        <div class="story5">
+          <p class="quote5" data-node-id="215:526">
+            <span class="line"><i>Where history is</i></span>
+            <span class="line"><i>carved in stone.</i></span>
+          </p>
+          <p class="label5" data-node-id="215:527">
+            <span class="line"><i>Nizwa · Living history,</i></span>
+            <span class="line"><i>still standing</i></span>
+          </p>
+          <p class="body5 r-fade" data-node-id="215:535">An ancient Omani city known as a living history, featuring the massive 17th-century <a href="https://experienceoman.om/destinations/al-dakhiliyah/nizwa-fort" target="_blank" rel="noopener">Nizwa Fort</a>, a bustling traditional souq, and lush date palm oases. It serves as the cultural heart of Oman, blending ancient defensive architecture with vibrant daily community life,.</p>
+          <a class="explore r-pop" href="#">
+            <span>Explore</span>
+            <img src="assets/arrow-right.svg" alt="" />
+          </a>
+        </div>
+
+        <!-- ---------- nav — Group 6 / Group 7 ---------- -->
+        <div class="nav-scrim" data-node-id="215:309">
+          <img src="assets/f2-navstrip.png" alt="" />
+        </div>
+
+        <div class="f4-scrim" data-node-id="215:474">
+          <img src="assets/f4-navscrim.png" alt="" />
+        </div>
+
+        <nav class="nav" data-node-id="215:285">
+          <a class="nav__logo" href="#" data-node-id="215:286">
+            <span class="v">Visit</span><span class="o">Oman</span>
+          </a>
+          <div class="nav__links" data-node-id="215:287">
+            <a href="#" data-node-id="215:288">Explore</a>
+            <a href="#" data-node-id="215:289">Experience</a>
+            <a href="#" data-node-id="215:290">Stay &amp; Journey</a>
+            <a href="#" data-node-id="215:291">Plan your visit</a>
+          </div>
+          <a class="nav__cta" href="#" data-node-id="215:292">GET IN TOUCH</a>
+        </nav>
+
+        <div class="cue">Scroll</div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= Journey — 239:32 =================
+       Begins the instant the pinned hero releases: the runway above is
+       10.6 stage-heights, and this is the first thing in normal flow
+       after it. -->
+  <section class="journey" id="journey" aria-labelledby="journey-title" data-node-id="239:32">
+
+    <!-- image 11 — 239:45 -->
+    <img class="j-pattern" src="assets/s6-pattern.png" alt="" aria-hidden="true" data-node-id="239:45" />
+
+    <!-- image 12 — 239:44 — sits under the type, so it is first -->
+    <img class="j-sketch" src="assets/s6-sketch.png" alt="" aria-hidden="true" data-node-id="239:44" />
+
+    <p class="j-lede" data-node-id="239:62">And this is only the beginning. From hidden wadis to fortress cities, Oman's must-visit places are waiting to be explored.</p>
+
+    <!-- 239:72 -->
+    <ul class="j-facts" data-node-id="239:72">
+      <li data-node-id="239:73">World-Class Safety</li>
+      <li class="sep" aria-hidden="true"></li>
+      <li data-node-id="239:75">Warm Omani hospitality</li>
+      <li class="sep" aria-hidden="true"></li>
+      <li data-node-id="239:77">OMANI architecture, no skyscrapers.</li>
+      <li class="sep" aria-hidden="true"></li>
+      <li data-node-id="239:79">Endless variety WITHIN 2 hours</li>
+    </ul>
+
+    <h2 class="j-title" id="journey-title" data-node-id="239:57">
+      <span class="line"><i>See where your journey</i></span>
+      <span class="line"><i>could take you.</i></span>
+    </h2>
+
+    <!-- 239:59 — the chosen category and its note ride the lead slot;
+         the other four wait at the foot of the column -->
+    <div class="j-menu" role="tablist" aria-orientation="vertical"
+         aria-label="Kinds of journey" data-node-id="239:59">
+      <div class="j-menu__lead" role="presentation"></div>
+      <div class="j-menu__rest" role="presentation"></div>
+    </div>
+
+    <!-- 239:64 — filled from the category being shown -->
+    <div class="j-rail" data-node-id="239:64">
+      <div class="j-rail__vp" role="tabpanel" tabindex="0">
+        <ul class="j-track"></ul>
+      </div>
+      <div class="j-rail__ui">
+        <div class="j-bar" aria-hidden="true"><i></i></div>
+        <div class="j-nav">
+          <button type="button" class="j-prev" aria-label="Previous places">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M15 4 7 12l8 8" stroke="currentColor" stroke-width="1.6"
+                    stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+          <button type="button" class="j-next" aria-label="More places">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M9 4l8 8-8 8" stroke="currentColor" stroke-width="1.6"
+                    stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ================= Choose your adventure — 257:30 =================
+       Figma parks two polaroids at the bottom right with the second
+       already running off the edge, which is the design saying the
+       strip continues. So they are built as a rail that keeps
+       travelling: the same two card geometries, the same tilts and
+       shadows, just no longer parked. The six activities are the ones
+       this section already carried; three of their photos are the
+       exact fills Figma uses. -->
+  <section class="adv" id="things-to-do" aria-labelledby="adv-title" data-node-id="257:30">
+
+    <h2 class="adv__title" id="adv-title" data-node-id="257:32">
+      <span class="line"><i>Choose your</i></span>
+      <span class="line"><i>adventure</i></span>
+    </h2>
+    <p class="adv__body r-fade" data-node-id="257:35">From swimming through hidden canyon pools to
+      yoga at sunset, every day here brings a new adventure.</p>
+
+    <img class="adv__map" src="assets/adv-map.png" alt="" data-node-id="257:37" />
+
+    <div class="adv__rail" role="group" aria-roledescription="carousel"
+         aria-label="Experiences and activities">
+      <div class="adv__track">
+
+        <figure class="pol pol--b" style="--rot: -4.2deg">
+          <div class="pol__rot"><div class="pol__card">
+            <div class="pol__photo"><img src="assets/act-zipline.png" alt="Ziplining high above a Musandam fjord" /></div>
+            <figcaption>Zipline</figcaption>
+          </div></div>
+        </figure>
+
+        <figure class="pol pol--a" style="--rot: 3.1deg">
+          <div class="pol__rot"><div class="pol__card">
+            <div class="pol__photo"><img src="assets/act-hike.png" alt="Hikers on a high mountain trail in Oman" /></div>
+            <figcaption>Mountain Hike</figcaption>
+          </div></div>
+        </figure>
+
+        <figure class="pol pol--b" style="--rot: -2.4deg">
+          <div class="pol__rot"><div class="pol__card">
+            <div class="pol__photo"><img src="assets/act-beach.png" alt="A coastal trail above the sea near Muscat" /></div>
+            <figcaption>Beach Yoga</figcaption>
+          </div></div>
+        </figure>
+
+        <figure class="pol pol--a pol--crop" style="--rot: 2.59deg" data-node-id="257:41">
+          <div class="pol__rot"><div class="pol__card">
+            <div class="pol__photo" data-node-id="257:42"><img src="assets/act-desert-yoga.png" alt="Yoga on the dunes at sunset in Wahiba Sands" /></div>
+            <figcaption data-node-id="257:43">Desert Yoga</figcaption>
+          </div></div>
+        </figure>
+
+        <figure class="pol pol--b" style="--rot: 5.4deg">
+          <div class="pol__rot"><div class="pol__card">
+            <div class="pol__photo"><img src="assets/act-sailing.png" alt="A dhow sailing along the Omani coastline" /></div>
+            <figcaption>Sailing</figcaption>
+          </div></div>
+        </figure>
+
+        <figure class="pol pol--b" style="--rot: -7.26deg" data-node-id="257:47">
+          <div class="pol__rot"><div class="pol__card">
+            <div class="pol__photo" data-node-id="257:48"><img src="assets/act-scuba.png" alt="A diver on a reef in the Daymaniyat Islands" /></div>
+            <figcaption data-node-id="257:49">Scuba Diving</figcaption>
+          </div></div>
+        </figure>
+
+        <!-- second pass, so -50% closes the loop on itself -->
+        <figure class="pol pol--b" style="--rot: -4.2deg" aria-hidden="true">
+          <div class="pol__rot"><div class="pol__card">
+            <div class="pol__photo"><img src="assets/act-zipline.png" alt="" /></div>
+            <figcaption>Zipline</figcaption>
+          </div></div>
+        </figure>
+
+        <figure class="pol pol--a" style="--rot: 3.1deg" aria-hidden="true">
+          <div class="pol__rot"><div class="pol__card">
+            <div class="pol__photo"><img src="assets/act-hike.png" alt="" /></div>
+            <figcaption>Mountain Hike</figcaption>
+          </div></div>
+        </figure>
+
+        <figure class="pol pol--b" style="--rot: -2.4deg" aria-hidden="true">
+          <div class="pol__rot"><div class="pol__card">
+            <div class="pol__photo"><img src="assets/act-beach.png" alt="" /></div>
+            <figcaption>Beach Yoga</figcaption>
+          </div></div>
+        </figure>
+
+        <figure class="pol pol--a pol--crop" style="--rot: 2.59deg" aria-hidden="true">
+          <div class="pol__rot"><div class="pol__card">
+            <div class="pol__photo"><img src="assets/act-desert-yoga.png" alt="" /></div>
+            <figcaption>Desert Yoga</figcaption>
+          </div></div>
+        </figure>
+
+        <figure class="pol pol--b" style="--rot: 5.4deg" aria-hidden="true">
+          <div class="pol__rot"><div class="pol__card">
+            <div class="pol__photo"><img src="assets/act-sailing.png" alt="" /></div>
+            <figcaption>Sailing</figcaption>
+          </div></div>
+        </figure>
+
+        <figure class="pol pol--b" style="--rot: -7.26deg" aria-hidden="true">
+          <div class="pol__rot"><div class="pol__card">
+            <div class="pol__photo"><img src="assets/act-scuba.png" alt="" /></div>
+            <figcaption>Scuba Diving</figcaption>
+          </div></div>
+        </figure>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= Useful info =================
+       Port of the shadcn `testimonials` block: an embla Carousel of
+       aspect-video muted cards, two to a view on large screens, that
+       advances itself every four seconds. Slides are authored in the
+       markup so they are readable and indexable before any script runs;
+       the script only moves the track. Cards link into articles.html.
+
+       lucide-react glyphs are inlined as SVG (Stamp, Sun, Scale,
+       Map, Car, Shirt) — there is no bundler here to tree-shake an
+       icon package into. -->
+  <section class="read" id="useful" aria-labelledby="read-title">
+
+    <!-- purely decorative marginalia, tucked behind the copy on the right -->
+    <img class="rd-deco" src="assets/note pad sketch.png" alt="" aria-hidden="true" loading="lazy" />
+
+    <div class="rd-wrap">
+
+      <div class="rd-head">
+        <h2 class="rd-title" id="read-title">
+          <span class="line"><i>Everything you</i></span>
+          <span class="line"><i>need to know</i></span>
+        </h2>
+        <p class="rd-note">Visas, seasons, driving distances and the comparison
+          everyone makes anyway — answered properly, before you have to ask.</p>
+        <a class="rd-all" href="articles.html">
+          Read all articles
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 12h15m-6-7 7 7-7 7" stroke="currentColor" stroke-width="1.6"
+                  stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </a>
+      </div>
+
+      <div class="rd-car" role="region" aria-roledescription="carousel"
+           aria-label="Useful articles" tabindex="0">
+        <div class="rd-vp">
+          <ul class="rd-track">
+
+            <li class="rd-item" role="group" aria-roledescription="slide">
+              <a class="rd-card" href="articles.html#oman-visa-guide">
+                <!-- lucide: stamp -->
+                <svg class="rd-ico" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M5 22h14M19.27 13.73A2.5 2.5 0 0 0 17.5 9h-1.79A2.71 2.71 0 0 1 13 6.29a2.71 2.71 0 0 0-4.63-1.92A2.71 2.71 0 0 0 8 6.29 2.71 2.71 0 0 1 5.29 9H3.5a2.5 2.5 0 0 0-1.77 4.27" />
+                  <path d="M4 18h16v-4H4z" />
+                </svg>
+                <div class="rd-foot">
+                  <div>
+                    <h3 class="rd-name">Do I need a visa for Oman? A simple guide to the 2026 entry rules</h3>
+                    <p class="rd-sum">The GCC Unified Tourist Visa, who is exempt, what it
+                      costs, and how long processing actually takes.</p>
+                  </div>
+                  <p class="rd-by">
+                    <span class="rd-av" aria-hidden="true">01</span>
+                    <span>Entry &amp; visas · 4 min</span>
+                    <span class="rd-arrow" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none"><path d="M7 17 17 7M9 7h8v8"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                    </span>
+                  </p>
+                </div>
+              </a>
+            </li>
+
+            <li class="rd-item" role="group" aria-roledescription="slide">
+              <a class="rd-card" href="articles.html#best-time-to-visit">
+                <!-- lucide: sun -->
+                <svg class="rd-ico" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="4" />
+                  <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+                </svg>
+                <div class="rd-foot">
+                  <div>
+                    <h3 class="rd-name">Best time to visit Oman: a season-by-season guide to weather, crowds, and khareef</h3>
+                    <p class="rd-sum">The coast, the mountains and Dhofar keep different
+                      calendars. Here is which one to plan around.</p>
+                  </div>
+                  <p class="rd-by">
+                    <span class="rd-av" aria-hidden="true">02</span>
+                    <span>When to go · 6 min</span>
+                    <span class="rd-arrow" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none"><path d="M7 17 17 7M9 7h8v8"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                    </span>
+                  </p>
+                </div>
+              </a>
+            </li>
+
+            <li class="rd-item" role="group" aria-roledescription="slide">
+              <a class="rd-card" href="articles.html#oman-vs-dubai">
+                <!-- lucide: scale -->
+                <svg class="rd-ico" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 3v18M7 21h10M3 8l4-5 4 5M13 8l4-5 4 5" />
+                  <path d="M3 8a4 4 0 0 0 8 0M13 8a4 4 0 0 0 8 0" />
+                </svg>
+                <div class="rd-foot">
+                  <div>
+                    <h3 class="rd-name">Oman vs. Dubai: what's actually different, and how to choose</h3>
+                    <p class="rd-sum">Two very different holidays three hours apart. An
+                      honest account of which one you are actually after.</p>
+                  </div>
+                  <p class="rd-by">
+                    <span class="rd-av" aria-hidden="true">03</span>
+                    <span>Comparisons · 5 min</span>
+                    <span class="rd-arrow" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none"><path d="M7 17 17 7M9 7h8v8"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                    </span>
+                  </p>
+                </div>
+              </a>
+            </li>
+
+            <li class="rd-item" role="group" aria-roledescription="slide">
+              <a class="rd-card" href="articles.html#7-days-in-oman">
+                <!-- lucide: map -->
+                <svg class="rd-ico" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M15 6.5v13M9 4.5v13" />
+                  <path d="m15 19.5 5.13-2.05a1 1 0 0 0 .63-.93V4.61a.5.5 0 0 0-.69-.46L15 6.5l-6-2-5.13 2.05a1 1 0 0 0-.63.93v11.91a.5.5 0 0 0 .69.46L9 17.5z" />
+                </svg>
+                <div class="rd-foot">
+                  <div>
+                    <h3 class="rd-name">7 days in Oman: how to see the desert, mountains, and coast in one trip</h3>
+                    <p class="rd-sum">Everything really is closer than you think. One week,
+                      one loop, all four landscapes — with the driving times.</p>
+                  </div>
+                  <p class="rd-by">
+                    <span class="rd-av" aria-hidden="true">04</span>
+                    <span>Itineraries · 8 min</span>
+                    <span class="rd-arrow" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none"><path d="M7 17 17 7M9 7h8v8"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                    </span>
+                  </p>
+                </div>
+              </a>
+            </li>
+
+            <li class="rd-item" role="group" aria-roledescription="slide">
+              <a class="rd-card" href="articles.html#renting-a-car">
+                <!-- lucide: car -->
+                <svg class="rd-ico" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M19 17h2v-4a2 2 0 0 0-.6-1.4L18 9H6L3.6 11.6A2 2 0 0 0 3 13v4h2" />
+                  <path d="M5 9 6.5 5.5A2 2 0 0 1 8.3 4.3h7.4a2 2 0 0 1 1.8 1.2L19 9M9 17h6" />
+                  <circle cx="7" cy="17" r="2" /><circle cx="17" cy="17" r="2" />
+                </svg>
+                <div class="rd-foot">
+                  <div>
+                    <h3 class="rd-name">Renting a car in Oman: what you need, what it costs, and where 4WD actually matters</h3>
+                    <p class="rd-sum">The roads are excellent and the signage is bilingual.
+                      There are three wadis where that stops being true.</p>
+                  </div>
+                  <p class="rd-by">
+                    <span class="rd-av" aria-hidden="true">05</span>
+                    <span>Getting around · 5 min</span>
+                    <span class="rd-arrow" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none"><path d="M7 17 17 7M9 7h8v8"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                    </span>
+                  </p>
+                </div>
+              </a>
+            </li>
+
+            <li class="rd-item" role="group" aria-roledescription="slide">
+              <a class="rd-card" href="articles.html#what-to-wear">
+                <!-- lucide: shirt -->
+                <svg class="rd-ico" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z" />
+                </svg>
+                <div class="rd-foot">
+                  <div>
+                    <h3 class="rd-name">What to wear in Oman: a practical guide for men and women</h3>
+                    <p class="rd-sum">Modest, not restrictive. What that means at the mosque,
+                      at the wadi, and at dinner in Muscat.</p>
+                  </div>
+                  <p class="rd-by">
+                    <span class="rd-av" aria-hidden="true">06</span>
+                    <span>Before you pack · 4 min</span>
+                    <span class="rd-arrow" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none"><path d="M7 17 17 7M9 7h8v8"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                    </span>
+                  </p>
+                </div>
+              </a>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+
+      <div class="rd-bar">
+        <div class="rd-dots" role="tablist" aria-label="Choose an article"></div>
+        <div class="rd-nav">
+          <button type="button" class="rd-prev" aria-label="Previous articles">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M19 12H5m6-7-7 7 7 7" stroke="currentColor" stroke-width="1.6"
+                    stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+          <button type="button" class="rd-next" aria-label="More articles">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M5 12h14m-6-7 7 7-7 7" stroke="currentColor" stroke-width="1.6"
+                    stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <p class="rd-live" aria-live="polite"></p>
+
+    </div>
+  </section>
+
+  <!-- ================= Footer ================= -->
+  <footer class="foot">
+    <a class="foot__logo" href="#" aria-label="Visit Oman — home">
+      <span class="v">Visit</span><span class="o">Oman</span>
+    </a>
+    <nav class="foot__links" aria-label="Footer">
+      <a href="#">About Oman</a>
+      <a href="#">Travel Tips</a>
+      <a href="#">Get In Touch</a>
+      <a href="#">Plan Your trip</a>
+      <a href="#">Articles</a>
+      <a href="#">News</a>
+    </nav>
+  </footer>
+</div>
+
+<script>
+(function () {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  var $ = function (s) { return document.querySelector(s); };
+
+  var frame = $(".frame"), track = $(".track"), stage = $(".stage");
+  var story = $(".story"), story3 = $(".story3");
+
+  var sky    = $(".layer--sky"),  skyImg = $(".layer--sky .clip"), haze = $(".layer--sky .haze");
+  var cliff  = $(".layer--cliff"), cliffI = $(".layer--cliff img");
+  var mosque = $(".layer--mosque"), dunes = $(".layer--dunes");
+  var scrim  = $(".nav-scrim"), hero = $(".hero-type"), cue = $(".cue");
+  var video  = $(".dunes-video");
+
+  var f3sky = $(".f3-sky"), f3mtn = $(".f3-mountain"),
+      f3mid = $(".f3-mid"), f3rock = $(".f3-rocky");
+
+  var f4canyon = $(".f4-canyon"), f4strips = $(".f4-strips"),
+      f4scrim = $(".f4-scrim"), story4 = $(".story4");
+
+  var f5sky = $(".f5-sky"), f5fort = $(".f5-fort"), f5house = $(".f5-house"),
+      f5bloom = $(".f5-bloom"), story5 = $(".story5");
+
+  /* ---- phase 1 geometry, straight from Figma (design px) ---- */
+  var BOX = {
+    sky:    { a: [-206.063, -156,     1892.900, 1143.513],
+              b: [-703.740, -445.449, 2589.347, 1564.254] },
+    cliff:  { a: [ -22.631,  230.094,  580.668,  675.409],
+              b: [-928.156,  220.645, 1269.658, 1331.355] },
+    mosque: { a: [ 481.581,  318.722,  988.239,  584.792],
+              b: [ 898.252,  265.436, 1698.748, 1005.239] }
+  };
+  var CLIFF_FILL = { a: [0, 0.08, 99.92, 99.94], b: [5.07, -1.19, 92.37, 102.48] };
+
+  /* ---- phase 2: how far each frame 3 layer travels, and when.
+         Negative rises from below; the sky descends from above.
+         [ travel, start, end, pointerDrift ]                    ---- */
+  var RISE = {
+    sky:   { travel: -260, from: 0.05, to: 0.75, drift:  5 },
+    mtn:   { travel:  520, from: 0.20, to: 0.92, drift: 12 },
+    mid:   { travel:  700, from: 0.26, to: 0.95, drift: 19 },
+    rock:  { travel:  880, from: 0.30, to: 1.00, drift: 30 }
+  };
+
+  /* ---- phase 3: the shared rocky layer's two Figma boxes ---- */
+  var ROCKY = { a: [-6, 503, 1452, 806], b: [-141, -321, 1587, 881] };
+
+  /* Phase 3 is one camera move up: every layer rides the SAME curve, only
+     the amplitude differs. That is what stops the rocky layer reading as a
+     separate sheet sliding up. Ordered far -> near:
+       sky 560 < mountain 680 < mid 760 < rocky 824  (rocky is fixed by Figma)
+     The canyon rises 850 — just enough to start below the stage edge
+     (-9 + 850 = 841 > 829) so its top never pops in as a hard line. */
+  var EXIT = {
+    sky: { travel: -560, from: 0.05, to: 0.55 },
+    mtn: { travel: -680, from: 0.05, to: 0.60 },
+    mid: { travel: -760, from: 0.08, to: 0.62 }
+  };
+  var CANYON_RISE = 850;
+
+  /* ---- phase 4: one more camera move, same direction. Frame 4's scene
+     leaves through the top while frame 5's rises in from below, so the
+     eye reads one continuous travel rather than a cut. Frame 4 exits far
+     enough to clear the stage entirely (canyon bottom 870 -> -10, rocky
+     bottom 560 -> -400), which is why nothing has to crossfade out.
+
+     Frame 5 arrives on the same curve, graded far -> near exactly like
+     frame 1 — and, inverting frame 1's push-in, the two cutouts converge
+     from the sides as the camera settles back.
+
+     The sky only travels 100 because its box overhangs the stage by
+     100.59 at the top; any further and its own top edge would show. The
+     8% dolly buys back the depth that costs it.                     ---- */
+  var EXIT4  = { canyon: -880, rock: -960 };
+  var RISE5 = {
+    sky:   { travel: 100, fromX:    0, drift:  4, scale: 1.08 },
+    fort:  { travel: 660, fromX: -180, drift: 14 },
+    house: { travel: 820, fromX:  160, drift: 26 }
+  };
+
+  var lerp = function (a, b, t) { return a + (b - a) * t; };
+  var clamp01 = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
+  var seg = function (p, a, b) { return clamp01((p - a) / (b - a)); };
+  var easeInOut = function (t) { return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2; };
+  var easeOut = function (t) { return 1 - Math.pow(1 - t, 3); };
+
+  function boxTransform(box, t, u, dx, dy) {
+    var a = box.a, b = box.b;
+    var x = lerp(a[0], b[0], t) - a[0] + dx;
+    var y = lerp(a[1], b[1], t) - a[1] + dy;
+    return "translate3d(" + (x * u) + "px," + (y * u) + "px,0) scale(" +
+           lerp(1, b[2] / a[2], t) + "," + lerp(1, b[3] / a[3], t) + ")";
+  }
+
+  /* a frame 3 layer: rises to rest in phase 2, then drifts up and out
+     in phase 3 if an exit is given */
+  function riseLayer(el, cfg, p2, u, mx, my, exit, p3, cam) {
+    var t = easeOut(seg(p2, cfg.from, cfg.to));
+    var vis = seg(p2, cfg.from, cfg.from + (cfg.to - cfg.from) * 0.5);
+    var y = lerp(cfg.travel, 0, t);
+    var fade = 1;
+    if (exit) {
+      y += exit.travel * cam;                       /* shared camera move */
+      fade = 1 - seg(p3, exit.from, exit.to);       /* own fade window    */
+    }
+    el.style.opacity = String(vis * fade);
+    el.style.transform = "translate3d(" + (mx * cfg.drift * vis * fade * u) + "px," +
+                         ((y + my * cfg.drift * 0.35 * vis * fade) * u) + "px,0)";
+  }
+
+  /* a frame 5 cutout: rises from off-stage and slides in from its side,
+     both on the shared phase 4 curve, then keeps a pointer drift scaled
+     to its depth once it has landed */
+  function arriveLayer(el, cfg, p4, cam4, u, mx, my) {
+    el.style.opacity = String(seg(p4, 0.00, 0.02));
+    el.style.transform =
+      "translate3d(" + ((lerp(cfg.fromX, 0, cam4) + mx * cfg.drift * cam4) * u) + "px," +
+      ((lerp(cfg.travel, 0, cam4) + my * cfg.drift * 0.35 * cam4) * u) + "px,0)";
+  }
+
+  /* ---- Scene 2: plays once as the ground rises, holds its last frame ---- */
+  var videoStarted = false, videoFinished = false;
+  if (video) {
+    video.muted = true;
+    video.loop = false;
+    video.addEventListener("ended", function () { videoFinished = true; video.pause(); });
+  }
+  function driveVideo(p1) {
+    if (!video) return;
+    if (p1 > 0.20 && !videoStarted && !videoFinished) {
+      videoStarted = true;
+      var t = video.play();
+      if (t && t.catch) t.catch(function () { videoStarted = false; });
+    }
+    if (p1 < 0.05 && (videoStarted || videoFinished)) {
+      video.pause(); video.currentTime = 0;
+      videoStarted = false; videoFinished = false;
+    }
+  }
+
+  var pointerX = 0, pointerY = 0, easedX = 0, easedY = 0, queued = false;
+
+  function render() {
+    queued = false;
+
+    var u = frame.clientWidth / 1441;
+    var max = track.offsetHeight - stage.offsetHeight;
+    var raw = max > 0 ? clamp01(-track.getBoundingClientRect().top / max) : 0;
+
+    /* four transitions, each with a dwell after it */
+    var p1 = seg(raw, 0.0000, 0.2138);
+    var p2 = seg(raw, 0.3088, 0.4908);
+    var p3 = seg(raw, 0.5621, 0.7442);
+    var p4 = seg(raw, 0.7900, 0.9600);
+
+    easedX += (pointerX - easedX) * 0.08;
+    easedY += (pointerY - easedY) * 0.08;
+
+    driveVideo(p1);
+
+    /* ---------- phase 1: frame 1 -> frame 2 ---------- */
+    var t1 = easeInOut(seg(p1, 0.00, 0.82));
+    var sway = 1 - seg(p1, 0.00, 0.45);
+
+    sky.style.transform    = boxTransform(BOX.sky,    t1, u, easedX *  6 * sway, easedY * 2.4 * sway);
+    cliff.style.transform  = boxTransform(BOX.cliff,  t1, u, easedX * 22 * sway, easedY * 8.8 * sway);
+    mosque.style.transform = boxTransform(BOX.mosque, t1, u, easedX * 14 * sway, easedY * 5.6 * sway);
+
+    var f = CLIFF_FILL;
+    cliffI.style.left   = lerp(f.a[0], f.b[0], t1) + "%";
+    cliffI.style.top    = lerp(f.a[1], f.b[1], t1) + "%";
+    cliffI.style.width  = lerp(f.a[2], f.b[2], t1) + "%";
+    cliffI.style.height = lerp(f.a[3], f.b[3], t1) + "%";
+
+    skyImg.style.opacity = String(1 - seg(p1, 0.34, 0.80));
+    haze.style.opacity   = String(1 - seg(p1, 0.30, 0.66));
+    cliff.style.opacity  = String(1 - seg(p1, 0.30, 0.72));
+    mosque.style.opacity = String(1 - seg(p1, 0.30, 0.72));
+
+    var ht = seg(p1, 0.00, 0.20);
+    hero.style.opacity = String(1 - ht);
+    hero.style.transform = "translate3d(0," + (-60 * ht * u) + "px,0)";
+    hero.style.filter = ht > 0 ? "blur(" + (10 * ht) + "px)" : "none";
+
+    if (cue) cue.style.opacity = String(1 - seg(p1, 0, 0.12));
+
+    /* ---------- phase 2: the ground sinks, the earth rises ---------- */
+    var sink = easeInOut(seg(p2, 0.00, 0.85));
+
+    var dt = seg(p1, 0.26, 0.72);
+    var ds = lerp(1.12, 1, easeOut(seg(p1, 0.26, 0.94)));
+    dunes.style.opacity = String(0.9 * dt * (1 - seg(p2, 0.45, 0.85)));
+    dunes.style.transform =
+      "translate3d(" + (easedX * -8 * dt * u) + "px," +
+      ((829 * sink + easedY * -3 * dt) * u) + "px,0) scale(" + ds + ")";
+
+    /* the single curve every phase 3 layer rides, and its phase 4 twin */
+    var cam  = easeInOut(seg(p3, 0.00, 0.88));
+    var cam4 = easeInOut(seg(p4, 0.00, 0.90));
+
+    riseLayer(f3sky, RISE.sky, p2, u, easedX, easedY, EXIT.sky, p3, cam);
+    riseLayer(f3mtn, RISE.mtn, p2, u, easedX, easedY, EXIT.mtn, p3, cam);
+    riseLayer(f3mid, RISE.mid, p2, u, easedX, easedY, EXIT.mid, p3, cam);
+
+    /* frame 2 copy steps aside for frame 3 */
+    var exit2 = seg(p2, 0.00, 0.22);
+    story.style.opacity = String(1 - exit2);
+    story.style.transform = "translate3d(0," + (-40 * exit2 * u) + "px,0)";
+
+    /* ---------- phase 3: the rocky layer rises into frame 4 ----------
+       Same element, same pixels — it just travels between the two boxes
+       Figma gives it, which is what makes the cut invisible.          */
+    var rt = cam;
+    var rockRise = lerp(RISE.rock.travel, 0,
+                        easeOut(seg(p2, RISE.rock.from, RISE.rock.to)));
+    var rockVis = seg(p2, RISE.rock.from,
+                      RISE.rock.from + (RISE.rock.to - RISE.rock.from) * 0.5);
+    var rx = lerp(ROCKY.a[0], ROCKY.b[0], rt) - ROCKY.a[0];
+    var ry = lerp(ROCKY.a[1], ROCKY.b[1], rt) - ROCKY.a[1];
+    var rs = lerp(1, ROCKY.b[2] / ROCKY.a[2], rt);
+
+    f3rock.style.opacity = String(rockVis);
+    f3rock.style.transform =
+      "translate3d(" + ((rx + easedX * RISE.rock.drift * rockVis * (1 - rt)) * u) + "px," +
+      ((rockRise + ry + EXIT4.rock * cam4 +
+        easedY * RISE.rock.drift * 0.35 * rockVis * (1 - rt)) * u) + "px,0)" +
+      " scale(" + rs + ")";
+
+    /* frame 4 ground rides the same curve, so it and the rocky layer read
+       as one scene travelling up rather than two sheets. No crossfade —
+       it starts below the stage edge and the motion itself reveals it,
+       then in phase 4 it keeps going and leaves through the top. */
+    var canyonY = lerp(CANYON_RISE, 0, cam) + EXIT4.canyon * cam4;
+    f4canyon.style.opacity = "1";
+    f4canyon.style.transform =
+      "translate3d(" + (easedX * 9 * cam * (1 - cam4) * u) + "px," +
+      ((canyonY + easedY * 3 * cam * (1 - cam4)) * u) + "px,0)";
+
+    /* the strips belong to that ground, so they travel with it */
+    f4strips.style.opacity = String(seg(p3, 0.45, 0.75));
+    f4strips.style.transform = "translate3d(0," + (canyonY * u) + "px,0)";
+
+    /* ---------- phase 4: the canyon leaves, Nizwa rises ----------
+       Frame 5 is already fully opaque behind the canyon by p4 = 0.14 —
+       at which point the canyon's bottom edge is still at y 856, ~27px
+       clear of the stage floor — so the handover is done entirely by
+       motion, never by a crossfade. (0.20 also works but leaves only
+       2px, which the pointer drift can eat.) Far -> near amplitudes,
+       and the two cutouts converge from the sides as it settles. */
+    f5sky.style.opacity = String(seg(p4, 0.00, 0.14));
+    f5sky.style.transform =
+      "translate3d(" + (easedX * RISE5.sky.drift * cam4 * u) + "px," +
+      ((lerp(RISE5.sky.travel, 0, cam4) +
+        easedY * RISE5.sky.drift * 0.35 * cam4) * u) + "px,0)" +
+      " scale(" + lerp(RISE5.sky.scale, 1, cam4) + ")";
+
+    arriveLayer(f5fort,  RISE5.fort,  p4, cam4, u, easedX, easedY);
+    arriveLayer(f5house, RISE5.house, p4, cam4, u, easedX, easedY);
+
+    f5bloom.style.opacity = String(Math.sin(Math.PI * seg(p4, 0.05, 0.85)) * 0.22);
+
+    /* frame 4 copy hands over to frame 5 */
+    var exit4 = seg(p4, 0.00, 0.22);
+    story4.style.opacity = String(1 - exit4);
+    story4.style.transform = "translate3d(0," + (-40 * exit4 * u) + "px,0)";
+
+    /* frame 3 copy hands over to frame 4 */
+    var exit3 = seg(p3, 0.00, 0.20);
+    story3.style.opacity = String(1 - exit3);
+    story3.style.transform = "translate3d(0," + (-40 * exit3 * u) + "px,0)";
+
+    /* stage ground: white -> #e4d4c2 (f3) -> #0d1e1a (f4) -> #e4d4c2 (f5) */
+    var bg2 = seg(p2, 0.05, 0.50), bg3 = seg(p3, 0.15, 0.55),
+        bg4 = seg(p4, 0.10, 0.50);
+    stage.style.backgroundColor =
+      "rgb(" + Math.round(lerp(lerp(lerp(255, 228, bg2), 13, bg3), 228, bg4)) + "," +
+               Math.round(lerp(lerp(lerp(255, 212, bg2), 30, bg3), 212, bg4)) + "," +
+               Math.round(lerp(lerp(lerp(255, 194, bg2), 26, bg3), 194, bg4)) + ")";
+
+    /* ---------- nav: black -> white -> black -> white, and stays ----------
+       Frame 5's nav is white too, so phase 4 only has to drop frame 4's
+       scrim — 215:516 has no blurred strip behind it. */
+    var toWhite  = seg(p1, 0.34, 0.58);
+    var toBlack  = seg(p2, 0.30, 0.60);
+    var toWhite2 = seg(p3, 0.30, 0.60);
+    var lum = lerp(255 * toWhite * (1 - toBlack), 255, toWhite2);
+    var ink = Math.round(lum);
+    frame.style.setProperty("--nav-ink", "rgb(" + ink + "," + ink + "," + ink + ")");
+    scrim.style.opacity = String(seg(p1, 0.34, 0.62) * (1 - seg(p2, 0.10, 0.45)));
+    f4scrim.style.opacity = String(seg(p3, 0.35, 0.65) * (1 - seg(p4, 0.10, 0.45)));
+
+    /* ---------- staged copy reveals ---------- */
+    if (p1 > 0.58 && p2 < 0.04) story.classList.add("is-revealed");
+    else if (p1 < 0.52 || p2 > 0.10) story.classList.remove("is-revealed");
+
+    if (p2 > 0.66 && p3 < 0.04) story3.classList.add("is-revealed");
+    else if (p2 < 0.60 || p3 > 0.10) story3.classList.remove("is-revealed");
+
+    if (p3 > 0.68 && p4 < 0.04) story4.classList.add("is-revealed");
+    else if (p3 < 0.62 || p4 > 0.10) story4.classList.remove("is-revealed");
+
+    if (p4 > 0.72) story5.classList.add("is-revealed");
+    else if (p4 < 0.66) story5.classList.remove("is-revealed");
+  }
+
+  function request() { if (!queued) { queued = true; requestAnimationFrame(render); } }
+
+  addEventListener("scroll", request, { passive: true });
+  addEventListener("resize", request);
+  addEventListener("pointermove", function (e) {
+    pointerX = (e.clientX / innerWidth) * 2 - 1;
+    pointerY = (e.clientY / innerHeight) * 2 - 1;
+    request();
+  }, { passive: true });
+
+  (function loop() {
+    if (Math.abs(pointerX - easedX) > 0.001 || Math.abs(pointerY - easedY) > 0.001) render();
+    requestAnimationFrame(loop);
+  })();
+
+  render();
+})();
+</script>
+
+<script>
+/* =================================================================
+   Journey — 239:32
+
+   Three independent pieces, all driven off one rAF-throttled scroll
+   read so nothing fights for frames with the hero above:
+
+     1. reveals   — everything that arrives once and stays
+     2. the lede  — lit word by word by the scroll position itself
+     3. the board — a five-way menu that FLIPs its labels between the
+                    lead slot and the foot of the column, and re-deals
+                    the rail underneath
+
+   IMAGERY NOTE: the four Glassy Waters photographs come from the Figma
+   board. The other four categories have no artwork in the file yet, so
+   they are dealt from the hero's own plates as stand-ins — swap the
+   `img` values below when the real photography lands.
+   ================================================================= */
+(function () {
+
+  var root = document.querySelector(".journey");
+  if (!root) return;
+
+  var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------------- content ----------------
+     Menu order is the resting order: whichever category is chosen is
+     lifted out of this list into the lead slot, and the rest close up
+     behind it. Glassy Waters starts chosen, as in 239:59. */
+  var CATS = [
+    {
+      id: "sky",
+      name: "Sky Trails",
+      desc: "Ridge paths that start above the cloud line and finish on the rim.",
+      cards: [
+        { img: "assets/layer-sky-mountains.png", title: "Jebel Shams",   sub: "Balcony walk" },
+        { img: "assets/f4-canyon.png",           title: "Wadi Ghul",     sub: "Canyon rim" },
+        { img: "assets/s6-glassy-3.png",         title: "Jebel Akhdar",  sub: "Terrace trail" }
+      ]
+    },
+    {
+      id: "higher",
+      name: "Higher Ground",
+      desc: "Villages that farm the mountain through channels older than the forts.",
+      cards: [
+        { img: "assets/s6-glassy-3.png",         title: "Misfat Al Abriyeen", sub: "Falaj village" },
+        { img: "assets/layer-sky-mountains.png", title: "Jebel Akhdar",       sub: "Rose terraces" },
+        { img: "assets/f4-canyon.png",           title: "Wadi Bani Awf",      sub: "Snake canyon" }
+      ]
+    },
+    {
+      id: "golden",
+      name: "Golden Silence",
+      desc: "Twelve thousand square kilometres of dune, and no sound that isn't yours.",
+      cards: [
+        { img: "assets/f2-dunes.png", title: "Wahiba Sands",     sub: "Endless dunes", pos: "50% 50%" },
+        { img: "assets/f2-dunes.png", title: "Sharqiya Sands",   sub: "Night camp",    pos: "8% 60%" },
+        { img: "assets/f2-dunes.png", title: "Ramlat Al Wahiba", sub: "Dune drive",    pos: "92% 40%" }
+      ]
+    },
+    {
+      id: "culture",
+      name: "Warm Culture",
+      desc: "Coffee first, questions later — the welcome is the attraction.",
+      cards: [
+        { img: "assets/f5-fort.png",     title: "Nizwa Fort",  sub: "Living history", fit: "bottom" },
+        { img: "assets/layer-mosque.png", title: "Muscat",      sub: "Grand Mosque",   fit: "bottom" },
+        { img: "assets/f5-sky.png",      title: "Nizwa",       sub: "Fort walls" }
+      ]
+    },
+    {
+      id: "glassy",
+      name: "Glassy Waters",
+      desc: "The emerald wadis are fed by 3,000-year-old engineering",
+      cards: [
+        { img: "assets/s6-glassy-1.png", title: "Wadi Dayqah",      sub: "Bright pools" },
+        { img: "assets/s6-glassy-2.png", title: "Wadi Al Abyad",    sub: "Wadi pools" },
+        { img: "assets/s6-glassy-3.png", title: "Wadi Al Arbiyyin", sub: "Wadi pools" },
+        { img: "assets/f4-canyon.png",   title: "Wadi Shab",        sub: "Cave swim" }
+      ]
+    }
+  ];
+
+  var START = "glassy";
+
+  var $ = function (s) { return root.querySelector(s); };
+
+  var pattern = $(".j-pattern"), sketch = $(".j-sketch"),
+      lede    = $(".j-lede"),    facts  = $(".j-facts"),
+      title   = $(".j-title");
+
+  var lead = $(".j-menu__lead"), rest = $(".j-menu__rest");
+  var rail = $(".j-rail"), vp = $(".j-rail__vp"), track = $(".j-track"),
+      bar  = $(".j-bar i"), prev = $(".j-prev"), next = $(".j-next");
+
+  /* ---------------- 1. reveals ----------------
+     Rect-based rather than IntersectionObserver, for two reasons: the
+     sketch spends its whole entrance clipped to zero width, which an
+     observer reports as not intersecting and so would never start; and
+     a rect read treats "already scrolled past" the same as "just
+     arrived", which is what a deep link or a restored scroll needs. */
+  var railSeen = false;
+  var pending = [
+    [pattern, "in"], [sketch, "in"], [facts, "in"],
+    [title, "is-revealed"], [rail, "in"]
+  ];
+
+  function reveal() {
+    if (!pending.length) return;
+    var edge = innerHeight * 0.86;
+    pending = pending.filter(function (p) {
+      if (p[0].getBoundingClientRect().top > edge) return true;
+      if (p[0] === rail) railSeen = true;
+      p[0].classList.add(p[1]);
+      return false;
+    });
+  }
+
+  /* the facts strip deals itself left to right */
+  Array.prototype.forEach.call(facts.children, function (el, i) {
+    el.style.setProperty("--d", (i * 0.06) + "s");
+  });
+
+  /* ---------------- 2. the lede, told word by word ----------------
+     Split once, then lit by scroll position rather than by a timer, so
+     the sentence lands at whatever pace the reader is scrolling. */
+  var words = [];
+  (function splitLede() {
+    var parts = lede.textContent.split(/\s+/).filter(Boolean);
+    lede.textContent = "";
+    parts.forEach(function (p, i) {
+      var w = document.createElement("span");
+      w.className = "w";
+      w.textContent = p;
+      lede.appendChild(w);
+      if (i < parts.length - 1) lede.appendChild(document.createTextNode(" "));
+      words.push(w);
+    });
+  })();
+
+  var litCount = -1;
+  function tellLede() {
+    var r = lede.getBoundingClientRect();
+    var h = innerHeight;
+    /* starts as the paragraph crosses 82% of the viewport, finishes as
+       its foot reaches 46% — a comfortable read either way it is
+       scrolled, and it un-tells itself on the way back up */
+    var p = (h * 0.82 - r.top) / (h * 0.82 - h * 0.46 + r.height);
+    p = p < 0 ? 0 : p > 1 ? 1 : p;
+
+    var n = Math.round(p * words.length);
+    if (n === litCount) return;
+    for (var i = litCount < 0 ? 0 : Math.min(litCount, n);
+         i < Math.max(litCount, n); i++) {
+      words[i].classList.toggle("lit", i < n);
+    }
+    litCount = n;
+  }
+
+  /* ---------------- 3. the board ---------------- */
+
+  var buttons = {}, current = null, cardsShown = [];
+
+  CATS.forEach(function (c) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "j-cat";
+    b.textContent = c.name;
+    b.setAttribute("role", "tab");
+    b.setAttribute("aria-selected", "false");
+    b.setAttribute("aria-controls", "j-rail");
+    b.id = "j-cat-" + c.id;
+    b.dataset.id = c.id;
+    b.addEventListener("click", function () { choose(c.id); });
+    b.addEventListener("keydown", stepMenu);
+    buttons[c.id] = b;
+    rest.appendChild(b);
+  });
+
+  var desc = document.createElement("p");
+  desc.className = "j-desc";
+  lead.appendChild(desc);
+  vp.id = "j-rail";
+
+  /* arrow keys walk the menu, as a tablist should */
+  function stepMenu(e) {
+    var k = e.key, d = k === "ArrowDown" || k === "ArrowRight" ? 1
+                     : k === "ArrowUp"   || k === "ArrowLeft"  ? -1 : 0;
+    if (!d) return;
+    e.preventDefault();
+    var i = CATS.findIndex(function (c) { return c.id === current; });
+    var n = CATS[(i + d + CATS.length) % CATS.length];
+    choose(n.id);
+    buttons[n.id].focus();
+  }
+
+  /* The note leaves upward under cover of the label's flight, is jumped
+     to its arrival pose while invisible, then rises into place. */
+  var descTimer = null;
+  function swapDesc(text) {
+    desc.classList.add("is-out");
+    clearTimeout(descTimer);
+    descTimer = setTimeout(function () {
+      desc.textContent = text;
+      desc.classList.remove("is-out");
+      desc.classList.add("is-in");        /* transition: none, so this is a cut */
+      void desc.offsetWidth;
+      desc.classList.remove("is-in");
+    }, 260);
+  }
+
+  function buildCards(cat) {
+    return cat.cards.map(function (c, i) {
+      var li = document.createElement("li");
+      li.className = "j-card";
+      li.style.setProperty("--d", (i * 0.09) + "s");
+      if (c.fit) li.dataset.fit = c.fit;
+
+      var img = document.createElement("img");
+      img.src = c.img;
+      img.alt = c.title + " — " + c.sub;
+      img.loading = "lazy";
+      img.decoding = "async";
+      if (c.pos) img.style.objectPosition = c.pos;
+
+      var cap = document.createElement("span");
+      cap.className = "j-card__cap";
+      var b = document.createElement("b"); b.textContent = c.title;
+      var em = document.createElement("em"); em.textContent = c.sub;
+      cap.appendChild(b); cap.appendChild(em);
+
+      li.appendChild(img);
+      li.appendChild(cap);
+      return li;
+    });
+  }
+
+  /* Deal a category's cards in. The outgoing set leaves upward on a
+     stagger; the incoming set is written only once the stage is clear,
+     so the two never overlap in the same column. */
+  var dealTimer = null;
+  function deal(cat, animate) {
+    var old = cardsShown;
+    cardsShown = buildCards(cat);
+
+    function write() {
+      /* the new cards must be painted at their start pose before "in"
+         goes back on, or there is no value to transition from */
+      rail.classList.remove("in");
+      track.textContent = "";
+      cardsShown.forEach(function (el) { track.appendChild(el); });
+      vp.scrollLeft = 0;
+      void track.offsetWidth;
+      if (railSeen) rail.classList.add("in");
+      syncRail();
+    }
+
+    if (!animate || reduce || !old.length) { write(); return; }
+
+    rail.classList.remove("in");
+    old.forEach(function (el, i) {
+      el.style.setProperty("--d", (i * 0.045) + "s");
+      el.classList.add("is-out");
+    });
+    clearTimeout(dealTimer);
+    dealTimer = setTimeout(write, 380);
+  }
+
+  /* FLIP: measure every label, move the chosen one into the lead slot,
+     measure again, then let each label glide from where it was to where
+     it now is. Nothing is cloned, so focus and a11y state survive. */
+  function choose(id, animate) {
+    if (id === current) return;
+    var cat = CATS.filter(function (c) { return c.id === id; })[0];
+    if (!cat) return;
+
+    var first = {};
+    if (animate !== false && !reduce) {
+      CATS.forEach(function (c) {
+        first[c.id] = buttons[c.id].getBoundingClientRect();
+      });
+    }
+
+    /* rebuild both slots in resting order, minus the chosen one */
+    CATS.forEach(function (c) {
+      var b = buttons[c.id];
+      b.setAttribute("aria-selected", String(c.id === id));
+      if (c.id === id) lead.insertBefore(b, desc);
+      else rest.appendChild(b);
+    });
+
+    if (animate !== false && !reduce) {
+      var moved = [];
+      CATS.forEach(function (c) {
+        var b = buttons[c.id], a = first[c.id], n = b.getBoundingClientRect();
+        var dx = a.left - n.left, dy = a.top - n.top;
+        if (!dx && !dy) return;
+        b.classList.remove("flip");   /* so the jump back is not animated */
+        b.style.transform = "translate(" + dx + "px," + dy + "px)";
+        moved.push(b);
+      });
+      void lead.offsetWidth;          /* commit the start pose, then release */
+      moved.forEach(function (b) {
+        b.classList.add("flip");
+        b.style.transform = "";
+      });
+
+      swapDesc(cat.desc);
+    } else {
+      desc.textContent = cat.desc;
+    }
+
+    vp.setAttribute("aria-labelledby", "j-cat-" + id);
+    current = id;
+    deal(cat, animate !== false);
+  }
+
+  /* ---------------- the rail ---------------- */
+
+  function syncRail() {
+    var max = vp.scrollWidth - vp.clientWidth;
+    var ratio = max > 0 ? vp.clientWidth / vp.scrollWidth : 1;
+    var p = max > 0 ? vp.scrollLeft / max : 0;
+    bar.style.width = (ratio * 100) + "%";
+    bar.style.transform = "translateX(" + (p * (1 / ratio - 1) * 100) + "%)";
+    prev.disabled = vp.scrollLeft <= 1;
+    next.disabled = vp.scrollLeft >= max - 1;
+  }
+
+  function step(dir) {
+    var card = track.firstElementChild;
+    if (!card) return;
+    var gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+    var by = card.getBoundingClientRect().width + gap;
+    vp.scrollBy({ left: dir * by, behavior: reduce ? "auto" : "smooth" });
+  }
+  prev.addEventListener("click", function () { step(-1); });
+  next.addEventListener("click", function () { step(1); });
+
+  var railQueued = false;
+  vp.addEventListener("scroll", function () {
+    if (railQueued) return;
+    railQueued = true;
+    requestAnimationFrame(function () { railQueued = false; syncRail(); });
+  }, { passive: true });
+
+  /* drag to pan — pointer events, so mouse, pen and touch are one path */
+  var dragId = null, dragX = 0, dragLeft = 0, dragged = 0;
+  vp.addEventListener("pointerdown", function (e) {
+    if (e.pointerType === "touch") return;      /* native panning is better */
+    dragId = e.pointerId; dragX = e.clientX; dragLeft = vp.scrollLeft; dragged = 0;
+    vp.setPointerCapture(dragId);
+    vp.classList.add("dragging");
+  });
+  vp.addEventListener("pointermove", function (e) {
+    if (e.pointerId !== dragId) return;
+    var dx = e.clientX - dragX;
+    dragged = Math.max(dragged, Math.abs(dx));
+    vp.scrollLeft = dragLeft - dx;
+  });
+  function endDrag(e) {
+    if (e.pointerId !== dragId) return;
+    dragId = null;
+    vp.classList.remove("dragging");
+  }
+  vp.addEventListener("pointerup", endDrag);
+  vp.addEventListener("pointercancel", endDrag);
+  vp.addEventListener("click", function (e) {
+    if (dragged > 6) { e.preventDefault(); e.stopPropagation(); }
+  }, true);
+
+  /* ---------------- parallax + scroll wiring ----------------
+     The two plates drift against the page as it moves, at the same
+     far/near ratio the hero uses. */
+  var queued = false;
+  function frame() {
+    queued = false;
+    reveal();
+    tellLede();
+
+    if (!reduce) {
+      var r = root.getBoundingClientRect();
+      var t = (innerHeight - r.top) / (innerHeight + r.height);   /* 0 -> 1 */
+      t = t < 0 ? 0 : t > 1 ? 1 : t;
+      pattern.style.transform = "translate3d(0," + ((t - 0.5) * -46) + "px,0)";
+      sketch.style.transform  = "translate3d(0," + ((t - 0.5) * -74) + "px,0)";
+    }
+  }
+  function request() { if (!queued) { queued = true; requestAnimationFrame(frame); } }
+
+  addEventListener("scroll", request, { passive: true });
+  addEventListener("resize", function () { request(); syncRail(); });
+
+  reveal();
+  choose(START, false);
+  request();
+})();
+</script>
+
+<script>
+/* =================================================================
+   Useful info — port of the shadcn `testimonials` block
+
+   The original is a shadcn Carousel (embla-carousel-react) wrapped in a
+   `useEffect` that re-arms a 4s timer on every selection change:
+
+     if (selectedScrollSnap() + 1 === scrollSnapList().length)  scrollTo(0)
+     else                                                       scrollNext()
+
+   Ported here as a snap track moved by one transform. The snap model is
+   embla's `trimSnaps`: one snap per item, each clamped so the last can
+   never scroll past the end of the track — which is why six cards two to
+   a view give five snaps, not six. Drag, wheel-free, and the arrow-key
+   handling that lives on shadcn's Carousel root are all carried over.
+
+   Added on top: the auto-advance stops on hover, on focus and while
+   dragging, and does not run at all under reduced motion. An unpausable
+   4s timer moves content out from under whoever is reading it, which is
+   a WCAG 2.2.2 failure rather than a matter of taste.
+   ================================================================= */
+(function () {
+
+  var root = document.querySelector(".read");
+  if (!root) return;
+
+  var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var car   = root.querySelector(".rd-car");
+  var vp    = root.querySelector(".rd-vp");
+  var track = root.querySelector(".rd-track");
+  var items = [].slice.call(root.querySelectorAll(".rd-item"));
+  var dotsE = root.querySelector(".rd-dots");
+  var prevB = root.querySelector(".rd-prev");
+  var nextB = root.querySelector(".rd-next");
+  var live  = root.querySelector(".rd-live");
+  var title = root.querySelector(".rd-title");
+  if (!items.length) return;
+
+  /* ---- settle the header on arrival ---- */
+  var settled = false;
+  function reveal() {
+    if (settled || root.getBoundingClientRect().top > innerHeight * 0.82) return;
+    settled = true;
+    root.classList.add("in");
+    title.classList.add("is-revealed");
+  }
+  addEventListener("scroll", reveal, { passive: true });
+  reveal();
+
+  /* ---- snap list, rebuilt whenever the box changes ---- */
+  var snaps = [], selected = 0;
+
+  function measure() {
+    var max = Math.max(0, track.scrollWidth - vp.clientWidth);
+    var base = vp.getBoundingClientRect().left;
+    var itemW = items[0].getBoundingClientRect().width || 1;
+    /* Two snaps closer together than a fraction of a card are the same
+       view, not two — clamping the tail against `max` always leaves one
+       such near-duplicate, and it would otherwise get its own dot that
+       moves the track by a few pixels. This is what trimSnaps is for. */
+    var tol = Math.max(24, itemW * 0.08);
+
+    snaps = [];
+    items.forEach(function (it) {
+      var at = Math.min(it.getBoundingClientRect().left - base + pos, max);
+      if (!snaps.length) { snaps.push(at); return; }
+      var gap = at - snaps[snaps.length - 1];
+      if (gap > tol) snaps.push(at);
+      else if (gap > 0) snaps[snaps.length - 1] = at;   /* keep the reachable end */
+    });
+
+    if (!snaps.length) snaps = [0];
+    if (selected > snaps.length - 1) selected = snaps.length - 1;
+    buildDots();
+    /* the box changed under us — sit back down on the selected snap */
+    pos = snaps[selected];
+    apply(false);
+    announce();
+  }
+
+  var pos = 0;
+  function current() { return pos; }
+
+  function apply(animate) {
+    track.style.transition = animate && !reduce
+      ? "transform 0.62s cubic-bezier(0.16, 1, 0.3, 1)" : "none";
+    track.style.transform = "translate3d(" + -pos + "px,0,0)";
+  }
+
+  function buildDots() {
+    if (dotsE.children.length === snaps.length) return;
+    dotsE.textContent = "";
+    snaps.forEach(function (_, i) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.setAttribute("role", "tab");
+      b.setAttribute("aria-label", "Go to article " + (i + 1));
+      b.addEventListener("click", function () { scrollTo(i); });
+      dotsE.appendChild(b);
+    });
+  }
+
+  function announce() {
+    [].forEach.call(dotsE.children, function (d, i) {
+      d.setAttribute("aria-current", String(i === selected));
+    });
+    if (prevB) prevB.disabled = selected === 0;
+    if (nextB) nextB.disabled = selected === snaps.length - 1;
+    var name = items[Math.min(selected, items.length - 1)].querySelector(".rd-name");
+    if (name) live.textContent = name.textContent + ", " + (selected + 1) +
+                                 " of " + snaps.length;
+  }
+
+  function scrollTo(i, animate) {
+    selected = Math.max(0, Math.min(snaps.length - 1, i));
+    pos = snaps[selected];
+    apply(animate !== false);
+    announce();
+    arm();
+  }
+  function scrollNext() { scrollTo(selected + 1); }
+  function scrollPrev() { scrollTo(selected - 1); }
+
+  if (prevB) prevB.addEventListener("click", function () { scrollPrev(); });
+  if (nextB) nextB.addEventListener("click", function () { scrollNext(); });
+
+  /* shadcn's Carousel root handles arrows via onKeyDownCapture */
+  car.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowLeft") { e.preventDefault(); scrollPrev(); }
+    else if (e.key === "ArrowRight") { e.preventDefault(); scrollNext(); }
+  });
+
+  /* ---- the 4s auto-advance, with the loop back to the first ---- */
+  var timer = null, held = false;
+
+  function arm() {
+    clearTimeout(timer);
+    if (reduce || held || snaps.length < 2) return;
+    timer = setTimeout(function () {
+      if (selected + 1 === snaps.length) scrollTo(0);
+      else scrollNext();
+    }, 4000);
+  }
+  function hold(on) { held = on; if (on) clearTimeout(timer); else arm(); }
+
+  car.addEventListener("pointerenter", function () { hold(true); });
+  car.addEventListener("pointerleave", function () { hold(false); });
+  car.addEventListener("focusin", function () { hold(true); });
+  car.addEventListener("focusout", function (e) {
+    if (!car.contains(e.relatedTarget)) hold(false);
+  });
+  /* nothing should advance while the section is off screen */
+  document.addEventListener("visibilitychange", function () {
+    hold(document.hidden);
+  });
+
+  /* ---- drag, as embla does it: follow the pointer, then settle on the
+         nearest snap with the throw taken into account ---- */
+  var id = null, startX = 0, startPos = 0, moved = 0, samples = [];
+
+  vp.addEventListener("pointerdown", function (e) {
+    if (reduce || e.button) return;
+    id = e.pointerId;
+    startX = e.clientX; startPos = pos; moved = 0;
+    samples = [{ x: e.clientX, t: performance.now() }];
+    car.classList.add("is-dragging");
+    hold(true);
+  });
+
+  vp.addEventListener("pointermove", function (e) {
+    if (e.pointerId !== id) return;
+    var dx = e.clientX - startX;
+    moved = Math.abs(dx);
+    var max = snaps[snaps.length - 1];
+    pos = startPos - dx;
+    /* embla's rubber band past either end */
+    if (pos < 0) pos *= 0.35;
+    else if (pos > max) pos = max + (pos - max) * 0.35;
+    apply(false);
+    samples.push({ x: e.clientX, t: performance.now() });
+    if (samples.length > 6) samples.shift();
+
+    /* Capture last, and never let it break the gesture: once the drag is
+       past the slop it should keep tracking even if the pointer leaves
+       the box, but a capture that cannot be taken is not worth losing
+       the drag over. */
+    if (moved > 6) {
+      try { if (!vp.hasPointerCapture(id)) vp.setPointerCapture(id); } catch (err) {}
+    }
+  });
+
+  function release(e) {
+    if (e.pointerId !== id) return;
+    id = null;
+    car.classList.remove("is-dragging");
+
+    var v = 0, a = samples[0], b = samples[samples.length - 1];
+    if (a && b && b.t > a.t) v = ((b.x - a.x) / (b.t - a.t)) * 1000;
+
+    /* project the throw a little, then take the nearest snap to that */
+    var landing = pos - v * 0.12;
+    var best = 0, bestD = Infinity;
+    snaps.forEach(function (s, i) {
+      var d = Math.abs(s - landing);
+      if (d < bestD) { bestD = d; best = i; }
+    });
+    scrollTo(best);
+    hold(false);
+  }
+  vp.addEventListener("pointerup", release);
+  vp.addEventListener("pointercancel", release);
+
+  /* a drag must not also open the article it finished on */
+  vp.addEventListener("click", function (e) {
+    if (moved > 6) { e.preventDefault(); e.stopPropagation(); }
+  }, true);
+
+  addEventListener("resize", measure);
+  if (window.ResizeObserver) new ResizeObserver(measure).observe(vp);
+
+  measure();
+  announce();
+  arm();
+})();
+</script>
+
+<script>
+/* =================================================================
+   Choose your adventure — 257:30
+
+   The rail is a CSS marquee, so this only does the two things CSS
+   cannot: reveal the copy when the board arrives, and stop the
+   animation while the section is off screen.
+   ================================================================= */
+(function () {
+  var adv = document.querySelector(".adv");
+  if (!adv) return;
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    adv.classList.add("is-revealed");
+    return;
+  }
+
+  /* the same rect read the journey section uses, so a restored scroll
+     position counts as arrived rather than as never-intersected */
+  var revealed = false;
+  function reveal() {
+    if (revealed || adv.getBoundingClientRect().top > innerHeight * 0.86) return;
+    adv.classList.add("is-revealed");
+    revealed = true;
+  }
+
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(function (e) {
+      adv.classList.toggle("adv--idle", !e[0].isIntersecting);
+    }, { rootMargin: "120px" }).observe(adv);
+  }
+
+  addEventListener("scroll", reveal, { passive: true });
+  addEventListener("resize", reveal);
+  reveal();
+})();
+</script>
+
+</body>
+</html>
