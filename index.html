@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <!-- Manrope is requested as a variable axis (200..800) so the journey menu can
      glide between regular and bold rather than snapping between two files. -->
-<link href="https://fonts.googleapis.com/css2?family=Fondamento&family=Libre+Baskerville:ital@0;1&family=Libre+Franklin&family=Mandali&family=Manrope:wght@200..800&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Baskervville:ital@0;1&family=Fondamento&family=Forum&family=Libre+Baskerville:ital@0;1&family=Libre+Franklin&family=Mandali&family=Manrope:wght@200..800&display=swap" rel="stylesheet" />
 
 <style>
 /* =================================================================
@@ -313,7 +313,8 @@ body {
   left: calc(353 * var(--u));
   top: calc(230 * var(--u));
   margin: 0;
-  font-family: "Libre Baskerville", serif;
+  font-family: "Baskervville", serif;
+  font-weight: 400;
   font-size: calc(110 * var(--u));
   line-height: normal;
   letter-spacing: calc(-2.2 * var(--u));
@@ -359,9 +360,7 @@ body {
 }
 .is-revealed .r-fade { opacity: 1; transform: none; filter: blur(0); }
 
-/* The button waits for every line to land before it arrives.
-   Slowest copy is the 3-line label: last line starts at 0.42s and, on this
-   ease-out, has visually settled by ~0.95s. 1.0s clears it on all frames. */
+/* The button waits for every line to land before it arrives. */
 .r-pop {
   opacity: 0;
   transform: translateY(calc(18 * var(--u))) scale(0.94);
@@ -403,50 +402,37 @@ body {
 }
 .explore:hover img { transform: translateX(calc(4 * var(--u))); }
 
-/* ---- frame 2 copy — 215:301 / 302 / 303 ---- */
+/* ---- frame 2 copy — 215:301 / 303 — 215:295 layout ---- */
 
 .quote {
   position: absolute;
-  left: calc(260 * var(--u));
-  top: calc(307 * var(--u));
+  left: calc(254 * var(--u));
+  top: calc(297 * var(--u));
   width: calc(403 * var(--u));
   margin: 0;
-  font-family: "Libre Baskerville", serif;
-  font-size: calc(40 * var(--u));
-  line-height: normal;
-  letter-spacing: calc(-0.8 * var(--u));
-  color: #fff;
-}
-.label {
-  position: absolute;
-  left: calc(260 * var(--u));
-  top: calc(618 * var(--u));
-  width: calc(591 * var(--u));
-  height: calc(97 * var(--u));
-  margin: 0;
-  font-family: "Libre Franklin", sans-serif;
-  font-size: calc(16 * var(--u));
-  line-height: normal;
-  letter-spacing: calc(5.28 * var(--u));
-  text-transform: uppercase;
+  font-family: "Baskervville", serif;
+  font-weight: 500;
+  font-size: calc(48 * var(--u));
+  line-height: calc(51 * var(--u));
+  letter-spacing: 0;
   color: #fff;
 }
 .body {
   position: absolute;
-  left: calc(891 * var(--u));
-  top: calc(618 * var(--u));
-  width: calc(493 * var(--u));
+  left: calc(762 * var(--u));
+  top: calc(314 * var(--u));
+  width: calc(412 * var(--u));
   height: calc(136 * var(--u));
   margin: 0;
-  font-family: "Libre Franklin", sans-serif;
-  font-size: calc(16 * var(--u));
-  line-height: normal;
-  letter-spacing: calc(-0.32 * var(--u));
+  font-family: "Forum", serif;
+  font-size: calc(18 * var(--u));
+  line-height: calc(22 * var(--u));
+  letter-spacing: calc(-0.36 * var(--u));
   color: #fff;
   word-break: break-word;
 }
 
-/* ---- frame 3 copy — 215:372 / 374 / 379 — black on sand ---- */
+/* ---- frame 3 copy — 215:372 / 379 — black on sand — 215:295 layout ---- */
 
 .quote3 {
   position: absolute;
@@ -454,53 +440,41 @@ body {
   top: calc(307 * var(--u));
   width: calc(406 * var(--u));
   margin: 0;
-  font-family: "Libre Baskerville", serif;
-  font-size: calc(40 * var(--u));
-  line-height: normal;
-  letter-spacing: calc(-0.8 * var(--u));
-  color: #000;
-}
-.label3 {
-  position: absolute;
-  left: calc(284 * var(--u));
-  top: calc(463 * var(--u));
-  width: calc(591 * var(--u));
-  height: calc(97 * var(--u));
-  margin: 0;
-  font-family: "Libre Franklin", sans-serif;
-  font-size: calc(16 * var(--u));
-  line-height: normal;
-  letter-spacing: calc(5.28 * var(--u));
-  text-transform: uppercase;
+  font-family: "Baskervville", serif;
+  font-weight: 500;
+  font-size: calc(48 * var(--u));
+  line-height: calc(51 * var(--u));
+  letter-spacing: 0;
   color: #000;
 }
 .body3 {
   position: absolute;
   left: calc(818 * var(--u));
-  top: calc(466 * var(--u));
+  top: calc(324 * var(--u));
   width: calc(457 * var(--u));
   height: calc(136 * var(--u));
   margin: 0;
-  font-family: "Libre Franklin", sans-serif;
-  font-size: calc(16 * var(--u));
-  line-height: normal;
-  letter-spacing: calc(-0.32 * var(--u));
+  font-family: "Forum", serif;
+  font-size: calc(18 * var(--u));
+  line-height: calc(22 * var(--u));
+  letter-spacing: calc(-0.36 * var(--u));
   color: #000;
   word-break: break-word;
 }
 
-/* ---- frame 4 copy — 215:547 / 215:548 — white on canyon ---- */
+/* ---- frame 4 copy — 215:547 / 215:548 — white on canyon — 215:295 layout ---- */
 
 .quote4 {
   position: absolute;
   left: calc(284 * var(--u));
   top: calc(307 * var(--u));
-  width: calc(482 * var(--u));
+  width: calc(600 * var(--u));
   margin: 0;
-  font-family: "Libre Baskerville", serif;
-  font-size: calc(40 * var(--u));
-  line-height: normal;
-  letter-spacing: calc(-0.8 * var(--u));
+  font-family: "Baskervville", serif;
+  font-weight: 500;
+  font-size: calc(48 * var(--u));
+  line-height: calc(51 * var(--u));
+  letter-spacing: 0;
   color: #fff;
 }
 .body4 {
@@ -510,15 +484,15 @@ body {
   width: calc(417 * var(--u));
   height: calc(136 * var(--u));
   margin: 0;
-  font-family: "Libre Franklin", sans-serif;
-  font-size: calc(16 * var(--u));
-  line-height: normal;
-  letter-spacing: calc(-0.32 * var(--u));
+  font-family: "Forum", serif;
+  font-size: calc(18 * var(--u));
+  line-height: calc(22 * var(--u));
+  letter-spacing: calc(-0.36 * var(--u));
   color: #fff;
   word-break: break-word;
 }
 
-/* ---- frame 5 copy — 215:526 / 527 / 535 — white on the Nizwa sky ---- */
+/* ---- frame 5 copy — 215:526 / 535 — white on the Nizwa sky — 215:295 layout ---- */
 
 .quote5 {
   position: absolute;
@@ -526,24 +500,11 @@ body {
   top: calc(142 * var(--u));
   width: calc(467 * var(--u));
   margin: 0;
-  font-family: "Libre Baskerville", serif;
-  font-size: calc(40 * var(--u));
-  line-height: normal;
-  letter-spacing: calc(-0.8 * var(--u));
-  color: #fff;
-}
-.label5 {
-  position: absolute;
-  left: calc(264 * var(--u));
-  top: calc(274 * var(--u));
-  width: calc(320 * var(--u));
-  height: calc(97 * var(--u));
-  margin: 0;
-  font-family: "Libre Franklin", sans-serif;
-  font-size: calc(16 * var(--u));
-  line-height: normal;
-  letter-spacing: calc(5.28 * var(--u));
-  text-transform: uppercase;
+  font-family: "Baskervville", serif;
+  font-weight: 500;
+  font-size: calc(48 * var(--u));
+  line-height: calc(51 * var(--u));
+  letter-spacing: 0;
   color: #fff;
 }
 .body5 {
@@ -553,10 +514,10 @@ body {
   width: calc(404 * var(--u));
   height: calc(136 * var(--u));
   margin: 0;
-  font-family: "Libre Franklin", sans-serif;
-  font-size: calc(16 * var(--u));
-  line-height: normal;
-  letter-spacing: calc(-0.32 * var(--u));
+  font-family: "Forum", serif;
+  font-size: calc(18 * var(--u));
+  line-height: calc(22 * var(--u));
+  letter-spacing: calc(-0.36 * var(--u));
   color: #fff;
   word-break: break-word;
 }
@@ -574,11 +535,6 @@ body {
 .quote5 .line:nth-child(1) i { transition-delay: 0.02s; }
 .quote  .line:nth-child(2) i, .quote3 .line:nth-child(2) i,
 .quote5 .line:nth-child(2) i { transition-delay: 0.11s; }
-.label  .line:nth-child(1) i, .label3 .line:nth-child(1) i,
-.label5 .line:nth-child(1) i { transition-delay: 0.28s; }
-.label  .line:nth-child(2) i, .label3 .line:nth-child(2) i,
-.label5 .line:nth-child(2) i { transition-delay: 0.35s; }
-.label  .line:nth-child(3) i, .label3 .line:nth-child(3) i { transition-delay: 0.42s; }
 
 /* ================= nav ================= */
 
@@ -623,10 +579,11 @@ body {
   flex-shrink: 0;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: calc(62 * var(--u));
   width: calc(582 * var(--u));
   font-family: "Manrope", sans-serif;
-  font-size: calc(18 * var(--u));
+  font-size: calc(16 * var(--u));
   line-height: normal;
   color: var(--nav-ink);
   white-space: nowrap;
@@ -640,7 +597,7 @@ body {
   width: calc(187 * var(--u));
   height: calc(40 * var(--u));
   padding: calc(14 * var(--u)) calc(32 * var(--u)) calc(14 * var(--u)) calc(36 * var(--u));
-  background: #404463;
+  background: #113240;
   border-radius: calc(100 * var(--u));
   overflow: clip;
   font-family: "Mandali", sans-serif;
@@ -651,7 +608,7 @@ body {
   text-decoration: none;
   transition: background 0.25s ease;
 }
-.nav__cta:hover { background: #4d5175; }
+.nav__cta:hover { background: #1c4a5e; }
 
 /* ================= scroll cue ================= */
 
@@ -898,31 +855,27 @@ body {
     width: calc(430 * var(--u)); height: calc(92 * var(--u));
     font-size: calc(28 * var(--u)); border-radius: calc(230 * var(--u)); padding: 0;
   }
-  .quote, .quote3 { font-size: calc(74 * var(--u)); width: calc(760 * var(--u)); }
-  .label, .label3 { font-size: calc(30 * var(--u)); width: calc(900 * var(--u));
-                    height: auto; letter-spacing: calc(9 * var(--u)); }
-  .body  { font-size: calc(30 * var(--u)); left: calc(260 * var(--u));
-           top: calc(430 * var(--u)); width: calc(920 * var(--u)); height: auto; }
-  .body3 { font-size: calc(30 * var(--u)); left: calc(284 * var(--u));
-           top: calc(300 * var(--u)); width: calc(900 * var(--u)); height: auto; }
+  .quote, .quote3, .quote4, .quote5 { line-height: normal; }
+  .quote, .quote3 { font-size: calc(89 * var(--u)); width: calc(760 * var(--u)); }
+  .body, .body3, .body4, .body5 { line-height: normal; }
+  .body  { font-size: calc(34 * var(--u)); left: calc(260 * var(--u));
+           top: calc(530 * var(--u)); width: calc(920 * var(--u)); height: auto; }
+  .body3 { font-size: calc(34 * var(--u)); left: calc(284 * var(--u));
+           top: calc(380 * var(--u)); width: calc(900 * var(--u)); height: auto; }
   .explore { left: calc(260 * var(--u)); top: calc(690 * var(--u));
              height: calc(84 * var(--u)); padding: 0 calc(44 * var(--u));
              gap: calc(20 * var(--u)); }
   .explore span { font-size: calc(34 * var(--u)); }
   .explore img  { width: calc(38 * var(--u)); height: calc(38 * var(--u)); }
   .quote3 { top: calc(140 * var(--u)); }
-  .label3 { top: calc(500 * var(--u)); }
-  .quote4 { font-size: calc(74 * var(--u)); width: calc(880 * var(--u));
+  .quote4 { font-size: calc(89 * var(--u)); width: calc(1080 * var(--u));
             left: calc(284 * var(--u)); top: calc(200 * var(--u)); }
-  .body4  { font-size: calc(30 * var(--u)); left: calc(284 * var(--u));
-            top: calc(560 * var(--u)); width: calc(900 * var(--u)); height: auto; }
-  .quote5 { font-size: calc(74 * var(--u)); width: calc(880 * var(--u));
+  .body4  { font-size: calc(34 * var(--u)); left: calc(284 * var(--u));
+            top: calc(470 * var(--u)); width: calc(900 * var(--u)); height: auto; }
+  .quote5 { font-size: calc(89 * var(--u)); width: calc(880 * var(--u));
             left: calc(264 * var(--u)); top: calc(150 * var(--u)); }
-  .label5 { font-size: calc(30 * var(--u)); width: calc(900 * var(--u));
-            left: calc(264 * var(--u)); top: calc(430 * var(--u));
-            height: auto; letter-spacing: calc(9 * var(--u)); }
-  .body5  { font-size: calc(30 * var(--u)); left: calc(264 * var(--u));
-            top: calc(560 * var(--u)); width: calc(900 * var(--u)); height: auto; }
+  .body5  { font-size: calc(34 * var(--u)); left: calc(264 * var(--u));
+            top: calc(420 * var(--u)); width: calc(900 * var(--u)); height: auto; }
   .f4-strips span { display: none; }
 
   /* the adventure board reflows to a taller portrait, the map drops
@@ -1065,15 +1018,14 @@ body {
   list-style: none;
   display: flex;
   align-items: center;
-  gap: calc(55 * var(--u));
+  gap: calc(52 * var(--u));
 }
-.j-facts li {
+.j-facts li {                             /* 296:53 */
   flex: none;
-  font-family: "Manrope", sans-serif;
-  font-weight: 400;
-  font-size: calc(14 * var(--u));
-  line-height: calc(25 * var(--u));
-  letter-spacing: calc(-0.28 * var(--u));
+  font-family: "Forum", serif;
+  font-size: calc(16 * var(--u));
+  line-height: calc(22 * var(--u));
+  letter-spacing: calc(2.24 * var(--u));  /* 14% of 16 */
   text-transform: uppercase;
   color: var(--ink);
   opacity: 0;
@@ -1081,10 +1033,10 @@ body {
   transition: opacity 0.9s ease, transform 1s cubic-bezier(0.16, 1, 0.3, 1);
   transition-delay: var(--d, 0s);
 }
-.j-facts li:nth-child(1) { width: calc(131 * var(--u)); }
-.j-facts li:nth-child(3) { width: calc(110 * var(--u)); }
-.j-facts li:nth-child(5) { width: calc(167 * var(--u)); }
-.j-facts li:nth-child(7) { width: calc(136 * var(--u)); }
+.j-facts li:nth-child(1) { width: calc(124 * var(--u)); }
+.j-facts li:nth-child(3) { width: calc(134 * var(--u)); }
+.j-facts li:nth-child(5) { width: calc(203 * var(--u)); }
+.j-facts li:nth-child(7) { width: calc(166 * var(--u)); }
 .j-facts .sep {
   width: 0;
   height: calc(48 * var(--u));
@@ -1107,7 +1059,7 @@ body {
   font-family: "Libre Baskerville", serif;
   font-weight: 400;
   font-size: calc(43 * var(--u));
-  line-height: calc(59 * var(--u));
+  line-height: calc(55 * var(--u));
   letter-spacing: calc(-0.86 * var(--u));
   color: var(--ink);
 }
@@ -1227,7 +1179,6 @@ body {
   width: calc(367 * var(--u));
   height: 100%;
   overflow: hidden;
-  border-radius: calc(14 * var(--u));
   scroll-snap-align: start;
   background: linear-gradient(180deg, #b9d5ec 0%, #e7dac6 100%);
   opacity: 0;
@@ -1466,312 +1417,434 @@ body {
 }
 
 /* =================================================================
-   Useful info — "Everything You Need to Know."
+   Everything you need to know  +  Right now in Oman — 252:52
 
-   A port of the shadcn `testimonials` block: a shadcn/embla Carousel of
-   `aspect-video` muted cards, two to a view on large screens, advancing
-   itself every four seconds and looping back to the first.
+   The mockup board is 1569 wide against this page's 1441 grid, so every
+   figure below is its Figma value scaled by 1441/1569 = 0.9184, with the
+   design's own left edge (x 61) pinned to the 133u gutter the sections
+   above already use:
 
-   Ported into this project's stack (static page, hand-written CSS, no
-   build), so embla-carousel-react becomes a snap track driven by one
-   translate; the snap model is embla's own `trimSnaps` — one snap per
-   item, clamped so the last never scrolls past the end.
+       my_x = 133 + (fig_x - 61) * 0.9184
 
-   Light ground, as asked. The card/page relationship is shadcn's
-   bg-background over bg-muted, warmed to sit with the rest of the page.
+   Mapped that way the article column's hairlines land within a few units
+   of the page's right gutter, so the board sits on the grid the rest of
+   the page is already built on rather than beside it. The one figure
+   that does not survive the mapping is the event thumbnail row: in the
+   mockup it runs to x 1547, very nearly full bleed, which lands at
+   1497u — past the page's right edge. That row is refitted to the
+   gutter instead, and is noted where it happens.
    ================================================================= */
 
 .read {
   --u: calc(100cqw / 1441);
-  --card: #ece5d9;              /* bg-muted */
-  --muted-fg: rgba(29, 25, 20, 0.62);
+  --navy: #113240;
+  --rule: rgba(17, 50, 64, 0.28);
   position: relative;
   width: 100%;
-  background: #f8f4ed;          /* bg-background */
+  /* the mockup's own 1033u, less the 47u taken off the board below */
+  height: calc(986 * var(--u));
+  background: #fff;
   color: #1d1914;
-  padding: calc(70 * var(--u)) 0 calc(150 * var(--u));
   overflow: hidden;
 }
 
-.rd-wrap {
-  /* container mx-auto, aligned to the grid every section above uses */
-  position: relative;
-  z-index: 1;                   /* stays above the sketch tucked behind it */
-  padding: 0 calc(133 * var(--u));
-}
-
-/* ---- the marginalia sketch — a hand-drawn note taking shape, tucked
-   behind the copy on the right. The plate ships opaque on its own
-   near-white paper (measured ~ rgb(246,241,230), a hair off this
-   section's own #f8f4ed) — multiply drops that ground into the page
-   the same way the journey section's ink sketch does, leaving only the
-   line work, so no separate mask or cutout was needed. ---- */
-/* 252:56 — sits between the title and the note, and deliberately hangs
-   past the bottom of the header block so its lower third runs behind
-   the top of the cards. z-index 0 keeps it under .rd-wrap (z-index 1),
-   so the cards crop it; it stays a child of .read rather than of
-   .rd-wrap because .rd-wrap is a stacking context, which would isolate
-   the blend and leave the plate's paper sitting on the page as an
-   opaque square. */
-.rd-deco {
+/* ---- 285:32 — the navy board, sized to the article column beside it.
+   Same top, same height, same foot (194 + 654 = 848) as .rd-list below,
+   so the two read as a matched pair of columns rather than a tall panel
+   next to a short one. Width comes down with it, a smaller cut. ---- */
+.rd-panel {
   position: absolute;
-  z-index: 0;
-  left: calc(573 * var(--u));
-  top: calc(124 * var(--u));              /* 70u section padding + 54u */
-  width: calc(411 * var(--u));
-  height: calc(411 * var(--u));
-  object-fit: contain;
-  /* darken, not multiply. The plate ships opaque on ~rgb(246,241,230);
-     multiply drove that a further ~20 levels under the page and the
-     cards, printing a visible square. darken takes the per-channel
-     minimum, so the paper vanishes completely wherever the backdrop is
-     already darker than it — the whole card area — and leaves only a
-     2–7 level step against the lighter page, while the ink stays ink. */
-  mix-blend-mode: darken;
-  pointer-events: none;
+  left: calc(133 * var(--u));
+  top: calc(194 * var(--u));
+  width: calc(580 * var(--u));
+  height: calc(654 * var(--u));
+  background: var(--navy);
+  color: #fff;
+  overflow: hidden;                       /* crops the sketch at the foot */
+  isolation: isolate;                     /* so the sketch blends against
+                                             this board and nothing else */
   opacity: 0;
-  transform: translateY(calc(24 * var(--u))) scale(0.96);
-  transition: opacity 1.1s ease 0.22s,
-              transform 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.22s;
+  transform: translateY(calc(30 * var(--u)));
+  transition: opacity 1.05s ease,
+              transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.read.in .rd-deco { opacity: 1; transform: none; }
-
-/* ---- header — 252:52 ----
-   The mockup board is 1569 wide against this page's 1441 grid, so every
-   figure below is the Figma value mapped through the card column, which
-   is the one thing both share: my_x = 133 + (fig_x - 175) * 0.9274. The
-   block is positioned rather than flowed because the sketch has to hang
-   past the bottom of it and over the cards, which no flow row can do. */
-.rd-head {
-  position: relative;
-  height: calc(360 * var(--u));           /* 252:59 card top, y 388 */
-}
+.read.in .rd-panel { opacity: 1; transform: none; }
 
 .rd-title {                               /* 252:58 */
   position: absolute;
-  left: calc(7 * var(--u));
-  top: calc(138 * var(--u));
-  width: calc(558 * var(--u));
+  left: calc(56 * var(--u));
+  top: calc(48 * var(--u));
+  width: calc(493 * var(--u));
   margin: 0;
   font-family: "Libre Baskerville", serif;
   font-weight: 400;
-  font-size: calc(53 * var(--u));
-  line-height: calc(64 * var(--u));
-  letter-spacing: calc(-1.06 * var(--u));
+  font-size: calc(52 * var(--u));
+  line-height: calc(59 * var(--u));
+  letter-spacing: calc(-1.05 * var(--u));
+  color: #fff;
 }
 .rd-title .line:nth-child(2) i { transition-delay: 0.1s; }
 
 .rd-note {                                /* 252:67 */
   position: absolute;
-  left: calc(884 * var(--u));
-  top: calc(146 * var(--u));
-  width: calc(291 * var(--u));
+  left: calc(62 * var(--u));
+  top: calc(186 * var(--u));
+  width: calc(358 * var(--u));
   margin: 0;
-  font-family: "Manrope", sans-serif;
-  font-size: calc(15 * var(--u));
-  line-height: calc(20 * var(--u));
-  letter-spacing: calc(-0.3 * var(--u));
-  color: #1d1914;
+  font-family: "Forum", serif;
+  font-size: calc(16.5 * var(--u));
+  line-height: calc(24 * var(--u));
+  letter-spacing: calc(-0.33 * var(--u));
+  color: rgba(255, 255, 255, 0.82);
   opacity: 0;
   transform: translateY(calc(14 * var(--u)));
-  transition: opacity 0.9s ease 0.12s,
-              transform 1s cubic-bezier(0.16, 1, 0.3, 1) 0.12s;
+  transition: opacity 0.9s ease 0.3s,
+              transform 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s;
 }
 .read.in .rd-note { opacity: 1; transform: none; }
 
 .rd-all {                                 /* 252:69 */
   position: absolute;
-  left: calc(885 * var(--u));
-  top: calc(223 * var(--u));
-  width: calc(231 * var(--u));
+  left: calc(62 * var(--u));
+  top: calc(278 * var(--u));
+  width: calc(204 * var(--u));
   height: calc(35 * var(--u));
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: calc(10 * var(--u));
   padding: 0;
+  background: #fff;
   border: 1px solid rgba(0, 0, 0, 0.56);
   border-radius: calc(21 * var(--u));
   font-family: "Manrope", sans-serif;
   font-weight: 700;
   font-size: calc(14 * var(--u));
   letter-spacing: calc(-0.28 * var(--u));
-  color: inherit;
+  color: #111827;
   text-decoration: none;
   white-space: nowrap;
-  transition: background 0.4s ease, border-color 0.4s ease, color 0.4s ease;
+  opacity: 0;
+  transform: translateY(calc(14 * var(--u)));
+  transition: opacity 0.8s ease 0.42s,
+              transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.42s,
+              background 0.4s ease, color 0.4s ease, border-color 0.4s ease;
 }
+.read.in .rd-all { opacity: 1; transform: none; }
 .rd-all svg {
   width: calc(15 * var(--u)); height: calc(15 * var(--u));
   min-width: 11px; min-height: 11px;
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.rd-all:hover { background: #1d1914; border-color: #1d1914; color: #f8f4ed; }
+.rd-all:hover { background: transparent; border-color: rgba(255,255,255,0.75); color: #fff; }
 .rd-all:hover svg { transform: translateX(calc(4 * var(--u))); }
+.rd-all:focus-visible { outline: 2px solid #fff; outline-offset: calc(3 * var(--u)); }
 
-/* ---------------- the carousel ---------------- */
+/* ---- 285:36 — the notepad plate, dropped into the foot of the board,
+   rendered plain: no filter, no blend mode — the PNG as shipped, opaque
+   paper and all. ---- */
+.rd-deco {
+  position: absolute;
+  left: calc(149 * var(--u));
+  /* the board's shorter now, so the plate is cut down with it, aspect
+     preserved (467:366), and still crops off the bottom edge on purpose */
+  top: calc(351 * var(--u));
+  width: calc(417 * var(--u));
+  height: calc(327 * var(--u));
+  object-fit: contain;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(calc(26 * var(--u)));
+  transition: opacity 1.2s ease 0.34s,
+              transform 1.3s cubic-bezier(0.16, 1, 0.3, 1) 0.34s;
+}
+.read.in .rd-deco { opacity: 1; transform: none; }
 
-.rd-car { position: relative; }
-.rd-car:focus-visible { outline: 1px solid rgba(29,25,20,0.4); outline-offset: calc(6 * var(--u)); }
-
-/* <div ref={carouselRef} className="overflow-hidden"> */
-.rd-vp { overflow: hidden; }
-
-/* CarouselContent — flex, -ml-4 */
-.rd-track {
-  display: flex;
-  margin: 0 0 0 calc(-16 * var(--u));
+/* ---- the article column — 278:62 / 63 / 64 / 69 ----
+   Eight titles behind a 654u window, which is what the board leaves
+   between the first title and its own foot. Row pitch is the mockup's:
+   title top to
+   title top is 193u, with the hairline 130u down. The native scrollbar
+   is suppressed in favour of the rule drawn beside it, because the OS
+   one is a different width and colour on every machine this opens on. */
+.rd-list {
+  position: absolute;
+  left: calc(836 * var(--u));
+  top: calc(194 * var(--u));
+  /* a shade under the mockup's 469u so the hairlines finish clear of the
+     scroll rail rather than running into it */
+  width: calc(446 * var(--u));
+  height: calc(654 * var(--u));           /* 194 + 654 = the board's foot */
+  margin: 0;
   padding: 0;
   list-style: none;
-  will-change: transform;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
-.rd-car.is-dragging .rd-track { transition: none; }
+.rd-list::-webkit-scrollbar { width: 0; height: 0; }
 
-/* CarouselItem — min-w-0 shrink-0 grow-0 basis-full, pl-4, lg:basis-1/2 */
 .rd-item {
-  min-width: 0;
-  flex: 0 0 100%;
-  padding-left: calc(16 * var(--u));
+  padding-bottom: calc(63 * var(--u));
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: calc(63 * var(--u));
+  opacity: 0;
+  transform: translateY(calc(18 * var(--u)));
+  transition: opacity 0.85s ease, transform 0.95s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--d, 0s);
 }
-@media (min-width: 1024px) { .rd-item { flex-basis: 50%; } }
+.rd-item:last-child { margin-bottom: 0; }
+.read.in .rd-item { opacity: 1; transform: none; }
 
-/* the card — bg-muted rounded-md h-full p-6 aspect-video flex col justify-between */
-.rd-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
-  aspect-ratio: 16 / 9;
-  padding: calc(30 * var(--u));
-  border-radius: calc(8 * var(--u));
-  background: var(--card);
+.rd-link {
+  display: block;
+  /* two lines' worth, so the mockup's even 193u pitch survives a title
+     that happens to fit on one */
+  min-height: calc(66 * var(--u));
+  font-family: "Baskervville", serif;
+  font-weight: 400;
+  font-size: calc(25.7 * var(--u));
+  line-height: calc(33 * var(--u));
+  letter-spacing: calc(-0.51 * var(--u));
   color: inherit;
   text-decoration: none;
-  transition: background 0.45s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: color 0.35s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.rd-card:hover { background: #e4dbca; transform: translateY(calc(-6 * var(--u))); }
-.rd-card:focus-visible { outline: 1px solid rgba(29,25,20,0.5); outline-offset: calc(3 * var(--u)); }
+.rd-link:hover { color: var(--navy); transform: translateX(calc(6 * var(--u))); }
+.rd-link:focus-visible { outline: 1px solid var(--navy); outline-offset: calc(4 * var(--u)); }
 
-/* the lucide glyph — w-8 h-8 stroke-1 */
-.rd-ico {
-  flex: none;
-  width: calc(32 * var(--u));
-  height: calc(32 * var(--u));
-  min-width: 22px; min-height: 22px;
-  stroke: currentColor;
-  stroke-width: 1;
-  fill: none;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+/* the scroll indicator that replaces the native bar */
+.rd-scroll {
+  position: absolute;
+  left: calc(1300 * var(--u));
+  top: calc(194 * var(--u));
+  width: calc(3 * var(--u));
+  min-width: 3px;
+  height: calc(654 * var(--u));
+  border-radius: 999px;
+  background: rgba(17, 50, 64, 0.13);
+  opacity: 0;
+  transition: opacity 0.9s ease 0.5s;
+  pointer-events: none;
 }
-.rd-card:hover .rd-ico { transform: translateY(calc(-3 * var(--u))); }
+.read.in .rd-scroll { opacity: 1; }
+.rd-scroll span {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  border-radius: inherit;
+  background: rgba(17, 50, 64, 0.55);
+  transition: transform 0.18s linear;
+}
 
-.rd-foot { display: flex; flex-direction: column; gap: calc(18 * var(--u)); }
+/* =================== Right now in Oman — 284:31 =================== */
 
-.rd-name {
+.now {
+  --u: calc(100cqw / 1441);
+  position: relative;
+  width: 100%;
+  height: calc(683 * var(--u));           /* fig 744 */
+  background: #fff;
+  color: #1d1914;
+  overflow: hidden;
+}
+
+.nw-pattern {                             /* 282:30 */
+  position: absolute;
+  left: calc(45 * var(--u));
+  top: calc(284 * var(--u));
+  width: calc(413 * var(--u));
+  height: calc(413 * var(--u));
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.6s ease;
+}
+.now.in .nw-pattern { opacity: 0.26; }
+
+.nw-title {                               /* 284:31 */
+  position: absolute;
+  left: calc(133 * var(--u));
+  top: calc(56 * var(--u));
+  width: calc(553 * var(--u));
   margin: 0;
-  font-family: "Libre Baskerville", serif;
+  font-family: "Baskervville", serif;
   font-weight: 400;
-  font-size: calc(22 * var(--u));          /* text-xl */
-  line-height: calc(32 * var(--u));
-  letter-spacing: calc(-0.44 * var(--u));  /* tracking-tight */
-}
-.rd-sum {
-  max-width: calc(430 * var(--u));         /* max-w-xs, widened for the copy */
-  margin: calc(8 * var(--u)) 0 0;
-  font-family: "Manrope", sans-serif;
-  font-size: calc(16 * var(--u));
-  line-height: calc(26 * var(--u));
-  letter-spacing: calc(-0.32 * var(--u));
-  color: var(--muted-fg);
+  font-size: calc(52 * var(--u));
+  line-height: calc(59 * var(--u));
+  letter-spacing: calc(-1.05 * var(--u));
+  color: #000;
 }
 
-/* the byline row — flex gap-2 text-sm items-center.
-   The Avatar slot carries the article's index rather than a face: these
-   are guides, not opinions, and inventing an author to fill a circle
-   would be attributing them to someone who does not exist. */
-.rd-by {
-  display: flex;
-  align-items: center;
-  gap: calc(9 * var(--u));
+/* ---- 286:48 — the open event, at size and in its own colour ---- */
+.nw-main {
+  position: absolute;
+  left: calc(133 * var(--u));
+  top: calc(204 * var(--u));
+  width: calc(389 * var(--u));
+  height: calc(365 * var(--u));
+  margin: 0;
+  overflow: hidden;
+  background: #e7e2d8;
+  opacity: 0;
+  transform: translateY(calc(26 * var(--u)));
+  transition: opacity 1s ease 0.1s,
+              transform 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
+}
+.now.in .nw-main { opacity: 1; transform: none; }
+
+/* Two plates, not one. A single image has to leave before its
+   replacement can arrive, which shows the empty frame for as long as the
+   incoming slide lasts; two of them travel as one filmstrip — outgoing
+   to -100%, incoming from +100%, same duration — so the frame is covered
+   the whole way across. */
+.nw-shot {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.62s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ---- the open event's copy, in the mockup's middle column ---- */
+.nw-copy {
+  position: absolute;
+  left: calc(557 * var(--u));
+  top: calc(216 * var(--u));
+  width: calc(300 * var(--u));
+  opacity: 0;
+  transform: translateY(calc(20 * var(--u)));
+  transition: opacity 1s ease 0.2s,
+              transform 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s;
+}
+.now.in .nw-copy { opacity: 1; transform: none; }
+
+.nw-when {
   margin: 0;
   font-family: "Manrope", sans-serif;
   font-size: calc(13 * var(--u));
-  letter-spacing: calc(0.9 * var(--u));
+  line-height: calc(18 * var(--u));
+  letter-spacing: calc(1.1 * var(--u));
   text-transform: uppercase;
-  color: var(--muted-fg);
+  color: rgba(29, 25, 20, 0.6);
 }
-.rd-av {                                    /* Avatar h-6 w-6 */
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex: none;
-  width: calc(26 * var(--u));
-  height: calc(26 * var(--u));
-  min-width: 19px; min-height: 19px;
-  border-radius: 50%;
-  background: rgba(29, 25, 20, 0.1);
-  font-size: calc(11 * var(--u));
-  font-weight: 700;
-  letter-spacing: 0;
-  color: #1d1914;
+.nw-name {
+  margin: calc(8 * var(--u)) 0 0;
+  font-family: "Baskervville", serif;
+  font-weight: 400;
+  font-size: calc(40 * var(--u));
+  line-height: calc(46 * var(--u));
+  letter-spacing: calc(-0.8 * var(--u));
+  color: #000;
 }
-.rd-arrow {
-  margin-left: auto;
-  display: flex;
+.nw-where {
+  margin: calc(6 * var(--u)) 0 0;
+  font-family: "Forum", serif;
+  font-size: calc(17 * var(--u));
+  line-height: calc(24 * var(--u));
+  letter-spacing: calc(-0.34 * var(--u));
+  color: rgba(29, 25, 20, 0.78);
+}
+/* the mockup drops the paragraph to the foot of the column, level with
+   the bottom of the open image rather than under the location line */
+.nw-desc {
+  position: absolute;
+  left: calc(557 * var(--u));
+  top: calc(453 * var(--u));
+  width: calc(300 * var(--u));
+  margin: 0;
+  font-family: "Manrope", sans-serif;
+  font-size: calc(14 * var(--u));
+  line-height: calc(23 * var(--u));
+  letter-spacing: calc(-0.28 * var(--u));
+  color: rgba(29, 25, 20, 0.72);
   opacity: 0;
-  transform: translateX(calc(-6 * var(--u)));
-  transition: opacity 0.45s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(calc(16 * var(--u)));
+  transition: opacity 1s ease 0.28s,
+              transform 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.28s;
 }
-.rd-arrow svg { width: calc(17 * var(--u)); height: calc(17 * var(--u));
-                min-width: 12px; min-height: 12px; }
-.rd-card:hover .rd-arrow, .rd-card:focus-visible .rd-arrow { opacity: 0.8; transform: none; }
+.now.in .nw-desc { opacity: 1; transform: none; }
 
-/* ---------------- controls ---------------- */
-
-.rd-bar {
+/* ---- 286:47 / 50 / 53 — the events still to come ----
+   The mockup runs these to x 1547, all but full bleed; refitted here to
+   finish on the page's own right gutter at 1308u. Three slots showing
+   whatever comes after the open event, so the row turns over as the
+   carousel advances instead of reflowing under the pointer. */
+.nw-thumbs {
+  position: absolute;
+  left: calc(897 * var(--u));
+  top: calc(457 * var(--u));              /* foot-aligned with .nw-main */
+  width: calc(411 * var(--u));
+  height: calc(112 * var(--u));
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: calc(24 * var(--u));
-  margin-top: calc(36 * var(--u));
+  gap: calc(15 * var(--u));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow: hidden;                       /* tiles leave behind the edge */
 }
-.rd-dots { display: flex; gap: calc(8 * var(--u)); }
-.rd-dots button {
-  width: calc(34 * var(--u));
-  min-width: 22px;
-  height: 2px;
+.nw-tile { flex: 1 1 0; min-width: 0; }
+
+.nw-thumb {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
   padding: 0;
   border: 0;
-  background: rgba(29, 25, 20, 0.16);
+  background: #d9d9d9;
+  overflow: hidden;
   cursor: pointer;
-  transition: background 0.4s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1);
+  text-align: left;
+  opacity: 0;
+  transform: translateY(calc(18 * var(--u)));
+  transition: opacity 0.85s ease, transform 0.95s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--d, 0s);
 }
-.rd-dots button[aria-current="true"] { background: #1d1914; transform: scaleY(2); }
-.rd-dots button:focus-visible { outline: 1px solid rgba(29,25,20,0.5); outline-offset: 5px; }
-
-/* CarouselPrevious / CarouselNext — h-8 w-8 rounded-full, outline variant */
-.rd-nav { display: flex; gap: calc(10 * var(--u)); }
-.rd-nav button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: calc(38 * var(--u));
-  height: calc(38 * var(--u));
-  min-width: 30px; min-height: 30px;
-  padding: 0;
-  border: 1px solid rgba(29, 25, 20, 0.18);
-  border-radius: 50%;
-  background: transparent;
-  color: inherit;
-  cursor: pointer;
-  transition: background 0.35s ease, opacity 0.35s ease, transform 0.35s ease;
+.now.in .nw-thumb { opacity: 1; transform: none; }
+.nw-thumb img {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  /* darker than the open event, as asked */
+  filter: brightness(0.7);
+  transition: filter 0.5s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.rd-nav button:hover:not(:disabled) { background: rgba(29,25,20,0.06); transform: scale(1.06); }
-.rd-nav button:disabled { opacity: 0.28; cursor: default; }
-.rd-nav svg { width: calc(15 * var(--u)); height: calc(15 * var(--u));
-              min-width: 12px; min-height: 12px; }
+.nw-thumb:hover img { filter: brightness(0.86); transform: scale(1.04); }
+/* 286:47 — the mockup's own gradient, verbatim */
+.nw-thumb::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg,
+              rgba(0, 0, 0, 0.43) 37.872%,
+              rgba(102, 102, 102, 0.43) 100%);
+  pointer-events: none;
+}
+.nw-thumb__name {                         /* 286:54 */
+  position: absolute;
+  z-index: 1;
+  left: calc(11 * var(--u));
+  right: calc(11 * var(--u));
+  bottom: calc(10 * var(--u));
+  font-family: "Baskervville", serif;
+  font-size: calc(15 * var(--u));
+  line-height: calc(19 * var(--u));
+  letter-spacing: calc(-0.3 * var(--u));
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+}
+.nw-thumb:focus-visible { outline: 2px solid #113240; outline-offset: calc(3 * var(--u)); }
 
-.rd-live {
+/* the record the open slot reads on a step, and that search and screen
+   readers get whether or not the script ever runs */
+.nw-thumb__desc {
   position: absolute;
   width: 1px; height: 1px;
   margin: -1px; padding: 0;
@@ -1780,84 +1853,274 @@ body {
   white-space: nowrap;
 }
 
-/* ================= useful info — narrow screens ================= */
+/* ---- the step ----
+   --slide is +1 travelling forward and -1 back. Everything leaves the
+   way the carousel is going and arrives from the far side, so the
+   direction you pressed is the direction the section moves.
+
+   .is-stepping exists to re-time the entrance transitions: at rest the
+   copy settles over a second with a delay, which is right for arriving
+   on the page and much too slow for a keypress. Source order matters
+   below — all three carry the same specificity, so out must follow
+   stepping, and pre must follow out. */
+.now.is-stepping .nw-copy,
+.now.is-stepping .nw-desc,
+.now.is-stepping .nw-thumb {
+  transition: opacity 0.4s ease,
+              transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.now.is-stepping .nw-tile:nth-child(2) .nw-thumb { transition-delay: 0.05s; }
+.now.is-stepping .nw-tile:nth-child(3) .nw-thumb { transition-delay: 0.10s; }
+
+.now.is-out .nw-copy,
+.now.is-out .nw-desc,
+.now.is-out .nw-thumb {
+  opacity: 0;
+  transform: translateX(calc(var(--slide, 1) * -34 * var(--u)));
+  transition: opacity 0.26s ease, transform 0.3s cubic-bezier(0.4, 0, 1, 1);
+}
+.now.is-out .nw-tile:nth-child(2) .nw-thumb { transition-delay: 0.05s; }
+.now.is-out .nw-tile:nth-child(3) .nw-thumb { transition-delay: 0.10s; }
+
+/* the far-side start pose, committed with no transition so the jump
+   across is never animated */
+.now.is-pre .nw-copy,
+.now.is-pre .nw-desc,
+.now.is-pre .nw-thumb {
+  opacity: 0;
+  transform: translateX(calc(var(--slide, 1) * 34 * var(--u)));
+  transition: none;
+}
+
+/* ---- arrows and position, filling the empty top right ---- */
+.nw-nav {
+  position: absolute;
+  left: calc(1216 * var(--u));            /* 2 x 40u + 12u, out to 1308 */
+  top: calc(66 * var(--u));               /* centred on the title */
+  display: flex;
+  gap: calc(12 * var(--u));
+  opacity: 0;
+  transform: translateY(calc(14 * var(--u)));
+  transition: opacity 0.9s ease 0.16s,
+              transform 1s cubic-bezier(0.16, 1, 0.3, 1) 0.16s;
+}
+.now.in .nw-nav { opacity: 1; transform: none; }
+.nw-nav button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(40 * var(--u));
+  height: calc(40 * var(--u));
+  min-width: 32px; min-height: 32px;
+  padding: 0;
+  border: 1px solid rgba(29, 25, 20, 0.24);
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition: background 0.35s ease, border-color 0.35s ease,
+              color 0.35s ease, transform 0.35s ease;
+}
+.nw-nav button:hover { background: #1d1914; border-color: #1d1914; color: #fff; }
+.nw-nav button:active { transform: scale(0.94); }
+.nw-nav button:focus-visible { outline: 2px solid #113240; outline-offset: calc(3 * var(--u)); }
+.nw-nav svg {
+  width: calc(15 * var(--u)); height: calc(15 * var(--u));
+  min-width: 12px; min-height: 12px;
+}
+
+.nw-count {
+  position: absolute;
+  left: calc(1100 * var(--u));
+  top: calc(77 * var(--u));
+  width: calc(96 * var(--u));
+  margin: 0;
+  text-align: right;
+  font-family: "Manrope", sans-serif;
+  font-size: calc(13 * var(--u));
+  letter-spacing: calc(1.1 * var(--u));
+  color: rgba(29, 25, 20, 0.5);
+  font-variant-numeric: tabular-nums;
+  opacity: 0;
+  transition: opacity 0.9s ease 0.2s;
+}
+.now.in .nw-count { opacity: 1; }
+
+.nw-live {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ============ everything you need to know — narrow screens ============ */
 @media (max-width: 899px) {
   .read {
     --gut: clamp(20px, 5.6vw, 44px);
-    padding: clamp(64px, 14vw, 120px) 0;   /* py-20 */
+    height: auto;
+    padding: clamp(56px, 12vw, 100px) 0 clamp(56px, 12vw, 100px);
   }
-  .rd-wrap { padding: 0 var(--gut); }
-  /* the positioned board collapses back to a plain stack — there is no
-     room beside the title for a right-hand column at this width */
-  .rd-head { position: static; height: auto; margin-bottom: 26px; }
+  /* the board and the column stop being a board and a column */
+  .rd-panel {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0 var(--gut);
+    padding: clamp(30px, 7vw, 52px) clamp(22px, 5.5vw, 40px) 0;
+  }
   .rd-title, .rd-note, .rd-all {
     position: static;
-    left: auto; top: auto;
+    left: auto; top: auto; width: auto;
   }
   .rd-title {
-    width: auto;
-    font-size: clamp(28px, 7.4vw, 46px);   /* text-3xl md:text-5xl */
-    line-height: 1.24;
+    font-size: clamp(28px, 7.4vw, 46px);
+    line-height: 1.2;
     letter-spacing: -0.028em;
   }
   .rd-note {
-    width: auto;
-    max-width: 38ch;
+    max-width: 40ch;
     margin: clamp(16px, 4vw, 26px) 0 0;
-    font-size: 15px;
-    line-height: 1.6;
-    color: var(--muted-fg);
+    font-size: 16px;
+    line-height: 1.55;
   }
   .rd-all {
-    width: auto;
+    display: inline-flex;
     margin: clamp(20px, 5vw, 30px) 0 0;
-    height: 44px;
+    height: 42px;
     padding: 0 20px;
     border-radius: 999px;
-    border-color: rgba(29, 25, 20, 0.35);
     font-size: 14px;
   }
   .rd-all svg { width: 14px; height: 14px; }
-
-  /* smaller and back into the corner — the stacked mobile head has far
-     less clearance than the desktop board does */
   .rd-deco {
-    left: auto;
-    right: -22px;
-    top: clamp(48px, 11vw, 90px);
-    width: clamp(120px, 34vw, 176px);
-    height: clamp(120px, 34vw, 176px);
+    position: relative;
+    left: auto; top: auto;
+    display: block;
+    width: 82%;
+    height: auto;
+    margin: clamp(18px, 5vw, 36px) auto -6%;
   }
 
-  .rd-track { margin-left: -12px; }
-  .rd-item { padding-left: 12px; }
-  .rd-card {
-    aspect-ratio: auto;
-    min-height: 250px;
-    padding: 22px;
-    border-radius: 8px;
+  /* no window and no scrollbar down here — all eight simply stack */
+  .rd-list {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    margin: clamp(34px, 9vw, 64px) var(--gut) 0;
   }
-  .rd-foot { gap: 14px; }
-  .rd-name { font-size: 18px; line-height: 1.36; letter-spacing: -0.015em; }
-  .rd-sum { max-width: none; margin-top: 7px; font-size: 14px; line-height: 1.55; }
-  .rd-by { font-size: 11px; letter-spacing: 0.08em; gap: 8px; }
-  /* the index would otherwise inherit a --u size that collapses to ~3px */
-  .rd-av { width: 20px; height: 20px; font-size: 10px; }
-  .rd-ico { width: 26px; height: 26px; }
-  .rd-arrow { opacity: 0.5; transform: none; }
-  .rd-bar { margin-top: 24px; }
-  .rd-dots button { width: 24px; }
+  .rd-item {
+    padding-bottom: clamp(16px, 4vw, 26px);
+    margin-bottom: clamp(16px, 4vw, 26px);
+  }
+  .rd-link {
+    min-height: 0;
+    font-size: clamp(18px, 4.6vw, 26px);
+    line-height: 1.3;
+    letter-spacing: -0.015em;
+  }
+  .rd-link:hover { transform: none; }
+  .rd-scroll { display: none; }
+
+  /* ---- right now in Oman ---- */
+  .now {
+    --gut: clamp(20px, 5.6vw, 44px);
+    height: auto;
+    padding: clamp(56px, 12vw, 100px) 0 clamp(60px, 13vw, 110px);
+  }
+  .nw-title {
+    position: static;
+    width: auto;
+    margin: 0 var(--gut);
+    font-size: clamp(28px, 7.4vw, 46px);
+    line-height: 1.2;
+    letter-spacing: -0.028em;
+  }
+  .nw-pattern {
+    left: -14%;
+    top: auto;
+    bottom: 0;
+    width: 62%;
+    height: auto;
+  }
+  .nw-main {
+    /* relative, not static: the two plates inside are absolutely
+       positioned, and static here would send them to the section box.
+       left/top have to be cleared with it — on a relative box the
+       desktop offsets would still apply, just as a nudge instead */
+    position: relative;
+    left: auto;
+    top: auto;
+    width: auto;
+    height: clamp(210px, 54vw, 340px);
+    margin: clamp(24px, 6vw, 40px) var(--gut) 0;
+  }
+  .nw-copy, .nw-desc {
+    position: static;
+    width: auto;
+    margin: clamp(18px, 4.5vw, 28px) var(--gut) 0;
+  }
+  .nw-when { font-size: 11px; letter-spacing: 0.09em; }
+  .nw-name { margin-top: 6px; font-size: clamp(26px, 6.6vw, 38px); line-height: 1.16; }
+  /* the desktop 6u gap is under 2px once --u is a 375-wide page */
+  .nw-where { margin-top: 8px; font-size: 15px; }
+  .nw-desc { font-size: 14px; line-height: 1.6; max-width: 46ch; }
+
+  /* a swipeable strip rather than three fixed slots */
+  .nw-thumbs {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: clamp(24px, 6vw, 40px) 0 0;
+    padding: 0 var(--gut);
+    gap: 10px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: var(--gut);
+    -webkit-overflow-scrolling: touch;
+  }
+  .nw-tile { flex: 0 0 clamp(140px, 40vw, 190px); scroll-snap-align: start; }
+  .nw-thumb { height: clamp(124px, 35vw, 168px); }
+  .nw-thumb__name { left: 10px; right: 10px; bottom: 9px; font-size: 14px; line-height: 18px; }
+
+  /* the controls come out of the empty top right and sit under the
+     title, where the thumbnails are also swipeable by hand */
+  .nw-nav, .nw-count {
+    position: static;
+    width: auto;
+    left: auto; top: auto;
+  }
+  .nw-nav {
+    justify-content: flex-end;
+    margin: 8px var(--gut) 0;
+    gap: 10px;
+  }
+  .nw-nav button { width: 38px; height: 38px; }
+  .nw-nav svg { width: 14px; height: 14px; }
+  .nw-count {
+    margin: clamp(14px, 3.5vw, 20px) var(--gut) 0;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+  }
 }
 
-/* ---- useful info — reduced motion ----
-   No auto-advance and no sliding: the track becomes a plain scroller. */
+/* ---- both sections — reduced motion: everything has already arrived ---- */
 @media (prefers-reduced-motion: reduce) {
-  .rd-note { opacity: 1; transform: none; }
-  .rd-deco { opacity: 0.9; transform: rotate(-6deg); transition: none; }
-  .rd-track { transform: none !important; overflow-x: auto; }
-  .rd-vp { overflow: visible; }
-  .rd-card { transition: none; }
-  .rd-nav, .rd-dots { display: none; }
+  .rd-panel, .rd-note, .rd-all, .rd-deco, .rd-item,
+  .nw-main, .nw-copy, .nw-desc, .nw-thumb, .nw-nav, .nw-count {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .rd-scroll { opacity: 1; transition: none; }
+  .nw-pattern { opacity: 0.26; transition: none; }
+  .rd-link:hover { transform: none; }
+  .nw-thumb:hover img { transform: none; }
+  /* the carousel cuts rather than slides; the script skips the step
+     choreography entirely and just rewrites the slot */
+  .nw-shot { transition: none; }
 }
 
 /* ---- journey — reduced motion: everything already arrived ---- */
@@ -1879,16 +2142,16 @@ body {
    Footer
 
    The same mark as the header, at the header's own metrics, on the
-   purple the GET IN TOUCH pill already uses (#404463 / #efdfdf) — so
-   it closes the page on a colour pair the design system already owns
-   rather than a new one.
+   navy the GET IN TOUCH pill and the "Everything you need to know"
+   board already use (#113240 / #efdfdf) — so it closes the page on a
+   colour pair the design system already owns rather than a new one.
    ================================================================= */
 
 .foot {
   --u: calc(100cqw / 1441);
   position: relative;
   width: 100%;
-  background: #404463;
+  background: #113240;
   color: #efdfdf;
   /* 23 left / 36 right lines the mark and the last link up with the
      two ends of the nav band above */
@@ -1990,11 +2253,6 @@ body {
             <span class="line"><i>Where the silence</i></span>
             <span class="line"><i>has a sound.</i></span>
           </p>
-          <p class="label" data-node-id="215:302">
-            <span class="line"><i>Wahiba Sands,</i></span>
-            <span class="line"><i>Endless dunes,</i></span>
-            <span class="line"><i>ancient stillness</i></span>
-          </p>
           <p class="body r-fade" data-node-id="215:303">Wahiba Sands, also called Sharqiya Sands, is a large and famous desert in Oman. It covers an area of 12,500 square kilometers with towering red and golden sand dunes that reach over 100 meters high.</p>
           <a class="explore r-pop" href="#" data-node-id="215:304">
             <span data-node-id="215:305">Explore</span>
@@ -2020,11 +2278,6 @@ body {
           <p class="quote3" data-node-id="215:372">
             <span class="line"><i>The earth rises to</i></span>
             <span class="line"><i>meet the sky.</i></span>
-          </p>
-          <p class="label3" data-node-id="215:374">
-            <span class="line"><i>Jebel Shams ,</i></span>
-            <span class="line"><i>The Grand Canyon</i></span>
-            <span class="line"><i>of Arabia</i></span>
           </p>
           <p class="body3 r-fade" data-node-id="215:379">The highest mountain in Oman. Often called the "Mountain of the Sun," it features the dramatic Wadi Ghul gorge, widely known as the Grand Canyon of Arabia. </p>
           <a class="explore r-pop" href="#" data-node-id="215:375">
@@ -2089,10 +2342,6 @@ body {
           <p class="quote5" data-node-id="215:526">
             <span class="line"><i>Where history is</i></span>
             <span class="line"><i>carved in stone.</i></span>
-          </p>
-          <p class="label5" data-node-id="215:527">
-            <span class="line"><i>Nizwa · Living history,</i></span>
-            <span class="line"><i>still standing</i></span>
           </p>
           <p class="body5 r-fade" data-node-id="215:535">An ancient Omani city known as a living history, featuring the massive 17th-century <a href="https://experienceoman.om/destinations/al-dakhiliyah/nizwa-fort" target="_blank" rel="noopener">Nizwa Fort</a>, a bustling traditional souq, and lush date palm oases. It serves as the cultural heart of Oman, blending ancient defensive architecture with vibrant daily community life,.</p>
           <a class="explore r-pop" href="#">
@@ -2305,219 +2554,152 @@ body {
     </div>
   </section>
 
-  <!-- ================= Useful info =================
-       Port of the shadcn `testimonials` block: an embla Carousel of
-       aspect-video muted cards, two to a view on large screens, that
-       advances itself every four seconds. Slides are authored in the
-       markup so they are readable and indexable before any script runs;
-       the script only moves the track. Cards link into articles.html.
-
-       lucide-react glyphs are inlined as SVG (Stamp, Sun, Scale,
-       Map, Car, Shirt) — there is no bundler here to tree-shake an
-       icon package into. -->
+  <!-- ================= Everything you need to know — 252:52 =================
+       The navy board carries the title, the standfirst, the button and the
+       notepad plate; the articles are a plain list of titles behind a
+       fixed window, scrolled by the rule drawn beside it. Titles are
+       authored in the markup so all eight are readable and indexable
+       before any script runs — the script only draws the indicator. -->
   <section class="read" id="useful" aria-labelledby="read-title">
 
-    <!-- purely decorative marginalia, tucked behind the copy on the right -->
-    <img class="rd-deco" src="assets/note pad sketch.png" alt="" aria-hidden="true" loading="lazy" />
-
-    <div class="rd-wrap">
-
-      <div class="rd-head">
-        <h2 class="rd-title" id="read-title">
-          <span class="line"><i>Everything you</i></span>
-          <span class="line"><i>need to know</i></span>
-        </h2>
-        <p class="rd-note">Visas, seasons, driving distances and the comparison
-          everyone makes anyway — answered properly, before you have to ask.</p>
-        <a class="rd-all" href="articles.html">
-          Read all articles
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M4 12h15m-6-7 7 7-7 7" stroke="currentColor" stroke-width="1.6"
-                  stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-        </a>
-      </div>
-
-      <div class="rd-car" role="region" aria-roledescription="carousel"
-           aria-label="Useful articles" tabindex="0">
-        <div class="rd-vp">
-          <ul class="rd-track">
-
-            <li class="rd-item" role="group" aria-roledescription="slide">
-              <a class="rd-card" href="articles.html#oman-visa-guide">
-                <!-- lucide: stamp -->
-                <svg class="rd-ico" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M5 22h14M19.27 13.73A2.5 2.5 0 0 0 17.5 9h-1.79A2.71 2.71 0 0 1 13 6.29a2.71 2.71 0 0 0-4.63-1.92A2.71 2.71 0 0 0 8 6.29 2.71 2.71 0 0 1 5.29 9H3.5a2.5 2.5 0 0 0-1.77 4.27" />
-                  <path d="M4 18h16v-4H4z" />
-                </svg>
-                <div class="rd-foot">
-                  <div>
-                    <h3 class="rd-name">Do I need a visa for Oman? A simple guide to the 2026 entry rules</h3>
-                    <p class="rd-sum">The GCC Unified Tourist Visa, who is exempt, what it
-                      costs, and how long processing actually takes.</p>
-                  </div>
-                  <p class="rd-by">
-                    <span class="rd-av" aria-hidden="true">01</span>
-                    <span>Entry &amp; visas · 4 min</span>
-                    <span class="rd-arrow" aria-hidden="true">
-                      <svg viewBox="0 0 24 24" fill="none"><path d="M7 17 17 7M9 7h8v8"
-                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                    </span>
-                  </p>
-                </div>
-              </a>
-            </li>
-
-            <li class="rd-item" role="group" aria-roledescription="slide">
-              <a class="rd-card" href="articles.html#best-time-to-visit">
-                <!-- lucide: sun -->
-                <svg class="rd-ico" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <circle cx="12" cy="12" r="4" />
-                  <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
-                </svg>
-                <div class="rd-foot">
-                  <div>
-                    <h3 class="rd-name">Best time to visit Oman: a season-by-season guide to weather, crowds, and khareef</h3>
-                    <p class="rd-sum">The coast, the mountains and Dhofar keep different
-                      calendars. Here is which one to plan around.</p>
-                  </div>
-                  <p class="rd-by">
-                    <span class="rd-av" aria-hidden="true">02</span>
-                    <span>When to go · 6 min</span>
-                    <span class="rd-arrow" aria-hidden="true">
-                      <svg viewBox="0 0 24 24" fill="none"><path d="M7 17 17 7M9 7h8v8"
-                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                    </span>
-                  </p>
-                </div>
-              </a>
-            </li>
-
-            <li class="rd-item" role="group" aria-roledescription="slide">
-              <a class="rd-card" href="articles.html#oman-vs-dubai">
-                <!-- lucide: scale -->
-                <svg class="rd-ico" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M12 3v18M7 21h10M3 8l4-5 4 5M13 8l4-5 4 5" />
-                  <path d="M3 8a4 4 0 0 0 8 0M13 8a4 4 0 0 0 8 0" />
-                </svg>
-                <div class="rd-foot">
-                  <div>
-                    <h3 class="rd-name">Oman vs. Dubai: what's actually different, and how to choose</h3>
-                    <p class="rd-sum">Two very different holidays three hours apart. An
-                      honest account of which one you are actually after.</p>
-                  </div>
-                  <p class="rd-by">
-                    <span class="rd-av" aria-hidden="true">03</span>
-                    <span>Comparisons · 5 min</span>
-                    <span class="rd-arrow" aria-hidden="true">
-                      <svg viewBox="0 0 24 24" fill="none"><path d="M7 17 17 7M9 7h8v8"
-                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                    </span>
-                  </p>
-                </div>
-              </a>
-            </li>
-
-            <li class="rd-item" role="group" aria-roledescription="slide">
-              <a class="rd-card" href="articles.html#7-days-in-oman">
-                <!-- lucide: map -->
-                <svg class="rd-ico" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M15 6.5v13M9 4.5v13" />
-                  <path d="m15 19.5 5.13-2.05a1 1 0 0 0 .63-.93V4.61a.5.5 0 0 0-.69-.46L15 6.5l-6-2-5.13 2.05a1 1 0 0 0-.63.93v11.91a.5.5 0 0 0 .69.46L9 17.5z" />
-                </svg>
-                <div class="rd-foot">
-                  <div>
-                    <h3 class="rd-name">7 days in Oman: how to see the desert, mountains, and coast in one trip</h3>
-                    <p class="rd-sum">Everything really is closer than you think. One week,
-                      one loop, all four landscapes — with the driving times.</p>
-                  </div>
-                  <p class="rd-by">
-                    <span class="rd-av" aria-hidden="true">04</span>
-                    <span>Itineraries · 8 min</span>
-                    <span class="rd-arrow" aria-hidden="true">
-                      <svg viewBox="0 0 24 24" fill="none"><path d="M7 17 17 7M9 7h8v8"
-                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                    </span>
-                  </p>
-                </div>
-              </a>
-            </li>
-
-            <li class="rd-item" role="group" aria-roledescription="slide">
-              <a class="rd-card" href="articles.html#renting-a-car">
-                <!-- lucide: car -->
-                <svg class="rd-ico" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M19 17h2v-4a2 2 0 0 0-.6-1.4L18 9H6L3.6 11.6A2 2 0 0 0 3 13v4h2" />
-                  <path d="M5 9 6.5 5.5A2 2 0 0 1 8.3 4.3h7.4a2 2 0 0 1 1.8 1.2L19 9M9 17h6" />
-                  <circle cx="7" cy="17" r="2" /><circle cx="17" cy="17" r="2" />
-                </svg>
-                <div class="rd-foot">
-                  <div>
-                    <h3 class="rd-name">Renting a car in Oman: what you need, what it costs, and where 4WD actually matters</h3>
-                    <p class="rd-sum">The roads are excellent and the signage is bilingual.
-                      There are three wadis where that stops being true.</p>
-                  </div>
-                  <p class="rd-by">
-                    <span class="rd-av" aria-hidden="true">05</span>
-                    <span>Getting around · 5 min</span>
-                    <span class="rd-arrow" aria-hidden="true">
-                      <svg viewBox="0 0 24 24" fill="none"><path d="M7 17 17 7M9 7h8v8"
-                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                    </span>
-                  </p>
-                </div>
-              </a>
-            </li>
-
-            <li class="rd-item" role="group" aria-roledescription="slide">
-              <a class="rd-card" href="articles.html#what-to-wear">
-                <!-- lucide: shirt -->
-                <svg class="rd-ico" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z" />
-                </svg>
-                <div class="rd-foot">
-                  <div>
-                    <h3 class="rd-name">What to wear in Oman: a practical guide for men and women</h3>
-                    <p class="rd-sum">Modest, not restrictive. What that means at the mosque,
-                      at the wadi, and at dinner in Muscat.</p>
-                  </div>
-                  <p class="rd-by">
-                    <span class="rd-av" aria-hidden="true">06</span>
-                    <span>Before you pack · 4 min</span>
-                    <span class="rd-arrow" aria-hidden="true">
-                      <svg viewBox="0 0 24 24" fill="none"><path d="M7 17 17 7M9 7h8v8"
-                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                    </span>
-                  </p>
-                </div>
-              </a>
-            </li>
-
-          </ul>
-        </div>
-      </div>
-
-      <div class="rd-bar">
-        <div class="rd-dots" role="tablist" aria-label="Choose an article"></div>
-        <div class="rd-nav">
-          <button type="button" class="rd-prev" aria-label="Previous articles">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M19 12H5m6-7-7 7 7 7" stroke="currentColor" stroke-width="1.6"
-                    stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </button>
-          <button type="button" class="rd-next" aria-label="More articles">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M5 12h14m-6-7 7 7-7 7" stroke="currentColor" stroke-width="1.6"
-                    stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      <p class="rd-live" aria-live="polite"></p>
-
+    <div class="rd-panel">
+      <h2 class="rd-title" id="read-title">
+        <span class="line"><i>Everything you</i></span>
+        <span class="line"><i>need to know</i></span>
+      </h2>
+      <p class="rd-note">Visas, seasons, driving distances and the comparison
+        everyone makes anyway — answered properly, before you have to ask.</p>
+      <a class="rd-all" href="articles.html">
+        All articles
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 12h15m-6-7 7 7-7 7" stroke="currentColor" stroke-width="1.6"
+                stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </a>
+      <img class="rd-deco" src="assets/note pad sketch.png" alt="" aria-hidden="true" loading="lazy" />
     </div>
+
+    <ul class="rd-list" tabindex="0" role="region" aria-label="Articles, scrollable">
+      <li class="rd-item" style="--d:0.10s">
+        <a class="rd-link" href="articles.html#7-days-in-oman">7 days in Oman: how to see the desert, mountains, and coast in one trip</a>
+      </li>
+      <li class="rd-item" style="--d:0.18s">
+        <a class="rd-link" href="articles.html#oman-visa-guide">Do I need a visa for Oman? A simple guide to the 2026 entry rules</a>
+      </li>
+      <li class="rd-item" style="--d:0.26s">
+        <a class="rd-link" href="articles.html#best-time-to-visit">Best time to visit Oman: a season-by-season guide to weather, crowds and khareef</a>
+      </li>
+      <li class="rd-item" style="--d:0.34s">
+        <a class="rd-link" href="articles.html#oman-vs-dubai">Oman vs. Dubai: what's actually different, and how to choose</a>
+      </li>
+      <li class="rd-item" style="--d:0.40s">
+        <a class="rd-link" href="articles.html#renting-a-car">Renting a car in Oman: what you need, and where 4WD actually matters</a>
+      </li>
+      <li class="rd-item" style="--d:0.44s">
+        <a class="rd-link" href="articles.html#what-to-wear">What to wear in Oman: a practical guide for men and women</a>
+      </li>
+      <li class="rd-item" style="--d:0.48s">
+        <a class="rd-link" href="articles.html#where-to-stay">Where to stay in Oman: desert camps, mountain lodges and Muscat hotels</a>
+      </li>
+      <li class="rd-item" style="--d:0.52s">
+        <a class="rd-link" href="articles.html#eating-in-oman">Eating in Oman: what to order, where to find it, and what shuwa actually is</a>
+      </li>
+    </ul>
+
+    <div class="rd-scroll" aria-hidden="true"><span></span></div>
+  </section>
+
+  <!-- ================= Right now in Oman — 284:31 =================
+       A carousel of four events in the order they happen, nearest first.
+       The open one runs large and in its own colour; the three slots on
+       the right hold whatever comes after it, so the row turns over as
+       the carousel advances. Arrows step either way and wrap; a tile
+       jumps straight to that event. Each tile carries the copy its open
+       state would show, so the section reads whole without JS. -->
+  <section class="now" id="whats-on" aria-labelledby="now-title"
+           aria-roledescription="carousel">
+
+    <img class="nw-pattern" src="assets/s6-pattern.png" alt="" aria-hidden="true" loading="lazy" />
+
+    <h2 class="nw-title" id="now-title">Right Now in Oman</h2>
+
+    <p class="nw-count"><span class="nw-i">01</span> / 04</p>
+
+    <div class="nw-nav">
+      <button type="button" class="nw-prev" aria-label="Previous event">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M19 12H5m6-7-7 7 7 7" stroke="currentColor" stroke-width="1.6"
+                stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+      <button type="button" class="nw-next" aria-label="Next event">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M5 12h14m-6-7 7 7-7 7" stroke="currentColor" stroke-width="1.6"
+                stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- two plates so an outgoing and an incoming image can travel as one
+         filmstrip; the second starts empty and is filled on the first step -->
+    <figure class="nw-main">
+      <img class="nw-shot" src="assets/pexels-beladiya-nikunj-742323377-38036762.jpg"
+           alt="Musicians in kummas and dishdashas playing hand drums in a fort gateway"
+           loading="lazy" />
+      <img class="nw-shot" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+           alt="" aria-hidden="true" />
+    </figure>
+
+    <div class="nw-copy">
+      <p class="nw-when">July – August 2026</p>
+      <h3 class="nw-name">Muscat Nights</h3>
+      <p class="nw-where">Multiple venues, Muscat</p>
+    </div>
+
+    <p class="nw-desc">A nationwide cultural and entertainment festival held across
+      multiple venues in the capital, with light shows, international food stalls,
+      live music, drone displays and Omani heritage exhibits.</p>
+
+    <ul class="nw-thumbs">
+      <li class="nw-tile">
+        <button type="button" class="nw-thumb" style="--d:0.30s"
+                data-when="21 June – 21 September 2026"
+                data-where="Salalah, Dhofar"
+                data-alt="A palm-lined wadi pool below green hills in the Dhofar monsoon">
+          <img src="assets/s6-glassy-3.png" alt="" loading="lazy" />
+          <span class="nw-thumb__name">Dhofar Khareef Festival</span>
+        </button>
+        <span class="nw-thumb__desc">Three months of monsoon turn the Dhofar hills
+          green. The festival fills Salalah with night markets, poetry evenings and
+          folk performances while the khareef mist rolls in off the sea.</span>
+      </li>
+      <li class="nw-tile">
+        <button type="button" class="nw-thumb" style="--d:0.38s"
+                data-when="August – November 2026"
+                data-where="Daymaniyat Islands Nature Reserve"
+                data-alt="A diver above a coral head with a turtle and shoaling reef fish">
+          <img src="assets/act-scuba.png" alt="" loading="lazy" />
+          <span class="nw-thumb__name">Whale shark season</span>
+        </button>
+        <span class="nw-thumb__desc">Whale sharks gather off the Daymaniyat Islands
+          through the autumn plankton bloom — the calmest, clearest water of the year
+          for snorkelling and diving the reserve.</span>
+      </li>
+      <li class="nw-tile">
+        <button type="button" class="nw-thumb" style="--d:0.46s"
+                data-when="14 – 19 February 2027"
+                data-where="Muscat to Jebel Akhdar"
+                data-alt="A walker on a ridge above the blue inlets of the Musandam coast">
+          <img src="assets/act-hike.png" alt="" loading="lazy" />
+          <span class="nw-thumb__name">Tour of Oman</span>
+        </button>
+        <span class="nw-thumb__desc">Six stages from the Gulf coast to the 5.7 km climb
+          up Jebel Akhdar, with a UCI ProSeries peloton and free roadside viewing along
+          the whole route.</span>
+      </li>
+    </ul>
+
+    <p class="nw-live" aria-live="polite"></p>
   </section>
 
   <!-- ================= Footer ================= -->
@@ -3262,228 +3444,266 @@ body {
 
 <script>
 /* =================================================================
-   Useful info — port of the shadcn `testimonials` block
+   Everything you need to know — 252:52
 
-   The original is a shadcn Carousel (embla-carousel-react) wrapped in a
-   `useEffect` that re-arms a 4s timer on every selection change:
-
-     if (selectedScrollSnap() + 1 === scrollSnapList().length)  scrollTo(0)
-     else                                                       scrollNext()
-
-   Ported here as a snap track moved by one transform. The snap model is
-   embla's `trimSnaps`: one snap per item, each clamped so the last can
-   never scroll past the end of the track — which is why six cards two to
-   a view give five snaps, not six. Drag, wheel-free, and the arrow-key
-   handling that lives on shadcn's Carousel root are all carried over.
-
-   Added on top: the auto-advance stops on hover, on focus and while
-   dragging, and does not run at all under reduced motion. An unpausable
-   4s timer moves content out from under whoever is reading it, which is
-   a WCAG 2.2.2 failure rather than a matter of taste.
+   Two jobs only. The section settles itself on arrival, the way every
+   other section on this page does, and the article window gets the
+   scroll indicator drawn beside it, because the native scrollbar is
+   suppressed — an OS scrollbar is a different width, colour and
+   fade-out behaviour on every machine this page opens on, and a 3u
+   navy rule is none of those things.
    ================================================================= */
 (function () {
 
   var root = document.querySelector(".read");
   if (!root) return;
 
-  var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  var car   = root.querySelector(".rd-car");
-  var vp    = root.querySelector(".rd-vp");
-  var track = root.querySelector(".rd-track");
-  var items = [].slice.call(root.querySelectorAll(".rd-item"));
-  var dotsE = root.querySelector(".rd-dots");
-  var prevB = root.querySelector(".rd-prev");
-  var nextB = root.querySelector(".rd-next");
-  var live  = root.querySelector(".rd-live");
+  var list  = root.querySelector(".rd-list");
+  var bar   = root.querySelector(".rd-scroll");
+  var thumb = bar && bar.firstElementChild;
   var title = root.querySelector(".rd-title");
-  if (!items.length) return;
 
-  /* ---- settle the header on arrival ---- */
+  /* ---- settle on arrival ---- */
   var settled = false;
   function reveal() {
     if (settled || root.getBoundingClientRect().top > innerHeight * 0.82) return;
     settled = true;
     root.classList.add("in");
-    title.classList.add("is-revealed");
+    if (title) title.classList.add("is-revealed");
+    removeEventListener("scroll", reveal);
   }
   addEventListener("scroll", reveal, { passive: true });
   reveal();
 
-  /* ---- snap list, rebuilt whenever the box changes ---- */
-  var snaps = [], selected = 0;
+  if (!list || !thumb) return;
 
-  function measure() {
-    var max = Math.max(0, track.scrollWidth - vp.clientWidth);
-    var base = vp.getBoundingClientRect().left;
-    var itemW = items[0].getBoundingClientRect().width || 1;
-    /* Two snaps closer together than a fraction of a card are the same
-       view, not two — clamping the tail against `max` always leaves one
-       such near-duplicate, and it would otherwise get its own dot that
-       moves the track by a few pixels. This is what trimSnaps is for. */
-    var tol = Math.max(24, itemW * 0.08);
+  /* ---- the indicator ---- */
+  var ticking = false;
 
-    snaps = [];
-    items.forEach(function (it) {
-      var at = Math.min(it.getBoundingClientRect().left - base + pos, max);
-      if (!snaps.length) { snaps.push(at); return; }
-      var gap = at - snaps[snaps.length - 1];
-      if (gap > tol) snaps.push(at);
-      else if (gap > 0) snaps[snaps.length - 1] = at;   /* keep the reachable end */
-    });
+  function draw() {
+    ticking = false;
+    /* drop any hide from a previous pass before measuring, or the inline
+       display would outrank the stylesheet and the bar could never come
+       back when the window widens out of the stacked layout again */
+    bar.style.removeProperty("display");
 
-    if (!snaps.length) snaps = [0];
-    if (selected > snaps.length - 1) selected = snaps.length - 1;
-    buildDots();
-    /* the box changed under us — sit back down on the selected snap */
-    pos = snaps[selected];
-    apply(false);
-    announce();
+    var track  = bar.clientHeight;
+    var travel = list.scrollHeight - list.clientHeight;
+
+    /* the window is only a window while there is more than fits in it */
+    if (travel <= 1 || track <= 0) { bar.style.display = "none"; return; }
+
+    var h = Math.max(track * (list.clientHeight / list.scrollHeight), 26);
+    var y = (list.scrollTop / travel) * (track - h);
+    thumb.style.height = h + "px";
+    thumb.style.transform = "translateY(" + y + "px)";
   }
 
-  var pos = 0;
-  function current() { return pos; }
-
-  function apply(animate) {
-    track.style.transition = animate && !reduce
-      ? "transform 0.62s cubic-bezier(0.16, 1, 0.3, 1)" : "none";
-    track.style.transform = "translate3d(" + -pos + "px,0,0)";
+  function schedule() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(draw);
   }
 
-  function buildDots() {
-    if (dotsE.children.length === snaps.length) return;
-    dotsE.textContent = "";
-    snaps.forEach(function (_, i) {
-      var b = document.createElement("button");
-      b.type = "button";
-      b.setAttribute("role", "tab");
-      b.setAttribute("aria-label", "Go to article " + (i + 1));
-      b.addEventListener("click", function () { scrollTo(i); });
-      dotsE.appendChild(b);
+  list.addEventListener("scroll", schedule, { passive: true });
+  addEventListener("resize", schedule);
+  if (window.ResizeObserver) new ResizeObserver(schedule).observe(list);
+  draw();
+})();
+</script>
+
+<script>
+/* =================================================================
+   Right now in Oman — 284:31
+
+   A carousel over four events, nearest first. Index `cur` is the open
+   one; the three tiles are always the next three after it, wrapping —
+   so the row reads as what is still to come and turns over as you move
+   rather than holding a fixed set with one of them marked.
+
+   Every record is lifted out of the markup once at start-up, so the
+   copy on screen and the copy a tile is holding are the same strings,
+   and there is no second table to fall out of step with the HTML.
+
+   The step itself is choreographed rather than animated by the browser
+   alone: text and tiles leave the way you are travelling, are rewritten
+   while invisible, are put down on the far side with transitions off,
+   and are released. The images do not take part in that — they are two
+   plates sliding as one filmstrip, which is what keeps the frame
+   covered the whole way across.
+   ================================================================= */
+(function () {
+
+  var root = document.querySelector(".now");
+  if (!root) return;
+
+  var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var shots = [].slice.call(root.querySelectorAll(".nw-shot"));
+  var when  = root.querySelector(".nw-when");
+  var name  = root.querySelector(".nw-name");
+  var where = root.querySelector(".nw-where");
+  var desc  = root.querySelector(".nw-desc");
+  var live  = root.querySelector(".nw-live");
+  var count = root.querySelector(".nw-i");
+  var prevB = root.querySelector(".nw-prev");
+  var nextB = root.querySelector(".nw-next");
+  var tiles = [].slice.call(root.querySelectorAll(".nw-tile"));
+
+  /* ---- settle on arrival ---- */
+  var settled = false;
+  function reveal() {
+    if (settled || root.getBoundingClientRect().top > innerHeight * 0.84) return;
+    settled = true;
+    root.classList.add("in");
+    removeEventListener("scroll", reveal);
+  }
+  addEventListener("scroll", reveal, { passive: true });
+  reveal();
+
+  if (shots.length < 2 || !desc || !tiles.length) return;
+
+  /* the tile copy is authored across several source lines; the indent
+     rides along in textContent, so flatten it on the way out */
+  function flat(s) { return s.replace(/\s+/g, " ").trim(); }
+
+  /* ---- the events, read out of the markup once ---- */
+  var events = [{
+    src:   shots[0].getAttribute("src"),
+    alt:   shots[0].getAttribute("alt") || "",
+    when:  flat(when.textContent),
+    name:  flat(name.textContent),
+    where: flat(where.textContent),
+    desc:  flat(desc.textContent)
+  }];
+
+  tiles.forEach(function (li) {
+    var b = li.querySelector(".nw-thumb");
+    events.push({
+      src:   li.querySelector("img").getAttribute("src"),
+      alt:   b.getAttribute("data-alt") || "",
+      when:  b.getAttribute("data-when") || "",
+      name:  flat(li.querySelector(".nw-thumb__name").textContent),
+      where: b.getAttribute("data-where") || "",
+      desc:  flat(li.querySelector(".nw-thumb__desc").textContent)
     });
+  });
+
+  var n = events.length;
+  var cur = 0;
+  var busy = false;
+
+  /* which plate is on screen; the other is parked off to one side */
+  var front = shots[0], back = shots[1];
+
+  function pad(i) { return (i < 9 ? "0" : "") + (i + 1); }
+
+  function writeCopy() {
+    var e = events[cur];
+    when.textContent  = e.when;
+    name.textContent  = e.name;
+    where.textContent = e.where;
+    desc.textContent  = e.desc;
+    if (count) count.textContent = pad(cur);
+  }
+
+  function writeTiles() {
+    tiles.forEach(function (li, k) {
+      var e = events[(cur + 1 + k) % n];
+      var b = li.querySelector(".nw-thumb");
+      li.querySelector("img").setAttribute("src", e.src);
+      li.querySelector(".nw-thumb__name").textContent = e.name;
+      li.querySelector(".nw-thumb__desc").textContent = e.desc;
+      b.setAttribute("data-alt", e.alt);
+      b.setAttribute("data-when", e.when);
+      b.setAttribute("data-where", e.where);
+      b.setAttribute("aria-label", "Show " + e.name);
+    });
+  }
+
+  /* the two plates, travelling together */
+  function slide(d) {
+    var e = events[cur];
+
+    back.setAttribute("src", e.src);
+    back.style.transition = "none";
+    back.style.transform = "translateX(" + (d * 100) + "%)";
+    void back.offsetWidth;                 /* commit the start pose */
+    back.style.transition = "";
+
+    back.style.transform = "translateX(0)";
+    front.style.transform = "translateX(" + (-d * 100) + "%)";
+
+    var leaving = front;
+    front = back;
+    back = leaving;
+
+    /* the description belongs to whichever plate is on screen */
+    front.setAttribute("alt", e.alt);
+    front.removeAttribute("aria-hidden");
+    back.setAttribute("alt", "");
+    back.setAttribute("aria-hidden", "true");
+  }
+
+  function cut() {
+    var e = events[cur];
+    front.setAttribute("src", e.src);
+    front.setAttribute("alt", e.alt);
   }
 
   function announce() {
-    [].forEach.call(dotsE.children, function (d, i) {
-      d.setAttribute("aria-current", String(i === selected));
+    var e = events[cur];
+    if (live) live.textContent =
+      e.name + ", " + e.when + ". " + (cur + 1) + " of " + n + ".";
+  }
+
+  function go(target, d) {
+    if (busy || target === cur) return;
+    cur = target;
+
+    if (reduce) { cut(); writeCopy(); writeTiles(); announce(); return; }
+
+    busy = true;
+    root.style.setProperty("--slide", d);
+    slide(d);
+    root.classList.add("is-stepping", "is-out");
+
+    setTimeout(function () {
+      writeCopy();
+      writeTiles();
+      root.classList.remove("is-out");
+      root.classList.add("is-pre");
+      void root.offsetWidth;               /* put them down on the far side */
+      root.classList.remove("is-pre");
+      announce();
+
+      setTimeout(function () {
+        root.classList.remove("is-stepping");
+        busy = false;
+      }, 700);
+    }, 300);
+  }
+
+  function step(d) { go((cur + d + n) % n, d); }
+
+  if (prevB) prevB.addEventListener("click", function () { step(-1); });
+  if (nextB) nextB.addEventListener("click", function () { step(1); });
+
+  /* a tile is a jump to that event, always forwards — it is one of the
+     ones still to come */
+  tiles.forEach(function (li, k) {
+    li.querySelector(".nw-thumb").addEventListener("click", function () {
+      go((cur + 1 + k) % n, 1);
     });
-    if (prevB) prevB.disabled = selected === 0;
-    if (nextB) nextB.disabled = selected === snaps.length - 1;
-    var name = items[Math.min(selected, items.length - 1)].querySelector(".rd-name");
-    if (name) live.textContent = name.textContent + ", " + (selected + 1) +
-                                 " of " + snaps.length;
-  }
-
-  function scrollTo(i, animate) {
-    selected = Math.max(0, Math.min(snaps.length - 1, i));
-    pos = snaps[selected];
-    apply(animate !== false);
-    announce();
-    arm();
-  }
-  function scrollNext() { scrollTo(selected + 1); }
-  function scrollPrev() { scrollTo(selected - 1); }
-
-  if (prevB) prevB.addEventListener("click", function () { scrollPrev(); });
-  if (nextB) nextB.addEventListener("click", function () { scrollNext(); });
-
-  /* shadcn's Carousel root handles arrows via onKeyDownCapture */
-  car.addEventListener("keydown", function (e) {
-    if (e.key === "ArrowLeft") { e.preventDefault(); scrollPrev(); }
-    else if (e.key === "ArrowRight") { e.preventDefault(); scrollNext(); }
   });
 
-  /* ---- the 4s auto-advance, with the loop back to the first ---- */
-  var timer = null, held = false;
-
-  function arm() {
-    clearTimeout(timer);
-    if (reduce || held || snaps.length < 2) return;
-    timer = setTimeout(function () {
-      if (selected + 1 === snaps.length) scrollTo(0);
-      else scrollNext();
-    }, 4000);
-  }
-  function hold(on) { held = on; if (on) clearTimeout(timer); else arm(); }
-
-  car.addEventListener("pointerenter", function () { hold(true); });
-  car.addEventListener("pointerleave", function () { hold(false); });
-  car.addEventListener("focusin", function () { hold(true); });
-  car.addEventListener("focusout", function (e) {
-    if (!car.contains(e.relatedTarget)) hold(false);
-  });
-  /* nothing should advance while the section is off screen */
-  document.addEventListener("visibilitychange", function () {
-    hold(document.hidden);
+  root.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowLeft")  { e.preventDefault(); step(-1); }
+    else if (e.key === "ArrowRight") { e.preventDefault(); step(1); }
   });
 
-  /* ---- drag, as embla does it: follow the pointer, then settle on the
-         nearest snap with the throw taken into account ---- */
-  var id = null, startX = 0, startPos = 0, moved = 0, samples = [];
-
-  vp.addEventListener("pointerdown", function (e) {
-    if (reduce || e.button) return;
-    id = e.pointerId;
-    startX = e.clientX; startPos = pos; moved = 0;
-    samples = [{ x: e.clientX, t: performance.now() }];
-    car.classList.add("is-dragging");
-    hold(true);
-  });
-
-  vp.addEventListener("pointermove", function (e) {
-    if (e.pointerId !== id) return;
-    var dx = e.clientX - startX;
-    moved = Math.abs(dx);
-    var max = snaps[snaps.length - 1];
-    pos = startPos - dx;
-    /* embla's rubber band past either end */
-    if (pos < 0) pos *= 0.35;
-    else if (pos > max) pos = max + (pos - max) * 0.35;
-    apply(false);
-    samples.push({ x: e.clientX, t: performance.now() });
-    if (samples.length > 6) samples.shift();
-
-    /* Capture last, and never let it break the gesture: once the drag is
-       past the slop it should keep tracking even if the pointer leaves
-       the box, but a capture that cannot be taken is not worth losing
-       the drag over. */
-    if (moved > 6) {
-      try { if (!vp.hasPointerCapture(id)) vp.setPointerCapture(id); } catch (err) {}
-    }
-  });
-
-  function release(e) {
-    if (e.pointerId !== id) return;
-    id = null;
-    car.classList.remove("is-dragging");
-
-    var v = 0, a = samples[0], b = samples[samples.length - 1];
-    if (a && b && b.t > a.t) v = ((b.x - a.x) / (b.t - a.t)) * 1000;
-
-    /* project the throw a little, then take the nearest snap to that */
-    var landing = pos - v * 0.12;
-    var best = 0, bestD = Infinity;
-    snaps.forEach(function (s, i) {
-      var d = Math.abs(s - landing);
-      if (d < bestD) { bestD = d; best = i; }
-    });
-    scrollTo(best);
-    hold(false);
-  }
-  vp.addEventListener("pointerup", release);
-  vp.addEventListener("pointercancel", release);
-
-  /* a drag must not also open the article it finished on */
-  vp.addEventListener("click", function (e) {
-    if (moved > 6) { e.preventDefault(); e.stopPropagation(); }
-  }, true);
-
-  addEventListener("resize", measure);
-  if (window.ResizeObserver) new ResizeObserver(measure).observe(vp);
-
-  measure();
-  announce();
-  arm();
+  writeTiles();
+  if (count) count.textContent = pad(cur);
 })();
 </script>
 
