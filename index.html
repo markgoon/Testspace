@@ -639,26 +639,106 @@ body {
 }
 
 /* =================================================================
-   Choose your adventure — 257:30
+   Choose your adventure  →  Everything you need to know
+   257:30 (scene 1) and 312:2 (scene 2)
 
-   A 1569x855 board rather than 1441x829, so it gets its own unit.
-   Figma parks two polaroids at the bottom right with the second one
-   already running off the edge, which is the design telling you the
-   strip continues. So it is built as a rail that keeps travelling:
-   same cards, same tilts, same shadows, just no longer parked. The
-   rail stays inside the right-hand zone Figma puts them in, which is
-   also what keeps a repeat from ever being on screen twice.
+   One pinned horizontal scroller in place of two stacked sections. The
+   page holds still while the track travels left: you pass through the
+   polaroid strip, the map sketch drifts left behind it at a third of
+   the track's speed, and scene 2 arrives with its title, its notepad
+   plate and the article column. At the end of the track the pin
+   releases and the page carries on down to Right now in Oman.
+
+   Scene 1 is a 1569-wide Figma board and scene 2 a 1526-wide one, so
+   each keeps its own unit (--w, --v). Both sit on a board of the Figma
+   height, centred in the viewport, so a tall window pads above and
+   below rather than stretching the composition.
+
+   Everything here is the flat, stacked layout by default and only
+   becomes a scroller once the script adds .hx--pinned. Without script,
+   below 900px, or under reduced motion, the two scenes are simply two
+   sections again — there is no state in which a 139cqw scroll runway
+   exists with nothing driving it.
    ================================================================= */
 
-.adv {
-  --w: calc(100cqw / 1569);      /* one Figma pixel on this board */
+.hx {
+  --w: calc(100cqw / 1569);      /* one Figma pixel, scene 1 */
+  --v: calc(100cqw / 1526);      /* one Figma pixel, scene 2 */
   --k: 1;                        /* polaroid scale, raised on phones */
+  --scene-a: calc(2900 * var(--w));
   position: relative;
   width: 100%;
-  height: calc(855 * var(--w));
   background: #f9f4eb;
-  overflow: hidden;
 }
+
+.hx__pin { position: relative; overflow: hidden; }
+
+.hx__track { display: block; }
+
+.hx__scene { position: relative; width: 100%; }
+.hx__scene--adv  { height: calc(855 * var(--w)); }
+.hx__scene--read { height: calc(749 * var(--v)); }
+
+.hx__board { position: absolute; inset: 0; }
+
+/* ---- the scroller ----
+   184.83cqw of track behind 139cqw of scroll: the track outruns the
+   wheel by a third, which is what keeps a strip this long from
+   feeling like a chore. */
+.hx--pinned { height: calc(100vh + 139cqw); }
+.hx--pinned .hx__pin {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+.hx--pinned .hx__track {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+.hx--pinned .hx__scene { flex: none; height: 100%; }
+.hx--pinned .hx__scene--adv  { width: var(--scene-a); }
+.hx--pinned .hx__scene--read { width: 100cqw; }
+/* the boards are shorter than most windows, so they centre rather than
+   stretch, and every child below still positions in Figma coordinates */
+.hx--pinned .hx__board {
+  inset: auto 0 auto 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.hx--pinned .hx__scene--adv  .hx__board { height: calc(855 * var(--w)); }
+.hx--pinned .hx__scene--read .hx__board { height: calc(749 * var(--v)); }
+
+/* ---- the map, drifting behind both scenes ----
+   Parked where 257:37 puts it and moved from there by script, so
+   scene 1 is right before a single frame has run. */
+.hx__map {
+  position: absolute;
+  z-index: 0;
+  left: calc(756 * var(--w));
+  top: calc(36 * var(--w));
+  width: calc(783 * var(--w));
+  height: calc(783 * var(--w));
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+}
+.hx--pinned .hx__map { will-change: transform; }
+.hx--pinned .hx__track { z-index: 1; }
+
+/* ================= scene 1 — 257:30 ================= */
+
+/* The copy is carried at half the track's speed, so it takes twice as
+   long to leave. It can afford to: it sits in a band the strip never
+   reaches (roughly y 197..407 against the cards' 476..785 at 1440), so
+   nothing runs over it while it lingers. Depth ends up consistent —
+   strip 1.0, copy 0.5, map 0.32. */
+.adv__copy { position: absolute; inset: 0; }
+.hx--pinned .adv__copy { will-change: transform; }
 
 .adv__title {                                  /* 257:32 */
   position: absolute;
@@ -673,6 +753,8 @@ body {
   letter-spacing: calc(-1.14 * var(--w));
   color: #000;
 }
+.adv__title .line:nth-child(1) i { transition-delay: 0.02s; }
+.adv__title .line:nth-child(2) i { transition-delay: 0.11s; }
 
 .adv__body {                                   /* 257:35 */
   position: absolute;
@@ -688,59 +770,243 @@ body {
   word-break: break-word;
 }
 
-.adv__map {                                    /* 257:37 — activities 1 */
-  position: absolute;
-  left: calc(756 * var(--w));
-  top: calc(36 * var(--w));
-  width: calc(783 * var(--w));
-  height: calc(783 * var(--w));
-  object-fit: cover;
-  display: block;
-  pointer-events: none;
-}
-
-/* ---- the rail ----
-   Both cards are centred on y 625.7 in Figma (489.75 + 274.226/2 and
-   492.81 + 263.356/2 agree to 2px), so the rail centres there too and
-   stays centred whatever --k does.
-
-   It spans the full board rather than only the right-hand zone Figma
-   parks the two cards in. That is a deliberate departure: the strip is
-   the section's subject once it moves, and it should read across the
-   whole width. Both ends are masked so cards dissolve instead of
-   clipping against the viewport edge. */
+/* ---- the polaroid strip ----
+   This used to be a CSS marquee. It is now the thing the horizontal
+   scroll is scrolling through, so it holds still and the track carries
+   it. Both card geometries are centred on y 625.7 in Figma, so the row
+   centres there too and stays centred whatever --k does. It starts at
+   x 820 so the two cards Figma parks at the bottom right are what you
+   see before anything moves. */
 .adv__rail {
   position: absolute;
-  left: 0;
+  left: calc(820 * var(--w));
   top: calc(625.7 * var(--w) - 170 * var(--w) * var(--k));
-  width: 100%;
   height: calc(340 * var(--w) * var(--k));
-  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%);
-          mask-image: linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%);
 }
-
 .adv__track {
   display: flex;
   align-items: center;
   width: max-content;
   height: 100%;
-  animation: adv-drift 46s linear infinite;
-  will-change: transform;
 }
-/* The set is in the DOM twice, and every card carries its gap as a
-   right margin rather than the flex gap, so -50% lands exactly one
-   copy along and the seam is invisible. */
-@keyframes adv-drift {
-  from { transform: translate3d(0, 0, 0); }
-  to   { transform: translate3d(-50%, 0, 0); }
-}
-.adv__rail:hover .adv__track,
-.adv__rail:focus-within .adv__track { animation-play-state: paused; }
-/* nothing animates while the board is off screen */
-.adv--idle .adv__track { animation-play-state: paused; }
 
-.adv__title .line:nth-child(1) i { transition-delay: 0.02s; }
-.adv__title .line:nth-child(2) i { transition-delay: 0.11s; }
+/* ================= scene 2 — 312:2 ================= */
+
+.rd2-title {                                   /* 312:3 */
+  position: absolute;
+  left: calc(161 * var(--v));
+  top: calc(111 * var(--v));
+  width: calc(602 * var(--v));
+  margin: 0;
+  font-family: "Libre Baskerville", serif;
+  font-weight: 400;
+  font-size: calc(57 * var(--v));
+  line-height: normal;
+  letter-spacing: calc(-1.14 * var(--v));
+  color: #000;
+}
+.rd2-title .line:nth-child(2) i { transition-delay: 0.1s; }
+
+.rd2-note {                                    /* 312:4 */
+  position: absolute;
+  left: calc(168 * var(--v));
+  top: calc(285 * var(--v));
+  width: calc(435 * var(--v));
+  margin: 0;
+  font-family: "Forum", serif;
+  font-size: calc(18 * var(--v));
+  line-height: calc(26 * var(--v));
+  letter-spacing: calc(-0.36 * var(--v));
+  color: #000;
+}
+
+.rd2-all {                                     /* 312:5 */
+  position: absolute;
+  left: calc(168 * var(--v));
+  top: calc(374 * var(--v));
+  width: calc(249 * var(--v));
+  height: calc(38 * var(--v));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(10 * var(--v));
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.56);
+  border-radius: calc(23 * var(--v));
+  font-family: "Manrope", sans-serif;
+  font-weight: 700;
+  font-size: calc(14 * var(--v));
+  letter-spacing: calc(-0.28 * var(--v));
+  color: #111827;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.35s ease, border-color 0.35s ease, color 0.35s ease;
+}
+.rd2-all svg {
+  width: calc(15 * var(--v)); height: calc(15 * var(--v));
+  min-width: 11px; min-height: 11px;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.rd2-all:hover { background: #113240; border-color: #113240; color: #fff; }
+.rd2-all:hover svg { transform: translateX(calc(4 * var(--v))); }
+.rd2-all:focus-visible { outline: 2px solid #113240; outline-offset: calc(3 * var(--v)); }
+
+/* ---- the article column — 312:6 … 312:14 ----
+   Four rows fill the board and the other four sit behind the window.
+   They are brought up by the tail of the pin rather than by a scrollbar
+   of their own: a nested scroller inside a section that is already
+   holding the page still is a trap, because the wheel stops meaning
+   what it meant a moment earlier. Row pitch is Figma's own first
+   interval — 105 to 232 is 127, which 72 + 26 + 1 + 28 reproduces. */
+.rd2-list {
+  position: absolute;
+  left: calc(722 * var(--v));
+  top: calc(105 * var(--v));
+  width: calc(529 * var(--v));
+}
+.hx--pinned .rd2-list {
+  height: calc(560 * var(--v));
+  overflow: hidden;
+}
+.rd2-list ul { margin: 0; padding: 0; list-style: none; }
+.hx--pinned .rd2-list ul { will-change: transform; }
+
+.rd2-item {
+  padding-bottom: calc(26 * var(--v));
+  border-bottom: 1px solid rgba(0, 0, 0, 0.32);
+  margin-bottom: calc(28 * var(--v));
+}
+.rd2-item:last-child { margin-bottom: 0; }
+
+.rd2-link {
+  display: block;
+  /* two lines' worth, so Figma's even pitch survives a title that
+     happens to fit on one */
+  min-height: calc(72 * var(--v));
+  font-family: "Baskervville", serif;
+  font-weight: 400;
+  font-size: calc(28 * var(--v));
+  line-height: calc(36 * var(--v));
+  letter-spacing: calc(-0.56 * var(--v));
+  color: #000;
+  text-decoration: none;
+  transition: color 0.3s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.rd2-link:hover { color: #113240; transform: translateX(calc(6 * var(--v))); }
+.rd2-link:focus-visible { outline: 1px solid #113240; outline-offset: calc(4 * var(--v)); }
+
+/* how far through the eight you are — the page scrollbar is measuring
+   the whole pin, not this column, so the column says so itself */
+.rd2-scroll {
+  position: absolute;
+  left: calc(690 * var(--v));
+  top: calc(105 * var(--v));
+  width: calc(3 * var(--v));
+  min-width: 3px;
+  height: calc(560 * var(--v));
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.1);
+  pointer-events: none;
+  display: none;
+}
+.hx--pinned .rd2-scroll { display: block; }
+.rd2-scroll span {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  border-radius: inherit;
+  background: rgba(17, 50, 64, 0.5);
+}
+
+/* the notepad plate, arriving from off the right edge — 312:10.
+   Figma crops the square plate to 400x314 at 127.17% and nudges it up
+   5.06%, which is cover at 18.5% down the overflow. */
+.rd2-deco {
+  position: absolute;
+  left: calc(1153 * var(--v));
+  top: calc(438 * var(--v));
+  width: calc(400 * var(--v));
+  height: calc(314 * var(--v));
+  object-fit: cover;
+  object-position: 50% 18.5%;
+  pointer-events: none;
+}
+
+/* ---- scene 2's entrance, thrown once the scene is half in ----
+   Only under the pin: flat, there is nothing to arrive from. */
+.hx--pinned .rd2-note,
+.hx--pinned .rd2-all,
+.hx--pinned .rd2-item {
+  opacity: 0;
+  transform: translateY(calc(20 * var(--v)));
+  transition: opacity 0.85s ease, transform 0.95s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.hx--pinned .rd2-note { transition-delay: 0.16s; }
+.hx--pinned .rd2-all  { transition-delay: 0.28s; }
+.hx--pinned .rd2-item { transition-delay: var(--d, 0s); }
+.hx--pinned .rd2-deco {
+  opacity: 0;
+  transform: translateX(calc(320 * var(--v)));
+  transition: opacity 1s ease 0.1s,
+              transform 1.15s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
+}
+.hx--pinned .rd2-scroll {
+  opacity: 0;
+  transition: opacity 0.8s ease 0.4s;
+}
+.hx--pinned.is-read .rd2-note,
+.hx--pinned.is-read .rd2-all,
+.hx--pinned.is-read .rd2-item,
+.hx--pinned.is-read .rd2-deco { opacity: 1; transform: none; }
+.hx--pinned.is-read .rd2-scroll { opacity: 1; }
+
+/* ---- not pinned ----
+   No script, reduced motion, or a window under 900px. Scene 2 gives up
+   its board coordinates for normal flow so eight articles have somewhere
+   to go, and the strip becomes a swipe rather than something the page
+   scroll drags past. Everything is already visible: there is no arrival
+   to wait for when nothing is going to move. */
+.hx:not(.hx--pinned) .hx__scene--read {
+  height: auto;
+  padding: calc(110 * var(--v)) 0;
+}
+.hx:not(.hx--pinned) .hx__scene--read .hx__board { position: static; }
+.hx:not(.hx--pinned) .rd2-title,
+.hx:not(.hx--pinned) .rd2-note,
+.hx:not(.hx--pinned) .rd2-all,
+.hx:not(.hx--pinned) .rd2-list,
+.hx:not(.hx--pinned) .rd2-deco {
+  position: static;
+  left: auto;
+  top: auto;
+}
+.hx:not(.hx--pinned) .rd2-title { margin: 0 calc(161 * var(--v)); }
+.hx:not(.hx--pinned) .rd2-note  { margin: calc(30 * var(--v)) calc(161 * var(--v)) 0; }
+.hx:not(.hx--pinned) .rd2-all   { margin: calc(34 * var(--v)) calc(161 * var(--v)) 0; }
+.hx:not(.hx--pinned) .rd2-deco  {
+  display: block;
+  width: calc(400 * var(--v));
+  height: auto;
+  /* the plate's own crop, reserved before it loads: height:auto on a
+     lazy image collapses the box to nothing, and a zero-height box can
+     sit at the viewport edge without ever counting as intersecting, so
+     the load never fires and the height never resolves */
+  aspect-ratio: 400 / 314;
+  margin: calc(44 * var(--v)) calc(161 * var(--v)) 0 auto;
+}
+.hx:not(.hx--pinned) .rd2-list {
+  width: auto;
+  margin: calc(52 * var(--v)) calc(161 * var(--v)) 0;
+}
+.hx:not(.hx--pinned) .adv__rail {
+  left: 0;
+  right: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.hx:not(.hx--pinned) .adv__rail::-webkit-scrollbar { width: 0; height: 0; }
+.hx:not(.hx--pinned) .adv__track { padding: 0 calc(60 * var(--w)); }
 
 /* ---- one polaroid ----
    The 82 gap is not styling. A card and its duplicate sit exactly one
@@ -880,22 +1146,22 @@ body {
 
   /* the adventure board reflows to a taller portrait, the map drops
      behind the copy as a watermark, and the rail goes full width */
-  .adv {
+  .hx {
     --w: calc(100cqw / 700);
     --k: 1.35;
-    height: calc(1120 * var(--w));
   }
+  .hx__scene--adv { height: calc(1120 * var(--w)); }
   .adv__title { left: calc(48 * var(--w)); top: calc(80 * var(--w));
                 width: calc(600 * var(--w)); font-size: calc(66 * var(--w));
                 letter-spacing: calc(-1.3 * var(--w)); }
   .adv__body  { left: calc(48 * var(--w)); top: calc(330 * var(--w));
                 width: calc(560 * var(--w)); font-size: calc(26 * var(--w));
                 letter-spacing: calc(-0.5 * var(--w)); }
-  .adv__map   { left: calc(140 * var(--w)); top: calc(200 * var(--w));
+  .hx__map    { left: calc(140 * var(--w)); top: calc(200 * var(--w));
                 width: calc(600 * var(--w)); height: calc(600 * var(--w));
                 opacity: 0.42; }
-  /* full width and both ends masked already; only the drop changes */
-  .adv__rail  { top: calc(620 * var(--w)); }
+  /* the strip is already a swipe at this width; only the drop changes */
+  .hx:not(.hx--pinned) .adv__rail { top: calc(620 * var(--w)); }
 }
 
 /* ================= reduced motion =================
@@ -911,8 +1177,6 @@ body {
   .r-fade, .r-pop { opacity: 1; transform: none; filter: none; }
   .stage { background: #e4d4c2; }
   .frame { --nav-ink: rgb(255, 255, 255); }
-  /* the rail parks where Figma parks it */
-  .adv__track { animation: none; }
   .pol__card { transition: none; }
 }
 
@@ -1203,6 +1467,41 @@ body {
   transition: transform 1.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .j-card[data-fit="bottom"] img { object-position: bottom; }
+
+/* A card with somewhere to go wraps its own contents, so the whole tile
+   is the target rather than the caption alone. Its z-index is left at
+   auto on purpose: forming no stacking context, the caption's own
+   z-index still lifts it clear of the ::after scrim exactly as it did
+   when the two were siblings. */
+.j-card__hit {
+  position: absolute;
+  inset: 0;
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+.j-card__hit:focus-visible { outline: 2px solid #fff; outline-offset: calc(-8 * var(--u)); }
+
+/* Only one card in the rail leads anywhere, so it says so — quietly,
+   and only once the pointer is on it. */
+.j-card__hit::after {
+  content: "";
+  position: absolute;
+  right: calc(26 * var(--u));
+  top: calc(26 * var(--u));
+  width: calc(38 * var(--u));
+  height: calc(38 * var(--u));
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  border-radius: 50%;
+  background: no-repeat center / calc(15 * var(--u)) calc(15 * var(--u))
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M4 12h15m-6-7 7 7-7 7' stroke='%23fff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  opacity: 0;
+  transform: translateY(calc(-6 * var(--u)));
+  transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.j-rail__vp:not(.dragging) .j-card:hover .j-card__hit::after,
+.j-card__hit:focus-visible::after { opacity: 1; transform: none; }
+
 .j-card::after {
   content: "";
   position: absolute;
@@ -1416,236 +1715,14 @@ body {
   .j-nav svg { width: 15px; height: 15px; }
 }
 
-/* =================================================================
-   Everything you need to know  +  Right now in Oman — 252:52
-
-   The mockup board is 1569 wide against this page's 1441 grid, so every
-   figure below is its Figma value scaled by 1441/1569 = 0.9184, with the
-   design's own left edge (x 61) pinned to the 133u gutter the sections
-   above already use:
-
-       my_x = 133 + (fig_x - 61) * 0.9184
-
-   Mapped that way the article column's hairlines land within a few units
-   of the page's right gutter, so the board sits on the grid the rest of
-   the page is already built on rather than beside it. The one figure
-   that does not survive the mapping is the event thumbnail row: in the
-   mockup it runs to x 1547, very nearly full bleed, which lands at
-   1497u — past the page's right edge. That row is refitted to the
-   gutter instead, and is noted where it happens.
-   ================================================================= */
-
-.read {
-  --u: calc(100cqw / 1441);
-  --navy: #113240;
-  --rule: rgba(17, 50, 64, 0.28);
-  position: relative;
-  width: 100%;
-  /* the mockup's own 1033u, less the 47u taken off the board below */
-  height: calc(986 * var(--u));
-  background: #fff;
-  color: #1d1914;
-  overflow: hidden;
-}
-
-/* ---- 285:32 — the navy board, sized to the article column beside it.
-   Same top, same height, same foot (194 + 654 = 848) as .rd-list below,
-   so the two read as a matched pair of columns rather than a tall panel
-   next to a short one. Width comes down with it, a smaller cut. ---- */
-.rd-panel {
-  position: absolute;
-  left: calc(133 * var(--u));
-  top: calc(194 * var(--u));
-  width: calc(580 * var(--u));
-  height: calc(654 * var(--u));
-  background: var(--navy);
-  color: #fff;
-  overflow: hidden;                       /* crops the sketch at the foot */
-  isolation: isolate;                     /* so the sketch blends against
-                                             this board and nothing else */
-  opacity: 0;
-  transform: translateY(calc(30 * var(--u)));
-  transition: opacity 1.05s ease,
-              transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.read.in .rd-panel { opacity: 1; transform: none; }
-
-.rd-title {                               /* 252:58 */
-  position: absolute;
-  left: calc(56 * var(--u));
-  top: calc(48 * var(--u));
-  width: calc(493 * var(--u));
-  margin: 0;
-  font-family: "Libre Baskerville", serif;
-  font-weight: 400;
-  font-size: calc(52 * var(--u));
-  line-height: calc(59 * var(--u));
-  letter-spacing: calc(-1.05 * var(--u));
-  color: #fff;
-}
-.rd-title .line:nth-child(2) i { transition-delay: 0.1s; }
-
-.rd-note {                                /* 252:67 */
-  position: absolute;
-  left: calc(62 * var(--u));
-  top: calc(186 * var(--u));
-  width: calc(358 * var(--u));
-  margin: 0;
-  font-family: "Forum", serif;
-  font-size: calc(16.5 * var(--u));
-  line-height: calc(24 * var(--u));
-  letter-spacing: calc(-0.33 * var(--u));
-  color: rgba(255, 255, 255, 0.82);
-  opacity: 0;
-  transform: translateY(calc(14 * var(--u)));
-  transition: opacity 0.9s ease 0.3s,
-              transform 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s;
-}
-.read.in .rd-note { opacity: 1; transform: none; }
-
-.rd-all {                                 /* 252:69 */
-  position: absolute;
-  left: calc(62 * var(--u));
-  top: calc(278 * var(--u));
-  width: calc(204 * var(--u));
-  height: calc(35 * var(--u));
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: calc(10 * var(--u));
-  padding: 0;
-  background: #fff;
-  border: 1px solid rgba(0, 0, 0, 0.56);
-  border-radius: calc(21 * var(--u));
-  font-family: "Manrope", sans-serif;
-  font-weight: 700;
-  font-size: calc(14 * var(--u));
-  letter-spacing: calc(-0.28 * var(--u));
-  color: #111827;
-  text-decoration: none;
-  white-space: nowrap;
-  opacity: 0;
-  transform: translateY(calc(14 * var(--u)));
-  transition: opacity 0.8s ease 0.42s,
-              transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.42s,
-              background 0.4s ease, color 0.4s ease, border-color 0.4s ease;
-}
-.read.in .rd-all { opacity: 1; transform: none; }
-.rd-all svg {
-  width: calc(15 * var(--u)); height: calc(15 * var(--u));
-  min-width: 11px; min-height: 11px;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.rd-all:hover { background: transparent; border-color: rgba(255,255,255,0.75); color: #fff; }
-.rd-all:hover svg { transform: translateX(calc(4 * var(--u))); }
-.rd-all:focus-visible { outline: 2px solid #fff; outline-offset: calc(3 * var(--u)); }
-
-/* ---- 285:36 — the notepad plate, dropped into the foot of the board,
-   rendered plain: no filter, no blend mode — the PNG as shipped, opaque
-   paper and all. ---- */
-.rd-deco {
-  position: absolute;
-  left: calc(149 * var(--u));
-  /* the board's shorter now, so the plate is cut down with it, aspect
-     preserved (467:366), and still crops off the bottom edge on purpose */
-  top: calc(351 * var(--u));
-  width: calc(417 * var(--u));
-  height: calc(327 * var(--u));
-  object-fit: contain;
-  pointer-events: none;
-  opacity: 0;
-  transform: translateY(calc(26 * var(--u)));
-  transition: opacity 1.2s ease 0.34s,
-              transform 1.3s cubic-bezier(0.16, 1, 0.3, 1) 0.34s;
-}
-.read.in .rd-deco { opacity: 1; transform: none; }
-
-/* ---- the article column — 278:62 / 63 / 64 / 69 ----
-   Eight titles behind a 654u window, which is what the board leaves
-   between the first title and its own foot. Row pitch is the mockup's:
-   title top to
-   title top is 193u, with the hairline 130u down. The native scrollbar
-   is suppressed in favour of the rule drawn beside it, because the OS
-   one is a different width and colour on every machine this opens on. */
-.rd-list {
-  position: absolute;
-  left: calc(836 * var(--u));
-  top: calc(194 * var(--u));
-  /* a shade under the mockup's 469u so the hairlines finish clear of the
-     scroll rail rather than running into it */
-  width: calc(446 * var(--u));
-  height: calc(654 * var(--u));           /* 194 + 654 = the board's foot */
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  overflow-y: auto;
-  overflow-x: hidden;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-}
-.rd-list::-webkit-scrollbar { width: 0; height: 0; }
-
-.rd-item {
-  padding-bottom: calc(63 * var(--u));
-  border-bottom: 1px solid var(--rule);
-  margin-bottom: calc(63 * var(--u));
-  opacity: 0;
-  transform: translateY(calc(18 * var(--u)));
-  transition: opacity 0.85s ease, transform 0.95s cubic-bezier(0.16, 1, 0.3, 1);
-  transition-delay: var(--d, 0s);
-}
-.rd-item:last-child { margin-bottom: 0; }
-.read.in .rd-item { opacity: 1; transform: none; }
-
-.rd-link {
-  display: block;
-  /* two lines' worth, so the mockup's even 193u pitch survives a title
-     that happens to fit on one */
-  min-height: calc(66 * var(--u));
-  font-family: "Baskervville", serif;
-  font-weight: 400;
-  font-size: calc(25.7 * var(--u));
-  line-height: calc(33 * var(--u));
-  letter-spacing: calc(-0.51 * var(--u));
-  color: inherit;
-  text-decoration: none;
-  transition: color 0.35s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.rd-link:hover { color: var(--navy); transform: translateX(calc(6 * var(--u))); }
-.rd-link:focus-visible { outline: 1px solid var(--navy); outline-offset: calc(4 * var(--u)); }
-
-/* the scroll indicator that replaces the native bar */
-.rd-scroll {
-  position: absolute;
-  left: calc(1300 * var(--u));
-  top: calc(194 * var(--u));
-  width: calc(3 * var(--u));
-  min-width: 3px;
-  height: calc(654 * var(--u));
-  border-radius: 999px;
-  background: rgba(17, 50, 64, 0.13);
-  opacity: 0;
-  transition: opacity 0.9s ease 0.5s;
-  pointer-events: none;
-}
-.read.in .rd-scroll { opacity: 1; }
-.rd-scroll span {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  border-radius: inherit;
-  background: rgba(17, 50, 64, 0.55);
-  transition: transform 0.18s linear;
-}
-
 /* =================== Right now in Oman — 284:31 =================== */
 
 .now {
   --u: calc(100cqw / 1441);
+  --dy: 48px;                             /* content dropped this far down */
   position: relative;
   width: 100%;
-  height: calc(683 * var(--u));           /* fig 744 */
+  height: calc(683 * var(--u) + 100px);   /* fig 744, +100px flat on top */
   background: #fff;
   color: #1d1914;
   overflow: hidden;
@@ -1654,7 +1731,7 @@ body {
 .nw-pattern {                             /* 282:30 */
   position: absolute;
   left: calc(45 * var(--u));
-  top: calc(284 * var(--u));
+  top: calc(284 * var(--u) + var(--dy));
   width: calc(413 * var(--u));
   height: calc(413 * var(--u));
   object-fit: contain;
@@ -1668,7 +1745,7 @@ body {
 .nw-title {                               /* 284:31 */
   position: absolute;
   left: calc(133 * var(--u));
-  top: calc(56 * var(--u));
+  top: calc(56 * var(--u) + var(--dy));
   width: calc(553 * var(--u));
   margin: 0;
   font-family: "Baskervville", serif;
@@ -1683,7 +1760,7 @@ body {
 .nw-main {
   position: absolute;
   left: calc(133 * var(--u));
-  top: calc(204 * var(--u));
+  top: calc(204 * var(--u) + var(--dy));
   width: calc(389 * var(--u));
   height: calc(365 * var(--u));
   margin: 0;
@@ -1714,7 +1791,7 @@ body {
 .nw-copy {
   position: absolute;
   left: calc(557 * var(--u));
-  top: calc(216 * var(--u));
+  top: calc(216 * var(--u) + var(--dy));
   width: calc(300 * var(--u));
   opacity: 0;
   transform: translateY(calc(20 * var(--u)));
@@ -1754,7 +1831,7 @@ body {
 .nw-desc {
   position: absolute;
   left: calc(557 * var(--u));
-  top: calc(453 * var(--u));
+  top: calc(453 * var(--u) + var(--dy));
   width: calc(300 * var(--u));
   margin: 0;
   font-family: "Manrope", sans-serif;
@@ -1777,7 +1854,7 @@ body {
 .nw-thumbs {
   position: absolute;
   left: calc(897 * var(--u));
-  top: calc(457 * var(--u));              /* foot-aligned with .nw-main */
+  top: calc(457 * var(--u) + var(--dy));  /* foot-aligned with .nw-main */
   width: calc(411 * var(--u));
   height: calc(112 * var(--u));
   display: flex;
@@ -1896,7 +1973,7 @@ body {
 .nw-nav {
   position: absolute;
   left: calc(1216 * var(--u));            /* 2 x 40u + 12u, out to 1308 */
-  top: calc(66 * var(--u));               /* centred on the title */
+  top: calc(66 * var(--u) + var(--dy));   /* centred on the title */
   display: flex;
   gap: calc(12 * var(--u));
   opacity: 0;
@@ -1932,7 +2009,7 @@ body {
 .nw-count {
   position: absolute;
   left: calc(1100 * var(--u));
-  top: calc(77 * var(--u));
+  top: calc(77 * var(--u) + var(--dy));
   width: calc(96 * var(--u));
   margin: 0;
   text-align: right;
@@ -1957,72 +2034,61 @@ body {
 
 /* ============ everything you need to know — narrow screens ============ */
 @media (max-width: 899px) {
-  .read {
-    --gut: clamp(20px, 5.6vw, 44px);
+  /* ---- the scroller, unrolled ----
+     The script never pins below this width, so the two scenes are two
+     ordinary stacked sections and scene 2 trades its board coordinates
+     for normal flow. Same specificity as the base rules, later in the
+     file, so no !important is needed to win. */
+  .hx { --gut: clamp(20px, 5.6vw, 44px); }
+  .hx:not(.hx--pinned) .hx__scene--read {
     height: auto;
-    padding: clamp(56px, 12vw, 100px) 0 clamp(56px, 12vw, 100px);
+    padding: clamp(56px, 12vw, 100px) 0 clamp(60px, 13vw, 110px);
   }
-  /* the board and the column stop being a board and a column */
-  .rd-panel {
-    position: static;
+  .hx:not(.hx--pinned) .rd2-title {
     width: auto;
-    height: auto;
     margin: 0 var(--gut);
-    padding: clamp(30px, 7vw, 52px) clamp(22px, 5.5vw, 40px) 0;
-  }
-  .rd-title, .rd-note, .rd-all {
-    position: static;
-    left: auto; top: auto; width: auto;
-  }
-  .rd-title {
     font-size: clamp(28px, 7.4vw, 46px);
     line-height: 1.2;
     letter-spacing: -0.028em;
   }
-  .rd-note {
-    max-width: 40ch;
-    margin: clamp(16px, 4vw, 26px) 0 0;
+  .hx:not(.hx--pinned) .rd2-note {
+    width: auto;
+    max-width: 42ch;
+    margin: clamp(16px, 4vw, 26px) var(--gut) 0;
     font-size: 16px;
-    line-height: 1.55;
+    line-height: 1.6;
   }
-  .rd-all {
-    display: inline-flex;
-    margin: clamp(20px, 5vw, 30px) 0 0;
+  .hx:not(.hx--pinned) .rd2-all {
+    width: auto;
     height: 42px;
+    margin: clamp(20px, 5vw, 30px) var(--gut) 0;
     padding: 0 20px;
     border-radius: 999px;
     font-size: 14px;
   }
-  .rd-all svg { width: 14px; height: 14px; }
-  .rd-deco {
-    position: relative;
-    left: auto; top: auto;
-    display: block;
-    width: 82%;
+  .rd2-all svg { width: 14px; height: 14px; }
+  .hx:not(.hx--pinned) .rd2-deco {
+    width: 76%;
     height: auto;
-    margin: clamp(18px, 5vw, 36px) auto -6%;
+    aspect-ratio: 400 / 314;
+    margin: clamp(18px, 5vw, 34px) var(--gut) 0 auto;
   }
-
-  /* no window and no scrollbar down here — all eight simply stack */
-  .rd-list {
-    position: static;
+  /* no window down here — all eight simply stack */
+  .hx:not(.hx--pinned) .rd2-list {
     width: auto;
-    height: auto;
-    overflow: visible;
-    margin: clamp(34px, 9vw, 64px) var(--gut) 0;
+    margin: clamp(30px, 8vw, 56px) var(--gut) 0;
   }
-  .rd-item {
-    padding-bottom: clamp(16px, 4vw, 26px);
-    margin-bottom: clamp(16px, 4vw, 26px);
+  .rd2-item {
+    padding-bottom: clamp(14px, 3.5vw, 22px);
+    margin-bottom: clamp(14px, 3.5vw, 22px);
   }
-  .rd-link {
+  .rd2-link {
     min-height: 0;
     font-size: clamp(18px, 4.6vw, 26px);
     line-height: 1.3;
     letter-spacing: -0.015em;
   }
-  .rd-link:hover { transform: none; }
-  .rd-scroll { display: none; }
+  .rd2-link:hover { transform: none; }
 
   /* ---- right now in Oman ---- */
   .now {
@@ -2108,15 +2174,15 @@ body {
 
 /* ---- both sections — reduced motion: everything has already arrived ---- */
 @media (prefers-reduced-motion: reduce) {
-  .rd-panel, .rd-note, .rd-all, .rd-deco, .rd-item,
+  .rd2-note, .rd2-all, .rd2-item, .rd2-deco,
   .nw-main, .nw-copy, .nw-desc, .nw-thumb, .nw-nav, .nw-count {
     opacity: 1;
     transform: none;
     transition: none;
   }
-  .rd-scroll { opacity: 1; transition: none; }
+  .rd2-scroll { opacity: 1; transition: none; }
   .nw-pattern { opacity: 0.26; transition: none; }
-  .rd-link:hover { transform: none; }
+  .rd2-link:hover { transform: none; }
   .nw-thumb:hover img { transform: none; }
   /* the carousel cuts rather than slides; the script skips the step
      choreography entirely and just rewrites the slot */
@@ -2442,171 +2508,149 @@ body {
 
   </section>
 
-  <!-- ================= Choose your adventure — 257:30 =================
-       Figma parks two polaroids at the bottom right with the second
-       already running off the edge, which is the design saying the
-       strip continues. So they are built as a rail that keeps
-       travelling: the same two card geometries, the same tilts and
-       shadows, just no longer parked. The six activities are the ones
-       this section already carried; three of their photos are the
-       exact fills Figma uses. -->
-  <section class="adv" id="things-to-do" aria-labelledby="adv-title" data-node-id="257:30">
+  <!-- ========== Choose your adventure → Everything you need to know ==========
+       257:30 and 312:2, built as one pinned horizontal scroller. Both
+       scenes are authored in full in the markup and both read as ordinary
+       stacked sections until the script decides the window is wide enough
+       to pin them — nothing here depends on the scroller existing.
 
-    <h2 class="adv__title" id="adv-title" data-node-id="257:32">
-      <span class="line"><i>Choose your</i></span>
-      <span class="line"><i>adventure</i></span>
-    </h2>
-    <p class="adv__body r-fade" data-node-id="257:35">From swimming through hidden canyon pools to
-      yoga at sunset, every day here brings a new adventure.</p>
+       The map plate lives inside scene 1 where 257:37 puts it, and the
+       script drives it back against the track so it drifts left at about
+       a third of the track's speed and lands where 312:15 wants it. -->
+  <section class="hx" id="things-to-do" aria-labelledby="adv-title">
+    <div class="hx__pin">
+      <div class="hx__track">
 
-    <img class="adv__map" src="assets/adv-map.png" alt="" data-node-id="257:37" />
+        <!-- ---------- scene 1 — 257:30 ---------- -->
+        <div class="hx__scene hx__scene--adv">
+          <div class="hx__board">
 
-    <div class="adv__rail" role="group" aria-roledescription="carousel"
-         aria-label="Experiences and activities">
-      <div class="adv__track">
+            <img class="hx__map" src="assets/adv-map.png" alt="" data-node-id="257:37" />
 
-        <figure class="pol pol--b" style="--rot: -4.2deg">
-          <div class="pol__rot"><div class="pol__card">
-            <div class="pol__photo"><img src="assets/act-zipline.png" alt="Ziplining high above a Musandam fjord" /></div>
-            <figcaption>Zipline</figcaption>
-          </div></div>
-        </figure>
+            <!-- title and standfirst move as one, at half the track's
+                 speed, so they hold the screen twice as long -->
+            <div class="adv__copy">
+              <h2 class="adv__title" id="adv-title" data-node-id="257:32">
+                <span class="line"><i>Choose your</i></span>
+                <span class="line"><i>adventure</i></span>
+              </h2>
+              <p class="adv__body r-fade" data-node-id="257:35">From swimming through hidden canyon pools to
+                yoga at sunset, every day here brings a new adventure.</p>
+            </div>
 
-        <figure class="pol pol--a" style="--rot: 3.1deg">
-          <div class="pol__rot"><div class="pol__card">
-            <div class="pol__photo"><img src="assets/act-hike.png" alt="Hikers on a high mountain trail in Oman" /></div>
-            <figcaption>Mountain Hike</figcaption>
-          </div></div>
-        </figure>
+            <div class="adv__rail" role="group" aria-label="Experiences and activities">
+              <div class="adv__track">
 
-        <figure class="pol pol--b" style="--rot: -2.4deg">
-          <div class="pol__rot"><div class="pol__card">
-            <div class="pol__photo"><img src="assets/act-beach.png" alt="A coastal trail above the sea near Muscat" /></div>
-            <figcaption>Beach Yoga</figcaption>
-          </div></div>
-        </figure>
+                <figure class="pol pol--b" style="--rot: -4.2deg">
+                  <div class="pol__rot"><div class="pol__card">
+                    <div class="pol__photo"><img src="assets/act-zipline.png" alt="Ziplining high above a Musandam fjord" /></div>
+                    <figcaption>Zipline</figcaption>
+                  </div></div>
+                </figure>
 
-        <figure class="pol pol--a pol--crop" style="--rot: 2.59deg" data-node-id="257:41">
-          <div class="pol__rot"><div class="pol__card">
-            <div class="pol__photo" data-node-id="257:42"><img src="assets/act-desert-yoga.png" alt="Yoga on the dunes at sunset in Wahiba Sands" /></div>
-            <figcaption data-node-id="257:43">Desert Yoga</figcaption>
-          </div></div>
-        </figure>
+                <figure class="pol pol--a" style="--rot: 3.1deg">
+                  <div class="pol__rot"><div class="pol__card">
+                    <div class="pol__photo"><img src="assets/act-hike.png" alt="Hikers on a high mountain trail in Oman" /></div>
+                    <figcaption>Mountain Hike</figcaption>
+                  </div></div>
+                </figure>
 
-        <figure class="pol pol--b" style="--rot: 5.4deg">
-          <div class="pol__rot"><div class="pol__card">
-            <div class="pol__photo"><img src="assets/act-sailing.png" alt="A dhow sailing along the Omani coastline" /></div>
-            <figcaption>Sailing</figcaption>
-          </div></div>
-        </figure>
+                <figure class="pol pol--b" style="--rot: -2.4deg">
+                  <div class="pol__rot"><div class="pol__card">
+                    <div class="pol__photo"><img src="assets/act-beach.png" alt="A coastal trail above the sea near Muscat" /></div>
+                    <figcaption>Beach Yoga</figcaption>
+                  </div></div>
+                </figure>
 
-        <figure class="pol pol--b" style="--rot: -7.26deg" data-node-id="257:47">
-          <div class="pol__rot"><div class="pol__card">
-            <div class="pol__photo" data-node-id="257:48"><img src="assets/act-scuba.png" alt="A diver on a reef in the Daymaniyat Islands" /></div>
-            <figcaption data-node-id="257:49">Scuba Diving</figcaption>
-          </div></div>
-        </figure>
+                <figure class="pol pol--a pol--crop" style="--rot: 2.59deg" data-node-id="257:41">
+                  <div class="pol__rot"><div class="pol__card">
+                    <div class="pol__photo" data-node-id="257:42"><img src="assets/act-desert-yoga.png" alt="Yoga on the dunes at sunset in Wahiba Sands" /></div>
+                    <figcaption data-node-id="257:43">Desert Yoga</figcaption>
+                  </div></div>
+                </figure>
 
-        <!-- second pass, so -50% closes the loop on itself -->
-        <figure class="pol pol--b" style="--rot: -4.2deg" aria-hidden="true">
-          <div class="pol__rot"><div class="pol__card">
-            <div class="pol__photo"><img src="assets/act-zipline.png" alt="" /></div>
-            <figcaption>Zipline</figcaption>
-          </div></div>
-        </figure>
+                <figure class="pol pol--b" style="--rot: 5.4deg">
+                  <div class="pol__rot"><div class="pol__card">
+                    <div class="pol__photo"><img src="assets/act-sailing.png" alt="A dhow sailing along the Omani coastline" /></div>
+                    <figcaption>Sailing</figcaption>
+                  </div></div>
+                </figure>
 
-        <figure class="pol pol--a" style="--rot: 3.1deg" aria-hidden="true">
-          <div class="pol__rot"><div class="pol__card">
-            <div class="pol__photo"><img src="assets/act-hike.png" alt="" /></div>
-            <figcaption>Mountain Hike</figcaption>
-          </div></div>
-        </figure>
+                <figure class="pol pol--b" style="--rot: -7.26deg" data-node-id="257:47">
+                  <div class="pol__rot"><div class="pol__card">
+                    <div class="pol__photo" data-node-id="257:48"><img src="assets/act-scuba.png" alt="A diver on a reef in the Daymaniyat Islands" /></div>
+                    <figcaption data-node-id="257:49">Scuba Diving</figcaption>
+                  </div></div>
+                </figure>
 
-        <figure class="pol pol--b" style="--rot: -2.4deg" aria-hidden="true">
-          <div class="pol__rot"><div class="pol__card">
-            <div class="pol__photo"><img src="assets/act-beach.png" alt="" /></div>
-            <figcaption>Beach Yoga</figcaption>
-          </div></div>
-        </figure>
+              </div>
+            </div>
 
-        <figure class="pol pol--a pol--crop" style="--rot: 2.59deg" aria-hidden="true">
-          <div class="pol__rot"><div class="pol__card">
-            <div class="pol__photo"><img src="assets/act-desert-yoga.png" alt="" /></div>
-            <figcaption>Desert Yoga</figcaption>
-          </div></div>
-        </figure>
+          </div>
+        </div>
 
-        <figure class="pol pol--b" style="--rot: 5.4deg" aria-hidden="true">
-          <div class="pol__rot"><div class="pol__card">
-            <div class="pol__photo"><img src="assets/act-sailing.png" alt="" /></div>
-            <figcaption>Sailing</figcaption>
-          </div></div>
-        </figure>
+        <!-- ---------- scene 2 — 312:2 ---------- -->
+        <div class="hx__scene hx__scene--read" id="useful" aria-labelledby="read-title">
+          <div class="hx__board">
 
-        <figure class="pol pol--b" style="--rot: -7.26deg" aria-hidden="true">
-          <div class="pol__rot"><div class="pol__card">
-            <div class="pol__photo"><img src="assets/act-scuba.png" alt="" /></div>
-            <figcaption>Scuba Diving</figcaption>
-          </div></div>
-        </figure>
+            <h2 class="rd2-title" id="read-title" data-node-id="312:3">
+              <span class="line"><i>Everything you</i></span>
+              <span class="line"><i>need to know</i></span>
+            </h2>
+
+            <p class="rd2-note" data-node-id="312:4">Visas, seasons, driving distances and the
+              comparison everyone makes anyway — answered properly, before you have to ask.</p>
+
+            <a class="rd2-all" href="articles.html" data-node-id="312:5">
+              All articles
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M4 12h15m-6-7 7 7-7 7" stroke="currentColor" stroke-width="1.6"
+                      stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </a>
+
+            <!-- before the column in the DOM, so the rules paint over it the
+                 way Figma stacks them, and so it reads after the button when
+                 the board unrolls into normal flow -->
+            <img class="rd2-deco" src="assets/note pad sketch.png" alt="" aria-hidden="true"
+                 loading="lazy" data-node-id="312:10" />
+
+            <div class="rd2-scroll" aria-hidden="true"><span></span></div>
+
+            <div class="rd2-list">
+              <ul>
+                <li class="rd2-item" style="--d:0.06s">
+                  <a class="rd2-link" href="articles.html#7-days-in-oman">7 days in Oman: how to see the desert, mountains, and coast in one trip</a>
+                </li>
+                <li class="rd2-item" style="--d:0.13s">
+                  <a class="rd2-link" href="articles.html#oman-visa-guide">Do I need a visa for Oman? A simple guide to the 2026 entry rules</a>
+                </li>
+                <li class="rd2-item" style="--d:0.20s">
+                  <a class="rd2-link" href="articles.html#best-time-to-visit">Best time to visit Oman: a season by season guide</a>
+                </li>
+                <li class="rd2-item" style="--d:0.27s">
+                  <a class="rd2-link" href="articles.html#oman-vs-dubai">Oman vs Dubai: what's actually different, and how to choose</a>
+                </li>
+                <li class="rd2-item" style="--d:0.32s">
+                  <a class="rd2-link" href="articles.html#renting-a-car">Renting a car in Oman: what you need, and where 4WD actually matters</a>
+                </li>
+                <li class="rd2-item" style="--d:0.36s">
+                  <a class="rd2-link" href="articles.html#what-to-wear">What to wear in Oman: a practical guide for men and women</a>
+                </li>
+                <li class="rd2-item" style="--d:0.40s">
+                  <a class="rd2-link" href="articles.html#where-to-stay">Where to stay in Oman: desert camps, mountain lodges and Muscat hotels</a>
+                </li>
+                <li class="rd2-item" style="--d:0.44s">
+                  <a class="rd2-link" href="articles.html#eating-in-oman">Eating in Oman: what to order, and what shuwa actually is</a>
+                </li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
 
       </div>
     </div>
-  </section>
-
-  <!-- ================= Everything you need to know — 252:52 =================
-       The navy board carries the title, the standfirst, the button and the
-       notepad plate; the articles are a plain list of titles behind a
-       fixed window, scrolled by the rule drawn beside it. Titles are
-       authored in the markup so all eight are readable and indexable
-       before any script runs — the script only draws the indicator. -->
-  <section class="read" id="useful" aria-labelledby="read-title">
-
-    <div class="rd-panel">
-      <h2 class="rd-title" id="read-title">
-        <span class="line"><i>Everything you</i></span>
-        <span class="line"><i>need to know</i></span>
-      </h2>
-      <p class="rd-note">Visas, seasons, driving distances and the comparison
-        everyone makes anyway — answered properly, before you have to ask.</p>
-      <a class="rd-all" href="articles.html">
-        All articles
-        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M4 12h15m-6-7 7 7-7 7" stroke="currentColor" stroke-width="1.6"
-                stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-      </a>
-      <img class="rd-deco" src="assets/note pad sketch.png" alt="" aria-hidden="true" loading="lazy" />
-    </div>
-
-    <ul class="rd-list" tabindex="0" role="region" aria-label="Articles, scrollable">
-      <li class="rd-item" style="--d:0.10s">
-        <a class="rd-link" href="articles.html#7-days-in-oman">7 days in Oman: how to see the desert, mountains, and coast in one trip</a>
-      </li>
-      <li class="rd-item" style="--d:0.18s">
-        <a class="rd-link" href="articles.html#oman-visa-guide">Do I need a visa for Oman? A simple guide to the 2026 entry rules</a>
-      </li>
-      <li class="rd-item" style="--d:0.26s">
-        <a class="rd-link" href="articles.html#best-time-to-visit">Best time to visit Oman: a season-by-season guide to weather, crowds and khareef</a>
-      </li>
-      <li class="rd-item" style="--d:0.34s">
-        <a class="rd-link" href="articles.html#oman-vs-dubai">Oman vs. Dubai: what's actually different, and how to choose</a>
-      </li>
-      <li class="rd-item" style="--d:0.40s">
-        <a class="rd-link" href="articles.html#renting-a-car">Renting a car in Oman: what you need, and where 4WD actually matters</a>
-      </li>
-      <li class="rd-item" style="--d:0.44s">
-        <a class="rd-link" href="articles.html#what-to-wear">What to wear in Oman: a practical guide for men and women</a>
-      </li>
-      <li class="rd-item" style="--d:0.48s">
-        <a class="rd-link" href="articles.html#where-to-stay">Where to stay in Oman: desert camps, mountain lodges and Muscat hotels</a>
-      </li>
-      <li class="rd-item" style="--d:0.52s">
-        <a class="rd-link" href="articles.html#eating-in-oman">Eating in Oman: what to order, where to find it, and what shuwa actually is</a>
-      </li>
-    </ul>
-
-    <div class="rd-scroll" aria-hidden="true"><span></span></div>
   </section>
 
   <!-- ================= Right now in Oman — 284:31 =================
@@ -3109,7 +3153,8 @@ body {
       desc: "Coffee first, questions later — the welcome is the attraction.",
       cards: [
         { img: "assets/f5-fort.png",     title: "Nizwa Fort",  sub: "Living history", fit: "bottom" },
-        { img: "assets/layer-mosque.png", title: "Muscat",      sub: "Grand Mosque",   fit: "bottom" },
+        { img: "assets/layer-mosque.png", title: "Muscat",      sub: "Grand Mosque",   fit: "bottom",
+          href: "muscat-grand-mosque.html" },
         { img: "assets/f5-sky.png",      title: "Nizwa",       sub: "Fort walls" }
       ]
     },
@@ -3274,8 +3319,18 @@ body {
       var em = document.createElement("em"); em.textContent = c.sub;
       cap.appendChild(b); cap.appendChild(em);
 
-      li.appendChild(img);
-      li.appendChild(cap);
+      /* A card with somewhere to go becomes a link, and the whole tile
+         is the target. Cards without one stay plain <li>, so nothing
+         announces itself as clickable when there is nothing behind it. */
+      var host = li;
+      if (c.href) {
+        host = document.createElement("a");
+        host.className = "j-card__hit";
+        host.href = c.href;
+        li.appendChild(host);
+      }
+      host.appendChild(img);
+      host.appendChild(cap);
       return li;
     });
   }
@@ -3444,71 +3499,200 @@ body {
 
 <script>
 /* =================================================================
-   Everything you need to know — 252:52
+   Choose your adventure → Everything you need to know — 257:30 / 312:2
 
-   Two jobs only. The section settles itself on arrival, the way every
-   other section on this page does, and the article window gets the
-   scroll indicator drawn beside it, because the native scrollbar is
-   suppressed — an OS scrollbar is a different width, colour and
-   fade-out behaviour on every machine this page opens on, and a 3u
-   navy rule is none of those things.
+   The pin. One scroll position drives four things, all off the same
+   0..1 progress through the section:
+
+     0 .. 0.78   the track travels left, through the polaroid strip and
+                 on until scene 2 has fully arrived
+     0.70        scene 2's copy, plate and column are let in
+     0.78 .. 1   the track holds and the article column comes up through
+                 its window, so all eight are reachable
+
+   The column is moved by this progress rather than by a scrollbar of
+   its own. A nested scroller inside a pinned section is a trap: the
+   wheel silently changes meaning depending on what the pointer happens
+   to be over, and the reader has no way to know which one they are
+   about to get.
+
+   Nothing here runs unless the window is wide and motion is welcome.
+   Without the .hx--pinned class the stylesheet leaves both scenes as
+   ordinary stacked sections, so no-script and reduced-motion are the
+   same well-formed page rather than a special case.
    ================================================================= */
 (function () {
 
-  var root = document.querySelector(".read");
-  if (!root) return;
+  var hx = document.querySelector(".hx");
+  if (!hx) return;
 
-  var list  = root.querySelector(".rd-list");
-  var bar   = root.querySelector(".rd-scroll");
-  var thumb = bar && bar.firstElementChild;
-  var title = root.querySelector(".rd-title");
+  var pin   = hx.querySelector(".hx__pin");
+  var track = hx.querySelector(".hx__track");
+  var map   = hx.querySelector(".hx__map");
+  var copy  = hx.querySelector(".adv__copy");
+  var clip  = hx.querySelector(".rd2-list");
+  var col   = clip && clip.querySelector("ul");
+  var rail  = hx.querySelector(".rd2-scroll");
+  var knob  = rail && rail.firstElementChild;
+  /* the board, not the title: .r-fade and the .line masks both key off an
+     ancestor carrying .is-revealed, and scene 1's standfirst is a sibling
+     of its title, not a child. Scene 2 has its own board and so waits. */
+  var advBoard  = hx.querySelector(".hx__scene--adv .hx__board");
+  var readBoard = hx.querySelector(".hx__scene--read .hx__board");
+  var readT     = hx.querySelector(".rd2-title");
 
-  /* ---- settle on arrival ---- */
-  var settled = false;
-  function reveal() {
-    if (settled || root.getBoundingClientRect().top > innerHeight * 0.82) return;
-    settled = true;
-    root.classList.add("in");
-    if (title) title.classList.add("is-revealed");
-    removeEventListener("scroll", reveal);
+  var wide   = matchMedia("(min-width: 900px)");
+  var reduce = matchMedia("(prefers-reduced-motion: reduce)");
+
+  /* ---- the copy reveal, which happens either way ---- */
+  var seen = false;
+
+  function open() {
+    opened = true;
+    hx.classList.add("is-read");
+    if (readT) readT.classList.add("is-revealed");
   }
-  addEventListener("scroll", reveal, { passive: true });
-  reveal();
 
-  if (!list || !thumb) return;
+  function arrive() {
+    if (!seen && hx.getBoundingClientRect().top <= innerHeight * 0.86) {
+      seen = true;
+      if (advBoard) advBoard.classList.add("is-revealed");
+    }
+    /* Unpinned, scene 2 is simply the next section and arrives on its
+       own. Under the pin it is the track that decides, in draw() — so
+       this has to know which of the two is running, or the masked title
+       would never lift on a phone. */
+    if (!pinned && !opened && readBoard &&
+        readBoard.getBoundingClientRect().top <= innerHeight * 0.86) open();
+  }
+  addEventListener("scroll", arrive, { passive: true });
 
-  /* ---- the indicator ---- */
-  var ticking = false;
+  if (!pin || !track) return;
 
+  /* ---- geometry, remeasured whenever the box changes ---- */
+  var pinned = false, opened = false, len = 0, travel = 0, colTravel = 0;
+  var mapDX = 0, mapDY = 0, mapScale = 0, copyDrag = 0;
+
+  function clamp(n) { return n < 0 ? 0 : n > 1 ? 1 : n; }
+
+  function measure() {
+    var on = wide.matches && !reduce.matches;
+
+    if (on !== pinned) {
+      pinned = on;
+      hx.classList.toggle("hx--pinned", on);
+      if (!on) {
+        /* hand every element back to the stylesheet */
+        track.style.transform = "";
+        if (map) { map.style.transform = ""; map.style.transformOrigin = ""; }
+        if (copy) copy.style.transform = "";
+        if (col) col.style.transform = "";
+        hx.classList.remove("is-read");
+        opened = false;
+      }
+    }
+    if (!pinned) return;
+
+    var W = pin.clientWidth;
+    var H = pin.clientHeight;
+
+    len = hx.offsetHeight - H;
+    /* offsetWidth, not scrollWidth: the notepad plate waits one plate-
+       width off the right edge of scene 2, and scrollWidth counts that
+       parking space as track to be travelled. */
+    travel = track.offsetWidth - W;
+
+    /* where the plate starts (257:37 on the 1569 board, centred) and
+       where it has to finish (312:15 on the 1526 board, centred) */
+    var boardA = 855 * W / 1569, boardB = 749 * W / 1526;
+    var fromX = 756 * W / 1569,  toX = -175 * W / 1526;
+    var fromY = (H - boardA) / 2 + 36 * W / 1569;
+    var toY   = (H - boardB) / 2 + 296 * W / 1526;
+
+    /* the plate rides inside the track, so its own move has to cover the
+       track's as well — hence + travel. Net across the viewport it drifts
+       left at roughly a third of the track's speed. */
+    mapDX = (toX - fromX) + travel;
+    mapDY = toY - fromY;
+    mapScale = (783 * W / 1526) / (783 * W / 1569) - 1;
+    if (map) map.style.transformOrigin = "0 0";
+
+    /* 0.6x the track's travel, pushed back the way it came, so the copy
+       leaves slower than the track and lingers on screen longer */
+    copyDrag = travel * 0.6;
+
+    colTravel = col && clip ? Math.max(0, col.scrollHeight - clip.clientHeight) : 0;
+
+    draw();
+  }
+
+  /* ---- one frame ---- */
   function draw() {
-    ticking = false;
-    /* drop any hide from a previous pass before measuring, or the inline
-       display would outrank the stylesheet and the bar could never come
-       back when the window widens out of the stacked layout again */
-    bar.style.removeProperty("display");
+    if (!pinned || len <= 0) return;
 
-    var track  = bar.clientHeight;
-    var travel = list.scrollHeight - list.clientHeight;
+    var p  = clamp(-hx.getBoundingClientRect().top / len);
+    var pT = clamp(p / 0.78);
+    var pL = clamp((p - 0.78) / 0.22);
 
-    /* the window is only a window while there is more than fits in it */
-    if (travel <= 1 || track <= 0) { bar.style.display = "none"; return; }
+    track.style.transform = "translate3d(" + (-pT * travel).toFixed(2) + "px,0,0)";
 
-    var h = Math.max(track * (list.clientHeight / list.scrollHeight), 26);
-    var y = (list.scrollTop / travel) * (track - h);
-    thumb.style.height = h + "px";
-    thumb.style.transform = "translateY(" + y + "px)";
+    if (map) {
+      map.style.transform =
+        "translate3d(" + (pT * mapDX).toFixed(2) + "px," +
+                         (pT * mapDY).toFixed(2) + "px,0) scale(" +
+                         (1 + pT * mapScale).toFixed(4) + ")";
+    }
+
+    if (copy) copy.style.transform = "translate3d(" + (pT * copyDrag).toFixed(2) + "px,0,0)";
+
+    if (col) col.style.transform = "translate3d(0," + (-pL * colTravel).toFixed(2) + "px,0)";
+
+    if (knob && colTravel > 0) {
+      var trackH = rail.clientHeight;
+      var h = Math.max(trackH * (clip.clientHeight / col.scrollHeight), 24);
+      knob.style.height = h + "px";
+      knob.style.transform = "translateY(" + (pL * (trackH - h)).toFixed(2) + "px)";
+    }
+
+    /* one way. Scrubbing back and forth over a pinned section is normal,
+       and re-running a second of entrance every time the reader crosses
+       0.7 would be the most irritating thing on the page. */
+    if (!opened && pT > 0.7) open();
   }
 
-  function schedule() {
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(draw);
+  var queued = false;
+  function onScroll() {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(function () { queued = false; draw(); });
   }
 
-  list.addEventListener("scroll", schedule, { passive: true });
-  addEventListener("resize", schedule);
-  if (window.ResizeObserver) new ResizeObserver(schedule).observe(list);
-  draw();
+  addEventListener("scroll", onScroll, { passive: true });
+  addEventListener("resize", measure);
+  if (wide.addEventListener) {
+    wide.addEventListener("change", measure);
+    reduce.addEventListener("change", measure);
+  }
+
+  /* Keyboard focus can land on an article that is still behind the
+     window. The browser answers that by scrolling the clip box, which
+     the column's transform knows nothing about — so undo that and move
+     the page instead, which is the one control that owns this column. */
+  if (clip) {
+    clip.addEventListener("scroll", function () { clip.scrollTop = 0; });
+    clip.addEventListener("focusin", function (e) {
+      if (!pinned || colTravel <= 0) return;
+      var li = e.target.closest(".rd2-item");
+      if (!li) return;
+      var want = Math.min(li.offsetTop, colTravel) / colTravel;
+      scrollTo({ top: hx.offsetTop + (0.78 + want * 0.22) * len });
+    });
+  }
+
+  /* measure first: arrive() branches on whether the pin is running, and
+     until measure() has looked at the media queries it is not */
+  measure();
+  arrive();
 })();
 </script>
 
@@ -3707,43 +3891,6 @@ body {
 })();
 </script>
 
-<script>
-/* =================================================================
-   Choose your adventure — 257:30
-
-   The rail is a CSS marquee, so this only does the two things CSS
-   cannot: reveal the copy when the board arrives, and stop the
-   animation while the section is off screen.
-   ================================================================= */
-(function () {
-  var adv = document.querySelector(".adv");
-  if (!adv) return;
-
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    adv.classList.add("is-revealed");
-    return;
-  }
-
-  /* the same rect read the journey section uses, so a restored scroll
-     position counts as arrived rather than as never-intersected */
-  var revealed = false;
-  function reveal() {
-    if (revealed || adv.getBoundingClientRect().top > innerHeight * 0.86) return;
-    adv.classList.add("is-revealed");
-    revealed = true;
-  }
-
-  if ("IntersectionObserver" in window) {
-    new IntersectionObserver(function (e) {
-      adv.classList.toggle("adv--idle", !e[0].isIntersecting);
-    }, { rootMargin: "120px" }).observe(adv);
-  }
-
-  addEventListener("scroll", reveal, { passive: true });
-  addEventListener("resize", reveal);
-  reveal();
-})();
-</script>
 
 </body>
 </html>

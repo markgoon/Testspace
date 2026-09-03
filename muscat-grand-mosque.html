@@ -1,0 +1,1893 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sultan Qaboos Grand Mosque, Muscat — Visit Oman</title>
+<meta name="description" content="Oman's grand mosque in Bawshar, Muscat: the story of how it was built, what to look for inside, and everything to know before you go." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Baskervville:ital@0;1&family=Fondamento&family=Forum&family=Libre+Baskerville:ital@0;1&family=Libre+Franklin&family=Mandali&family=Manrope:wght@200..800&display=swap" rel="stylesheet" />
+
+<style>
+/* =================================================================
+   Sultan Qaboos Grand Mosque — a place page
+
+   Layout borrowed from the Tengile/MalaMala lodge pages: a full-bleed
+   hero, a lede that runs wide, a two-column "at a glance" of
+   essentials against highlights, a story told in prose with one line
+   pulled out of it, a block of practical notes set as a grid, and a
+   short row of cards for what else is close by.
+
+   Nothing new is invented for it. Every type size, colour, rule weight
+   and unit below is one the home page already uses:
+
+     --u  = 100cqw / 1441        the site's Figma pixel
+     #113240                     the navy of the nav pill and footer
+     #f9f4eb                     the cream of Choose your adventure
+     #1d1914                     body ink
+     Libre Baskerville 52/59     section titles
+     Baskervville 28/36          sub-headings and card titles
+     Forum 18/26                 standfirsts
+     Manrope 14/23               small print
+     Forum 16 caps, 14% tracking the key-stats bar
+   ================================================================= */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #ffffff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.page { container-type: inline-size; width: 100%; }
+
+/* the home page's mask reveal, unchanged */
+.line { display: block; overflow: hidden; padding-block: 0.14em; margin-block: -0.14em; }
+.line i {
+  display: block;
+  font-style: normal;
+  transform: translateY(118%);
+  transition: transform 1.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.is-revealed .line i { transform: none; }
+
+.r-fade {
+  opacity: 0;
+  transform: translateY(calc(26 * var(--u)));
+  filter: blur(10px);
+  transition: opacity 1s ease, transform 1.1s cubic-bezier(0.16, 1, 0.3, 1), filter 1s ease;
+  transition-delay: 0.32s;
+}
+.is-revealed .r-fade { opacity: 1; transform: none; filter: blur(0); }
+
+/* ================= the hero =================
+   The plate is a cut-out, so the sky behind it is drawn rather than
+   photographed — the navy the site already owns, falling to the warm
+   cream it uses everywhere else. The mountains from the home page's
+   own frame 1 sit between the two at low opacity, which is where that
+   composition puts them as well.
+
+   This is the one image on the page that moves. It rises at 0.18 of
+   the scroll while the sky holds still, so the building settles into
+   the horizon rather than sliding off it. */
+.mg-hero {
+  --u: calc(100cqw / 1441);
+  --nav-ink: #efdfdf;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: calc(560 * var(--u));
+  overflow: hidden;
+  background: linear-gradient(180deg,
+              #0c2733 0%,
+              #113240 34%,
+              #47555b 62%,
+              #9d9385 82%,
+              #d8cdba 100%);
+}
+
+.mg-hero__range {
+  position: absolute;
+  left: 50%;
+  bottom: calc(96 * var(--u));
+  width: calc(1700 * var(--u));
+  transform: translateX(-50%);
+  opacity: 0.17;
+  filter: grayscale(0.4) brightness(1.25);
+  pointer-events: none;
+  user-select: none;
+}
+
+.mg-hero__plate {
+  position: absolute;
+  left: 50%;
+  bottom: calc(-30 * var(--u));
+  width: calc(1030 * var(--u));
+  /* positive, with the translateX(-50%) below it: the building sits
+     right of centre so the left third stays sky, which is where the
+     title goes */
+  margin-left: calc(300 * var(--u));
+  transform: translateX(-50%);
+  pointer-events: none;
+  user-select: none;
+  will-change: transform;
+}
+
+/* the ground the building stands on, so it does not float */
+.mg-hero__floor {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(150 * var(--u));
+  background: linear-gradient(180deg, rgba(216, 205, 186, 0) 0%, #d8cdba 62%);
+  pointer-events: none;
+}
+
+/* The copy sits on the left, so the left is darkened — and the scrim
+   has to sit above the plate to do that, since the building itself is
+   the bright thing the type has to hold against. z-index 1 puts it over
+   the plate (auto) and under the copy (2). */
+.mg-hero__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(100deg,
+              rgba(10, 33, 44, 0.92) 0%,
+              rgba(10, 33, 44, 0.74) 26%,
+              rgba(10, 33, 44, 0.34) 46%,
+              rgba(10, 33, 44, 0) 66%);
+  pointer-events: none;
+}
+
+.mg-hero__copy {
+  position: absolute;
+  left: calc(133 * var(--u));
+  bottom: calc(150 * var(--u));
+  width: calc(660 * var(--u));
+  z-index: 2;
+}
+
+.mg-eyebrow {
+  margin: 0 0 calc(22 * var(--u));
+  font-family: "Manrope", sans-serif;
+  font-size: calc(13 * var(--u));
+  line-height: calc(18 * var(--u));
+  letter-spacing: calc(1.1 * var(--u));
+  text-transform: uppercase;
+  color: rgba(239, 223, 223, 0.72);
+}
+
+.mg-hero__title {
+  margin: 0;
+  font-family: "Baskervville", serif;
+  font-weight: 400;
+  font-size: calc(72 * var(--u));
+  line-height: calc(80 * var(--u));
+  letter-spacing: calc(-1.44 * var(--u));
+  color: #fff;
+}
+.mg-hero__title .line:nth-child(2) i { transition-delay: 0.1s; }
+
+.mg-hero__sub {
+  margin: calc(26 * var(--u)) 0 0;
+  width: calc(468 * var(--u));
+  font-family: "Forum", serif;
+  font-size: calc(18 * var(--u));
+  line-height: calc(28 * var(--u));
+  letter-spacing: calc(-0.36 * var(--u));
+  color: rgba(255, 255, 255, 0.84);
+}
+
+/* ================= the nav, as the home page has it ================= */
+.nav {
+  position: absolute;
+  left: calc(23 * var(--u));
+  top: calc(24 * var(--u));
+  width: calc(1382 * var(--u));
+  height: calc(40 * var(--u));
+  display: flex;
+  align-items: center;
+  gap: calc(274 * var(--u));
+  z-index: 3;
+}
+.nav__logo {
+  flex-shrink: 0;
+  width: calc(65 * var(--u));
+  font-family: "Fondamento", cursive;
+  color: var(--nav-ink);
+  text-align: center;
+  letter-spacing: calc(-0.5 * var(--u));
+  white-space: nowrap;
+  text-decoration: none;
+}
+.nav__logo span { display: block; line-height: calc(15 * var(--u)); }
+.nav__logo .v { font-size: calc(21 * var(--u)); }
+.nav__logo .o { font-size: calc(25 * var(--u)); }
+
+.nav__links {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(62 * var(--u));
+  width: calc(582 * var(--u));
+  font-family: "Manrope", sans-serif;
+  font-size: calc(16 * var(--u));
+  line-height: normal;
+  color: var(--nav-ink);
+  white-space: nowrap;
+}
+.nav__links a { flex-shrink: 0; color: inherit; text-decoration: none; transition: opacity 0.25s ease; }
+.nav__links a:hover { opacity: 0.6; }
+
+.nav__cta {
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  width: calc(187 * var(--u));
+  height: calc(40 * var(--u));
+  padding: calc(14 * var(--u)) calc(32 * var(--u)) calc(14 * var(--u)) calc(36 * var(--u));
+  background: #113240;
+  border-radius: calc(100 * var(--u));
+  overflow: clip;
+  font-family: "Mandali", sans-serif;
+  font-size: calc(12 * var(--u));
+  line-height: normal;
+  color: #efdfdf;
+  text-align: center;
+  text-decoration: none;
+  transition: background 0.25s ease;
+}
+.nav__cta:hover { background: #1c4a5e; }
+
+/* ================= shared section furniture ================= */
+.mg {
+  --u: calc(100cqw / 1441);
+  position: relative;
+  width: 100%;
+  color: #1d1914;
+  /* the ghosted icon grid hangs past the right edge on purpose; without
+     this the page grows a horizontal scrollbar to go and find it */
+  overflow: hidden;
+}
+.mg--cream { background: #f9f4eb; }
+.mg--white  { background: #fff; }
+.mg--sand   { background: #faf6f0; }      /* 318:32 */
+
+.mg__wrap { padding: 0 calc(133 * var(--u)); }
+
+.mg-h2 {
+  margin: 0;
+  font-family: "Libre Baskerville", serif;
+  font-weight: 400;
+  font-size: calc(52 * var(--u));
+  line-height: calc(59 * var(--u));
+  letter-spacing: calc(-1.05 * var(--u));
+  color: #000;
+}
+.mg-h2 .line:nth-child(2) i { transition-delay: 0.1s; }
+
+.mg-h3 {
+  margin: 0;
+  font-family: "Baskervville", serif;
+  font-weight: 400;
+  font-size: calc(28 * var(--u));
+  line-height: calc(36 * var(--u));
+  letter-spacing: calc(-0.56 * var(--u));
+  color: #000;
+}
+
+.mg-p {
+  margin: calc(22 * var(--u)) 0 0;
+  font-family: "Forum", serif;
+  font-size: calc(18 * var(--u));
+  line-height: calc(30 * var(--u));
+  letter-spacing: calc(-0.36 * var(--u));
+  color: rgba(29, 25, 20, 0.86);
+}
+
+.mg-label {
+  margin: 0;
+  font-family: "Forum", serif;
+  font-size: calc(16 * var(--u));
+  line-height: calc(22 * var(--u));
+  letter-spacing: calc(2.24 * var(--u));      /* 14%, the key-stats bar */
+  text-transform: uppercase;
+  color: #1d1914;
+}
+
+/* =================================================================
+   Sections 02 and 03 — 318:32
+
+   One 1440x2840 Figma board, split at y 1440 so the two dev tags keep
+   the numbers they had. Both halves carry the same ground, so the seam
+   is invisible; nothing straddles it.
+
+   Frame is 1440 wide against the page's 1441 unit — a 0.07% difference,
+   so every figure below is its Figma value unchanged.
+
+     02   0    lede, stats bar, arch photograph, The Essentials
+     03   1440 prayer-hall photograph, What to look for, quote, prose
+
+   The type is the site's own: Baskervville 33/44 for the lede and the
+   pull quote, Forum 29/36 for the two column headings, Forum 18/26 for
+   body, Manrope 600 16/26 for the spec labels, and for the stats bar
+   the Forum 16 caps at 14% tracking that the home page's key-stats
+   strip already uses.
+   ================================================================= */
+
+.mg-lede  { height: calc(1440 * var(--u)); }
+.mg-story { height: calc(1400 * var(--u)); }
+
+/* image 11 — 322:32 — the Omani icon grid the home page uses */
+.mg-pattern {
+  position: absolute;
+  left: 0;
+  top: calc(201 * var(--u));
+  width: calc(429 * var(--u));
+  height: calc(429 * var(--u));
+  object-fit: cover;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.6s ease;
+}
+.mg.is-revealed .mg-pattern { opacity: 0.29; }
+
+/* 322:30 */
+.mg-lede__p {
+  position: absolute;
+  left: calc(122 * var(--u));
+  top: calc(139 * var(--u));
+  width: calc(779 * var(--u));
+  margin: 0;
+  font-family: "Baskervville", serif;
+  font-weight: 400;
+  font-size: calc(33 * var(--u));
+  line-height: calc(44 * var(--u));
+  letter-spacing: calc(-0.66 * var(--u));
+  color: #000;
+}
+
+/* 322:93 — the key-stats strip, same construction as the home page's */
+.mg-stats {
+  position: absolute;
+  left: calc(239 * var(--u));
+  top: calc(445 * var(--u));
+  display: flex;
+  align-items: center;
+  gap: calc(52 * var(--u));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.mg-stats li {
+  flex: none;
+  font-family: "Forum", serif;
+  font-size: calc(16 * var(--u));
+  line-height: calc(22 * var(--u));
+  letter-spacing: calc(2.24 * var(--u));   /* 14% of 16 */
+  text-transform: uppercase;
+  color: #000;
+}
+.mg-stats li:nth-child(1) { width: calc(124 * var(--u)); }
+.mg-stats li:nth-child(3) { width: calc(134 * var(--u)); }
+.mg-stats li:nth-child(5) { width: calc(203 * var(--u)); }
+.mg-stats li:nth-child(7) { width: calc(166 * var(--u)); }
+.mg-stats .sep {
+  width: 0;
+  height: calc(48 * var(--u));
+  border-left: 1px solid rgba(0, 0, 0, 0.17);
+}
+
+/* the two photographs — 322:35 and 322:67 */
+.mg-shot { position: absolute; margin: 0; overflow: hidden; background: #e7e2d8; }
+.mg-shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.mg-shot--arch {
+  left: calc(611 * var(--u));
+  top: calc(630 * var(--u));
+  width: calc(694 * var(--u));
+  height: calc(694 * var(--u));
+}
+.mg-shot--hall {
+  left: calc(122 * var(--u));
+  top: calc(23 * var(--u));                /* 1463 on the board */
+  width: calc(563 * var(--u));
+  height: calc(750 * var(--u));
+}
+
+/* 322:70 / 322:72 — the two column headings */
+.mg-col-title {
+  position: absolute;
+  margin: 0;
+  font-family: "Forum", serif;
+  font-weight: 400;
+  font-size: calc(29 * var(--u));
+  line-height: calc(36 * var(--u));
+  letter-spacing: calc(-0.58 * var(--u));
+  color: #000;
+}
+.mg-col-title--essentials { left: calc(122 * var(--u)); top: calc(788 * var(--u)); }
+.mg-col-title--look       { left: calc(815 * var(--u)); top: calc(5 * var(--u)); }
+
+/* 322:42 — The Essentials. A <dl>, because that is what it is: five
+   terms and their definitions, not five paragraphs that happen to
+   alternate weight. */
+.mg-spec {
+  position: absolute;
+  left: calc(122 * var(--u));
+  top: calc(849 * var(--u));
+  width: calc(233 * var(--u));
+  margin: 0;
+}
+.mg-spec dt {
+  font-family: "Manrope", sans-serif;
+  font-weight: 600;
+  font-size: calc(16 * var(--u));
+  line-height: calc(26 * var(--u));
+  letter-spacing: calc(-0.32 * var(--u));
+  color: #000;
+}
+.mg-spec dd {
+  margin: 0;
+  font-family: "Forum", serif;
+  font-size: calc(18 * var(--u));
+  line-height: calc(26 * var(--u));
+  letter-spacing: calc(-0.36 * var(--u));
+  color: #000;
+}
+/* the board spaces these with an empty line; a margin does it without
+   putting a blank paragraph in the document */
+.mg-spec dd + dt { margin-top: calc(26 * var(--u)); }
+
+/* 322:69 — What to look for */
+.mg-look {
+  position: absolute;
+  left: calc(799 * var(--u));
+  top: calc(41 * var(--u));                /* 1481 on the board */
+  width: calc(403 * var(--u));
+  margin: 0;
+  padding-left: calc(27 * var(--u));
+  list-style: disc;
+}
+.mg-look li {
+  margin-bottom: calc(26 * var(--u));
+  padding-left: calc(4 * var(--u));
+  font-family: "Forum", serif;
+  font-size: calc(18 * var(--u));
+  line-height: calc(26 * var(--u));
+  letter-spacing: calc(-0.36 * var(--u));
+  color: #000;
+}
+.mg-look li::marker { font-size: calc(14 * var(--u)); }
+.mg-look li:last-child { margin-bottom: 0; }
+
+/* 322:74 — the pull quote, set as the lede is rather than italicised:
+   on this board the two are the same voice at the same size */
+.mg-quote {
+  position: absolute;
+  left: calc(122 * var(--u));
+  top: calc(833 * var(--u));               /* 2273 on the board */
+  width: calc(779 * var(--u));
+  margin: 0;
+  font-family: "Baskervville", serif;
+  font-weight: 400;
+  font-size: calc(33 * var(--u));
+  line-height: calc(44 * var(--u));
+  letter-spacing: calc(-0.66 * var(--u));
+  color: #000;
+}
+
+/* 322:78 / 322:92 — the closing prose, two columns */
+.mg-prose {
+  position: absolute;
+  top: calc(984 * var(--u));               /* 2424 on the board */
+  width: calc(467 * var(--u));
+}
+.mg-prose--a { left: calc(243 * var(--u)); }
+.mg-prose--b { left: calc(730 * var(--u)); }
+.mg-prose p {
+  margin: 0 0 calc(26 * var(--u));
+  font-family: "Forum", serif;
+  font-size: calc(18 * var(--u));
+  line-height: calc(26 * var(--u));
+  letter-spacing: calc(-0.36 * var(--u));
+  color: #000;
+}
+.mg-prose p:last-child { margin-bottom: 0; }
+
+/* ---- the full-bleed band, the way the reference stacks its images ----
+   The plate is a cut-out, so the "photograph" is the building over the
+   same drawn sky the hero uses, letterboxed. Cropped low and wide so it
+   reads as the arcade running away from you rather than as the hero
+   again at half height. */
+.mg-band {
+  position: relative;
+  width: 100%;
+  height: calc(470 * var(--u));
+  margin: 0;                              /* it is a <figure>: the UA
+                                             gives those 40px of side
+                                             margin, which on a 100%-wide
+                                             band is 40px of page */
+  overflow: hidden;
+  background: linear-gradient(180deg, #16394a 0%, #3f5560 46%, #b3a794 78%, #d8cdba 100%);
+}
+.mg-band img {
+  position: absolute;
+  left: 50%;
+  bottom: calc(-56 * var(--u));
+  width: calc(1560 * var(--u));
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+/* white over the crop rather than ink: what ends up under this corner is
+   the lawn and the courtyard, both of them bright */
+.mg-band figcaption {
+  position: absolute;
+  left: calc(133 * var(--u));
+  bottom: calc(30 * var(--u));
+  z-index: 1;
+  margin: 0;
+  font-family: "Manrope", sans-serif;
+  font-size: calc(13 * var(--u));
+  letter-spacing: calc(1.1 * var(--u));
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.6);
+}
+
+/* ---- image against text, the reference's alternating rhythm ---- */
+.mg-pair { padding: calc(110 * var(--u)) 0; }
+.mg-pair__grid {
+  display: flex;
+  align-items: center;
+  gap: calc(90 * var(--u));
+}
+.mg-pair__shot {
+  flex: 0 0 calc(560 * var(--u));
+  height: calc(430 * var(--u));
+  margin: 0;
+  overflow: hidden;
+  background: #e7e2d8;
+}
+.mg-pair__shot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.mg-pair__copy { flex: 1 1 0; min-width: 0; }
+.mg-pair__copy .mg-p:first-of-type { margin-top: calc(24 * var(--u)); }
+
+/* ---- before you visit: the reference's useful-information block ---- */
+.mg-know { padding: calc(110 * var(--u)) 0 calc(120 * var(--u)); }
+.mg-know__head { width: calc(700 * var(--u)); }
+.mg-know__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: calc(54 * var(--u)) calc(60 * var(--u));
+  margin-top: calc(70 * var(--u));
+}
+.mg-know__grid > div {
+  padding-top: calc(26 * var(--u));
+  border-top: 1px solid rgba(0, 0, 0, 0.32);
+}
+.mg-know__grid .mg-h3 { font-size: calc(24 * var(--u)); line-height: calc(32 * var(--u)); }
+.mg-know__grid p {
+  margin: calc(14 * var(--u)) 0 0;
+  font-family: "Manrope", sans-serif;
+  font-size: calc(14 * var(--u));
+  line-height: calc(24 * var(--u));
+  letter-spacing: calc(-0.28 * var(--u));
+  color: rgba(29, 25, 20, 0.74);
+}
+
+/* ---- nearby: the map — 334:112 -----------------------------------------
+   A window on the map with an information card beside it. The map opens
+   at the width of the page, both edges of the drawing showing, and the
+   controls take it in from there; the section is painted the paper's own
+   colour so there is no seam to find between the two.
+
+   Which place the card is showing is held by a radio group, not by
+   script: the card switches on :checked, so choosing a pin works before
+   the drag script loads and keeps working if it never does. ------------- */
+.mgm {
+  padding: calc(110 * var(--u)) 0 calc(120 * var(--u));
+  background: #f8f0e5;
+}
+
+.mgm__stage {
+  position: relative;
+  width: 100%;
+  height: calc(806 * var(--u));
+  margin-top: calc(58 * var(--u));
+  background: #f8f0e5;
+  overflow: hidden;
+}
+
+.mgm__pane {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  cursor: grab;
+  /* sideways drags pan the map, up and down still scrolls the page: a
+     full-width box that swallowed the flick would trap the reader */
+  touch-action: pan-y;
+}
+.mgm__pane.is-dragging { cursor: grabbing; }
+
+/* the static offsets are the opening frame. The script moves the plate
+   from here with a transform and never rewrites them, so a page with no
+   script still opens on Muscat instead of on the empty Gulf. */
+/* at rest the plate is exactly the width of the page — both edges of
+   the drawing on screen, nothing cropped at the sides — and hangs a
+   little above the window so the country sits in the middle of it. The
+   script scales and moves it from here and never rewrites these, so a
+   page with no script still gets the whole map. */
+.mgm__plate {
+  position: absolute;
+  left: 0;
+  top: calc(-152 * var(--u));
+  width: 100%;
+  aspect-ratio: 3473 / 2798;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+.mgm__plate.is-easing { transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+.mgm__plate > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.mgm__pins { margin: 0; padding: 0; list-style: none; }
+
+/* each spot is a point, not a box: the pin hangs off it by its own
+   centre, so it stays tied to the same place on the drawing however it
+   is sized */
+.mgm__spot {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: 0;
+  height: 0;
+}
+
+/* the radio is the state. It stays reachable by keyboard, just not
+   visible, and the pin beside it is its label. */
+.mgm__radio {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* the pin is counter-scaled against the plate, so zooming in enlarges
+   the country and not the furniture standing on it */
+.mgm__pin {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: calc(20 * var(--u));
+  height: calc(20 * var(--u));
+  transform: translate(-50%, -50%) scale(calc(1 / var(--z, 1)));
+  cursor: pointer;
+}
+
+/* the ping, on the pins nobody has chosen yet */
+.mgm__pin::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgba(17, 50, 64, 0.45);
+  transform: translate(-50%, -50%);
+  animation: mgmPing 1.9s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+@keyframes mgmPing {
+  0%   { opacity: 0.65; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0;    transform: translate(-50%, -50%) scale(1.9); }
+}
+
+.mgm__dot {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 calc(1 * var(--u)) calc(4 * var(--u)) rgba(29, 25, 20, 0.28);
+  transition: background 0.3s cubic-bezier(0.165, 0.84, 0.44, 1),
+              transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+.mgm__dot::before {
+  content: "";
+  width: calc(6 * var(--u));
+  height: calc(6 * var(--u));
+  border-radius: 50%;
+  background: #113240;
+  transition: background 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.mgm__label {
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 6 * var(--u));
+  transform: translateY(-50%);
+  padding: calc(3 * var(--u)) calc(6 * var(--u));
+  border-radius: calc(2 * var(--u));
+  font-family: "Forum", serif;
+  font-size: calc(13 * var(--u));
+  line-height: calc(15 * var(--u));
+  letter-spacing: calc(1.17 * var(--u));        /* 9%, as the map is drawn */
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-align: left;
+  color: rgba(17, 50, 64, 0.76);
+  transition: color 0.3s cubic-bezier(0.165, 0.84, 0.44, 1),
+              background-color 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+.mgm__label em {
+  display: block;
+  margin-top: calc(3 * var(--u));
+  font-style: normal;
+  font-size: calc(11 * var(--u));
+  letter-spacing: calc(0.99 * var(--u));
+  color: rgba(17, 50, 64, 0.62);
+}
+
+/* hover, and then the harder state: the one the card is showing. The
+   board draws both as ink on the paper rather than as a chip, so the
+   dot carries the change and the label only firms up. */
+.mgm__pin:hover .mgm__dot,
+.mgm__radio:checked + .mgm__pin .mgm__dot { background: #113240; }
+.mgm__pin:hover .mgm__dot::before,
+.mgm__radio:checked + .mgm__pin .mgm__dot::before { background: #fff; }
+.mgm__pin:hover .mgm__label,
+.mgm__radio:checked + .mgm__pin .mgm__label { color: #113240; }
+
+.mgm__radio:checked + .mgm__pin { cursor: default; }
+.mgm__radio:checked + .mgm__pin::before { display: none; }
+.mgm__radio:checked + .mgm__pin .mgm__dot { transform: scale(1.12); }
+.mgm__radio:focus-visible + .mgm__pin .mgm__dot {
+  box-shadow: 0 0 0 calc(3 * var(--u)) rgba(17, 50, 64, 0.55);
+}
+
+/* a spot flips when the map has printed its own name to the right */
+.mgm__spot--flip .mgm__label {
+  left: auto;
+  right: calc(100% + 6 * var(--u));
+  text-align: right;
+}
+
+/* ---- the controls, in the corner the card leaves free ---- */
+.mgm__tools {
+  position: absolute;
+  right: calc(133 * var(--u));                /* the page gutter */
+  bottom: calc(34 * var(--u));
+  display: flex;
+  align-items: center;
+  gap: calc(10 * var(--u));
+}
+.mgm__zoom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(38 * var(--u));
+  height: calc(38 * var(--u));
+  padding: 0;
+  border: 1px solid rgba(17, 50, 64, 0.32);
+  border-radius: 50%;
+  background: rgba(248, 240, 229, 0.9);
+  color: #113240;
+  font-family: "Forum", serif;
+  font-size: calc(21 * var(--u));
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+.mgm__zoom:hover { background: #113240; border-color: #113240; color: #f8f0e5; }
+.mgm__zoom[disabled] { opacity: 0.34; cursor: default; }
+.mgm__zoom[disabled]:hover { background: rgba(248, 240, 229, 0.9); border-color: rgba(17, 50, 64, 0.32); color: #113240; }
+.mgm__zoom svg { width: calc(13 * var(--u)); height: calc(13 * var(--u)); }
+
+.mgm__hint {
+  margin: 0 0 0 calc(4 * var(--u));
+  font-family: "Forum", serif;
+  font-size: calc(13 * var(--u));
+  line-height: calc(18 * var(--u));
+  letter-spacing: calc(1.17 * var(--u));
+  text-transform: uppercase;
+  color: rgba(17, 50, 64, 0.5);
+  pointer-events: none;
+}
+
+/* the board hangs this on the right, where its map had nothing but
+   sea. With the whole drawing on screen the country sits centre-right
+   instead, so the card takes the empty side and leaves the coast — and
+   every pin on it — in the clear. */
+/* ---- the card, 334:122 ---- */
+.mgm__card {
+  position: absolute;
+  left: calc(133 * var(--u));
+  top: calc(159 * var(--u));
+  width: calc(405 * var(--u));
+  /* the board draws a fixed 502 tall box around copy that happens to
+     fill it. Six panels of different lengths do not, so the height
+     follows the copy and the space under the last line stays equal to
+     the space at the sides. */
+  height: auto;
+  padding: calc(36 * var(--u)) calc(26 * var(--u)) calc(26 * var(--u));
+  background: #fff;
+}
+.mgm__panel { display: none; }
+.mgm__panel > * { animation: mgmCard 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.mgm__panel > *:nth-child(2) { animation-delay: 0.05s; }
+.mgm__panel > *:nth-child(3) { animation-delay: 0.09s; }
+.mgm__panel > *:nth-child(4) { animation-delay: 0.13s; }
+@keyframes mgmCard {
+  from { opacity: 0; transform: translateY(calc(10 * var(--u))); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* one rule per place: the card follows the radio with nothing in
+   between. :has() is what reaches from the stage down to the checked
+   input, and it is the only way across from the map to the card. */
+/* the mosque panel also stands as the fallback: a browser without
+   :has() ignores every rule below and simply keeps showing it */
+.mgm__panel--mosque { display: block; }
+.mgm__stage:has(.mgm__radio:checked:not(#mgm-mosque)) .mgm__panel--mosque { display: none; }
+
+.mgm__stage:has(#mgm-mosque:checked)   .mgm__panel--mosque   { display: block; }
+.mgm__stage:has(#mgm-musandam:checked) .mgm__panel--musandam { display: block; }
+.mgm__stage:has(#mgm-rustaq:checked)   .mgm__panel--rustaq   { display: block; }
+.mgm__stage:has(#mgm-nizwa:checked)    .mgm__panel--nizwa    { display: block; }
+.mgm__stage:has(#mgm-shab:checked)     .mgm__panel--shab     { display: block; }
+.mgm__stage:has(#mgm-wahiba:checked)   .mgm__panel--wahiba   { display: block; }
+
+.mgm__shot {
+  display: block;
+  width: 100%;
+  height: calc(269 * var(--u));
+  object-fit: cover;
+  background: #e7e2d8;
+}
+.mgm__from {
+  margin: 0;
+  font-family: "Baskervville", serif;
+  font-style: italic;
+  font-size: calc(16 * var(--u));
+  line-height: calc(36 * var(--u));
+  letter-spacing: calc(-0.32 * var(--u));
+  text-align: right;
+  color: #000;
+}
+.mgm__name {
+  margin: calc(11 * var(--u)) 0 0;
+  font-family: "Forum", serif;
+  font-weight: 400;
+  font-size: calc(29 * var(--u));
+  line-height: calc(36 * var(--u));
+  letter-spacing: calc(-0.58 * var(--u));
+  color: #000;
+}
+.mgm__blurb {
+  margin: calc(9 * var(--u)) 0 0;
+  font-family: "Forum", serif;
+  font-size: calc(18 * var(--u));
+  line-height: calc(26 * var(--u));
+  letter-spacing: calc(-0.36 * var(--u));
+  color: #000;
+}
+
+.mg-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(10 * var(--u));
+  height: calc(38 * var(--u));
+  margin-top: calc(74 * var(--u));
+  padding: 0 calc(28 * var(--u));
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.56);
+  border-radius: calc(23 * var(--u));
+  font-family: "Manrope", sans-serif;
+  font-weight: 700;
+  font-size: calc(14 * var(--u));
+  letter-spacing: calc(-0.28 * var(--u));
+  color: #111827;
+  text-decoration: none;
+  transition: background 0.35s ease, border-color 0.35s ease, color 0.35s ease;
+}
+.mg-back svg { width: calc(15 * var(--u)); height: calc(15 * var(--u)); min-width: 11px; min-height: 11px; }
+.mg-back:hover { background: #113240; border-color: #113240; color: #fff; }
+
+/* sections settle on arrival, like every other section on the site */
+.mg__fade {
+  opacity: 0;
+  transform: translateY(calc(24 * var(--u)));
+  transition: opacity 0.9s ease, transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--d, 0s);
+}
+.mg.is-revealed .mg__fade { opacity: 1; transform: none; }
+
+/* ================= the footer, as the home page has it ================= */
+.foot {
+  --u: calc(100cqw / 1441);
+  position: relative;
+  width: 100%;
+  background: #113240;
+  color: #efdfdf;
+  padding: calc(56 * var(--u)) calc(36 * var(--u)) calc(56 * var(--u)) calc(23 * var(--u));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(40 * var(--u));
+}
+.foot__logo {
+  flex-shrink: 0;
+  width: calc(65 * var(--u));
+  font-family: "Fondamento", cursive;
+  color: #efdfdf;
+  text-align: center;
+  letter-spacing: calc(-0.5 * var(--u));
+  white-space: nowrap;
+  text-decoration: none;
+}
+.foot__logo span { display: block; line-height: calc(15 * var(--u)); }
+.foot__logo .v { font-size: calc(21 * var(--u)); }
+.foot__logo .o { font-size: calc(25 * var(--u)); }
+.foot__links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: calc(18 * var(--u)) calc(46 * var(--u));
+  font-family: "Manrope", sans-serif;
+  font-size: calc(16 * var(--u));
+  line-height: normal;
+}
+.foot__links a { color: inherit; text-decoration: none; opacity: 0.86; transition: opacity 0.25s ease; }
+.foot__links a:hover { opacity: 1; }
+.foot__links a:focus-visible {
+  opacity: 1;
+  outline: 1px solid rgba(239, 223, 223, 0.7);
+  outline-offset: calc(6 * var(--u));
+}
+
+/* ================= narrow screens =================
+   The same move the rest of the site makes: --u stops driving type,
+   clamp() takes over, and every row becomes a column. */
+@media (max-width: 899px) {
+  .mg-hero {
+    height: auto;
+    min-height: 0;
+    padding: clamp(150px, 34vw, 260px) 0 0;
+  }
+  .mg-hero__range { width: 190%; bottom: clamp(80px, 20vw, 150px); }
+  .mg-hero__plate {
+    position: relative;
+    left: auto;
+    bottom: auto;
+    width: 148%;
+    margin: clamp(30px, 8vw, 60px) 0 0 -30%;
+    transform: none !important;   /* no parallax once it is in flow */
+  }
+  /* the building grounds itself against the copy panel down here */
+  .mg-hero__floor { display: none; }
+  /* only the top needs darkening now — that is where the nav sits */
+  .mg-hero__scrim {
+    background: linear-gradient(180deg,
+                rgba(12, 39, 51, 0.78) 0%,
+                rgba(12, 39, 51, 0.24) 30%,
+                rgba(12, 39, 51, 0) 52%);
+  }
+  /* In flow the copy lands below the plate, on the pale end of the sky,
+     where white type has nothing to hold against. So it takes its own
+     ground — the navy the rest of the site already uses. */
+  .mg-hero__copy {
+    position: static;
+    width: auto;
+    margin-top: -1px;                 /* no hairline of sky at the seam */
+    padding: clamp(30px, 8vw, 46px) clamp(20px, 5.6vw, 44px) clamp(38px, 10vw, 60px);
+    background: #113240;
+  }
+  .mg-eyebrow { margin-bottom: 14px; font-size: 11px; letter-spacing: 0.09em; }
+  .mg-hero__title {
+    font-size: clamp(38px, 10vw, 66px);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+  }
+  .mg-hero__sub { width: auto; max-width: 40ch; margin-top: 18px; font-size: 16px; line-height: 1.6; }
+
+  .nav { position: absolute; gap: 0; justify-content: space-between;
+         left: clamp(20px, 5.6vw, 44px); right: clamp(20px, 5.6vw, 44px);
+         top: 22px; width: auto; height: auto; }
+  .nav__links { display: none; }
+  .nav__logo { width: auto; }
+  .nav__logo .v { font-size: 21px; }
+  .nav__logo .o { font-size: 25px; }
+  .nav__logo span { line-height: 15px; }
+  .nav__cta { width: auto; height: 38px; padding: 0 20px; font-size: 12px; border-radius: 999px; }
+
+  .mg { --gut: clamp(20px, 5.6vw, 44px); }
+  .mg__wrap { padding: 0 var(--gut); }
+  .mg-h2 { font-size: clamp(28px, 7.4vw, 46px); line-height: 1.2; letter-spacing: -0.028em; }
+  .mg-h3 { font-size: clamp(19px, 4.8vw, 26px); line-height: 1.32; letter-spacing: -0.015em; }
+  .mg-p  { margin-top: 16px; font-size: 16px; line-height: 1.7; }
+  .mg-label { font-size: 13px; letter-spacing: 0.13em; }
+
+  /* ---- 02 and 03 unroll: the board's absolute coordinates are dropped
+     for normal flow, and the two columns become one ---- */
+  .mg-lede, .mg-story {
+    height: auto;
+    padding: clamp(56px, 13vw, 100px) 0 0;
+  }
+  .mg-story { padding-bottom: clamp(60px, 14vw, 110px); }
+  .mg-lede__p, .mg-stats, .mg-shot, .mg-col-title,
+  .mg-spec, .mg-look, .mg-quote, .mg-prose {
+    position: static;
+    left: auto; top: auto; width: auto;
+  }
+  .mg-lede__p {
+    margin: 0 var(--gut);
+    font-size: clamp(21px, 5.4vw, 30px);
+    line-height: 1.36;
+    letter-spacing: -0.015em;
+  }
+  .mg-pattern { left: -16%; top: auto; bottom: 0; width: 62%; height: auto; }
+
+  .mg-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(20px, 5vw, 32px);
+    margin: clamp(34px, 9vw, 60px) var(--gut) 0;
+  }
+  .mg-stats li,
+  .mg-stats li:nth-child(1), .mg-stats li:nth-child(3),
+  .mg-stats li:nth-child(5), .mg-stats li:nth-child(7) {
+    width: auto;
+    font-size: 12px;
+    line-height: 1.55;
+    letter-spacing: 0.12em;
+  }
+  .mg-stats .sep { display: none; }
+
+  .mg-shot {
+    display: block;
+    margin: clamp(34px, 9vw, 60px) var(--gut) 0;
+    height: auto;
+  }
+  .mg-shot--arch { aspect-ratio: 1 / 1; }
+  .mg-shot--hall { aspect-ratio: 563 / 750; }
+
+  .mg-col-title {
+    margin: clamp(34px, 9vw, 58px) var(--gut) 0;
+    font-size: clamp(21px, 5.4vw, 27px);
+    line-height: 1.3;
+    letter-spacing: -0.015em;
+  }
+  .mg-spec, .mg-look { margin: clamp(18px, 4.5vw, 28px) var(--gut) 0; }
+  .mg-look { margin-bottom: clamp(20px, 5vw, 32px); }
+  .mg-spec dt { font-size: 15px; line-height: 1.6; }
+  .mg-spec dd { font-size: 16px; line-height: 1.62; }
+  .mg-spec dd + dt { margin-top: 18px; }
+  .mg-look { padding-left: 20px; }
+  .mg-look li { margin-bottom: 14px; padding-left: 2px; font-size: 16px; line-height: 1.62; }
+
+  .mg-quote {
+    margin: clamp(40px, 10vw, 70px) var(--gut) 0;
+    font-size: clamp(21px, 5.4vw, 30px);
+    line-height: 1.36;
+    letter-spacing: -0.015em;
+  }
+  .mg-prose { margin: clamp(30px, 8vw, 50px) var(--gut) 0; }
+  .mg-prose--b { margin-top: 0; }
+  .mg-prose p { margin-bottom: 16px; font-size: 16px; line-height: 1.65; }
+
+  .mg-band { height: clamp(200px, 52vw, 340px); }
+  .mg-band img { width: 190%; bottom: clamp(-30px, -6vw, -12px); }
+  .mg-band figcaption { left: var(--gut); bottom: 14px; font-size: 11px; letter-spacing: 0.1em; }
+
+  .mg-pair { padding: clamp(56px, 13vw, 100px) 0; }
+  .mg-pair__grid { display: block; }
+  .mg-pair__shot { height: clamp(220px, 56vw, 360px); }
+  .mg-pair__copy { margin-top: clamp(26px, 7vw, 44px); }
+  .mg-pair__copy .mg-p:first-of-type { margin-top: 16px; }
+
+  .mg-know { padding: clamp(56px, 13vw, 100px) 0; }
+  .mg-know__head { width: auto; }
+  .mg-know__grid { grid-template-columns: 1fr; gap: clamp(24px, 6vw, 38px); margin-top: clamp(32px, 8vw, 56px); }
+  .mg-know__grid > div { padding-top: 18px; }
+  .mg-know__grid .mg-h3 { font-size: 18px; line-height: 1.35; }
+  .mg-know__grid p { margin-top: 10px; font-size: 14px; line-height: 1.65; }
+
+  /* the map window takes the column and the card drops underneath it.
+     Everything on the plate is re-sized in pixels: at this width one
+     Figma unit is a quarter of a pixel and the pins would vanish. */
+  .mgm { padding: clamp(56px, 13vw, 100px) 0 clamp(64px, 15vw, 120px); }
+  .mgm__stage {
+    height: auto;
+    margin-top: clamp(28px, 7vw, 48px);
+    padding-bottom: clamp(20px, 5vw, 32px);
+  }
+  /* the window takes the shape of the map itself: at this width the
+     whole country fits inside it, so nothing is cropped in either
+     direction until someone zooms in */
+  .mgm__pane {
+    position: relative;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3473 / 2798;
+  }
+  .mgm__plate { left: 0; top: 0; width: 100%; }
+  .mgm__pin { width: 15px; height: 15px; }
+  .mgm__dot::before { width: 5px; height: 5px; }
+  .mgm__label {
+    left: calc(100% + 4px);
+    padding: 2px 4px;
+    border-radius: 2px;
+    font-size: 9px;
+    line-height: 10px;
+    letter-spacing: 0.07em;
+    /* at this size six standing labels sit on top of each other, so the
+       map shows the one it is telling you about and the one you are
+       standing on. Opacity, not display: the labels stay readable to a
+       screen reader either way. */
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+  .mgm__spot--flip .mgm__label { right: calc(100% + 4px); }
+  .mgm__label em { margin-top: 2px; font-size: 8px; letter-spacing: 0.06em; }
+  .mgm__pin--here .mgm__label { width: 62px; }
+  .mgm__pin:hover .mgm__label,
+  .mgm__radio:checked + .mgm__pin .mgm__label,
+  .mgm__radio:focus-visible + .mgm__pin .mgm__label { opacity: 1; }
+  .mgm__radio:focus-visible + .mgm__pin .mgm__dot { box-shadow: 0 0 0 3px rgba(17, 50, 64, 0.55); }
+  .mgm__tools { left: var(--gut); bottom: 12px; gap: 8px; }
+  .mgm__zoom { width: 34px; height: 34px; }
+  .mgm__zoom svg { width: 12px; height: 12px; }
+  .mgm__hint { margin-left: 2px; font-size: 10px; letter-spacing: 0.08em; }
+
+  .mgm__card {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: clamp(18px, 4.5vw, 28px) var(--gut) 0;
+    padding: clamp(16px, 4vw, 24px);
+  }
+  .mgm__shot { height: clamp(180px, 48vw, 260px); }
+  .mgm__from { font-size: 14px; line-height: 30px; }
+  .mgm__name { margin-top: 8px; font-size: clamp(19px, 4.8vw, 26px); line-height: 1.32; }
+  .mgm__blurb { margin-top: 10px; font-size: 16px; line-height: 1.62; }
+  .mg-back { height: 44px; margin-top: clamp(34px, 8vw, 56px); padding: 0 22px; border-radius: 999px; font-size: 14px; }
+  .mg-back svg { width: 14px; height: 14px; }
+
+  .foot {
+    --u: calc(100cqw / 700);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: calc(34 * var(--u));
+    padding: calc(46 * var(--u)) calc(26 * var(--u));
+  }
+  .foot__logo { width: auto; text-align: left; }
+  .foot__logo span { line-height: calc(34 * var(--u)); }
+  .foot__logo .v { font-size: calc(44 * var(--u)); }
+  .foot__logo .o { font-size: calc(52 * var(--u)); }
+  .foot__links { font-size: calc(28 * var(--u)); gap: calc(20 * var(--u)) calc(36 * var(--u)); }
+}
+
+/* ---- reduced motion: everything has already arrived, nothing drifts ---- */
+@media (prefers-reduced-motion: reduce) {
+  .line i { transform: none; }
+  .r-fade, .mg__fade { opacity: 1; transform: none; filter: none; transition: none; }
+  .mg-pattern { opacity: 0.29; transition: none; }
+  .mg-hero__plate { transform: translateX(-50%) !important; }
+  .mgm__pin::before { animation: none; opacity: 0.35; }
+  .mgm__panel > * { animation: none; }
+  .mgm__plate.is-easing { transition: none; }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+  <!-- ================= hero ================= -->
+  <header class="mg-hero">
+    <img class="mg-hero__range" src="assets/layer-sky-mountains.png" alt="" aria-hidden="true" />
+    <div class="mg-hero__scrim"></div>
+    <img class="mg-hero__plate" src="assets/layer-mosque.png"
+         alt="The Sultan Qaboos Grand Mosque: a sandstone prayer hall under a ribbed dome, with the main minaret standing away to the left across the courtyard." />
+    <div class="mg-hero__floor"></div>
+
+    <nav class="nav" aria-label="Main">
+      <a class="nav__logo" href="index.html" aria-label="Visit Oman — home">
+        <span class="v">Visit</span><span class="o">Oman</span>
+      </a>
+      <div class="nav__links">
+        <a href="index.html#journey">Explore</a>
+        <a href="index.html#things-to-do">Experience</a>
+        <a href="index.html">Stay &amp; Journey</a>
+        <a href="index.html#useful">Plan your visit</a>
+      </div>
+      <a class="nav__cta" href="#">GET IN TOUCH</a>
+    </nav>
+
+    <div class="mg-hero__copy">
+      <p class="mg-eyebrow">Bawshar · Muscat</p>
+      <h1 class="mg-hero__title">
+        <span class="line"><i>Sultan Qaboos</i></span>
+        <span class="line"><i>Grand Mosque</i></span>
+      </h1>
+      <p class="mg-hero__sub r-fade">Oman's principal mosque, and the rare one that opens
+        its doors to visitors of every faith — for three hours, every morning but Friday.</p>
+    </div>
+  </header>
+
+  <!-- ================= 02 — lede, stats, arch, essentials ================= -->
+  <section class="mg mg--sand mg-lede" aria-labelledby="essentials-title">
+
+    <img class="mg-pattern" src="assets/s6-pattern.png" alt="" aria-hidden="true" loading="lazy" />
+
+    <p class="mg-lede__p mg__fade" data-node-id="322:30">It was finished in 2001, after six years
+      of building, because a ruler decided his country should have one great mosque of its own.
+      It holds twenty thousand worshippers. And between eight and eleven each morning, it belongs
+      to everybody else as well.</p>
+
+    <ul class="mg-stats mg__fade" style="--d:0.08s" data-node-id="322:93">
+      <li>Opened<br />in 2001</li>
+      <li class="sep" aria-hidden="true"></li>
+      <li>Over 20,000<br />Worshippers</li>
+      <li class="sep" aria-hidden="true"></li>
+      <li>4,300 m²<br />One-piece carpet</li>
+      <li class="sep" aria-hidden="true"></li>
+      <li>90m Tallest minaret</li>
+    </ul>
+
+    <figure class="mg-shot mg-shot--arch mg__fade" style="--d:0.14s" data-node-id="322:35">
+      <img src="assets/mosque-arch.png"
+           alt="The mosque's main entrance arch, carved with Qur'anic inscription, framing two further arches and the minaret beyond."
+           loading="lazy" />
+    </figure>
+
+    <h2 class="mg-col-title mg-col-title--essentials mg__fade" style="--d:0.1s"
+        id="essentials-title" data-node-id="322:70">The Essentials</h2>
+
+    <dl class="mg-spec mg__fade" style="--d:0.16s" data-node-id="322:42">
+      <dt>Where</dt>
+      <dd>Bawshar, on Sultan Qaboos Street, about 20 minutes west of Old Muscat</dd>
+      <dt>Open to visitors</dt>
+      <dd>Saturday to Thursday, 8:00–11:00. Closed to visitors on Fridays</dd>
+      <dt>Entry</dt>
+      <dd>Free. No ticket to book in advance</dd>
+      <dt>Allow</dt>
+      <dd>60 to 90 minutes, longer if the light is good</dd>
+      <dt>Dress</dt>
+      <dd>Arms and legs covered. Women cover their hair</dd>
+    </dl>
+
+  </section>
+
+  <!-- ================= 03 — prayer hall, look for, quote, prose ================= -->
+  <section class="mg mg--sand mg-story" aria-labelledby="look-title">
+
+    <figure class="mg-shot mg-shot--hall mg__fade" data-node-id="322:67">
+      <img src="assets/mosque-hall.png"
+           alt="The main prayer hall: the single-piece Persian carpet running away under the crystal chandeliers."
+           loading="lazy" />
+    </figure>
+
+    <h2 class="mg-col-title mg-col-title--look mg__fade" style="--d:0.06s"
+        id="look-title" data-node-id="322:72">What to look for</h2>
+
+    <ul class="mg-look mg__fade" style="--d:0.12s" data-node-id="322:69">
+      <li>The prayer-hall carpet — one piece, no seams, four years on the loom</li>
+      <li>The Swarovski chandelier hanging some fourteen metres above it</li>
+      <li>Five minarets, one for each pillar of Islam</li>
+      <li>The marble courtyard, at its best in the low morning light</li>
+      <li>The library and the Islamic Information Centre, both open to visitors</li>
+    </ul>
+
+    <p class="mg-quote mg__fade" style="--d:0.18s" data-node-id="322:74">One carpet. No seams.
+      Four years on the loom, and something in the order of 1.7 billion knots underfoot.</p>
+
+    <div class="mg-prose mg-prose--a mg__fade" style="--d:0.22s" data-node-id="322:78">
+      <p>In 1992 Sultan Qaboos bin Said announced that Oman should have a grand mosque, and opened
+        the design to competition. Ground was broken in 1995. Six years and four months later, in
+        May 2001, the mosque opened its gates.</p>
+      <p>It is built from some 300,000 tonnes of Indian sandstone, and it borrows openly — Omani,
+        Persian, Mughal and Egyptian ideas share the same walls without arguing about it. The five
+        minarets stand for the five pillars of Islam: the main one rises about ninety metres, the
+        four around it roughly half that.</p>
+    </div>
+
+    <div class="mg-prose mg-prose--b mg__fade" style="--d:0.26s" data-node-id="322:92">
+      <p>The main prayer hall takes around 6,500 people and the complex about 20,000, which is most
+        of a small town. Above the floor hangs a chandelier of Swarovski crystal, gold-plated and
+        roughly fourteen metres tall — for a time, the largest in the world.</p>
+      <p>Beneath it lies the reason most people come. A single carpet, woven in one piece in Iran by
+        around 600 weavers over four years: some 4,300 square metres of wool and cotton, laid
+        without a seam anywhere in it. Until Abu Dhabi's Sheikh Zayed Mosque took the record in
+        2007, it was the largest carpet ever made.</p>
+    </div>
+
+  </section>
+
+  <!-- ================= the band ================= -->
+  <figure class="mg mg-band">
+    <img src="assets/layer-mosque.png"
+         alt="The mosque's western arcade running back towards the main minaret, seen across the marble courtyard." />
+    <figcaption>The western arcade, and the main minaret beyond it</figcaption>
+  </figure>
+
+  <!-- ================= image against text ================= -->
+  <section class="mg mg--white mg-pair" aria-labelledby="pair-title">
+    <div class="mg__wrap">
+      <div class="mg-pair__grid">
+
+        <figure class="mg-pair__shot mg__fade">
+          <img src="assets/pexels-beladiya-nikunj-742323377-38036762.jpg"
+               alt="Omani men in dishdashas and embroidered kummas playing hand drums in a fort gateway"
+               loading="lazy" />
+        </figure>
+
+        <div class="mg-pair__copy mg__fade" style="--d:0.1s">
+          <h2 class="mg-h2" id="pair-title">
+            <span class="line"><i>A working mosque,</i></span>
+            <span class="line"><i>first and always</i></span>
+          </h2>
+          <p class="mg-p">The visiting hours exist because the rest of the day is spoken for.
+            Five times over, the courtyard fills and empties again, and what you are walking
+            through at nine in the morning is somebody's Tuesday.</p>
+          <p class="mg-p">Which is the whole reason it is worth the early start. Guides stand
+            about inside the main hall with nothing to sell and no fee to collect — ask them
+            anything. Oman's own tradition is Ibadi Islam, older and quieter than the branches
+            most visitors have heard of, and the Islamic Information Centre by the eastern gate
+            exists precisely so that people can come and ask about it.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= before you visit ================= -->
+  <section class="mg mg--cream mg-know" aria-labelledby="know-title">
+    <div class="mg__wrap">
+
+      <div class="mg-know__head">
+        <h2 class="mg-h2" id="know-title">
+          <span class="line"><i>Before you go</i></span>
+        </h2>
+        <p class="mg-p">It is a working mosque before it is anything else, and the rules that
+          come with that are simple, few, and taken seriously at the gate.</p>
+      </div>
+
+      <div class="mg-know__grid">
+        <div class="mg__fade" style="--d:0.04s">
+          <h3 class="mg-h3">Hours</h3>
+          <p>Saturday to Thursday, 8:00 to 11:00 in the morning, and not on Fridays. Hours
+            shorten during Ramadan and around religious holidays, so check before you set out
+            rather than after.</p>
+        </div>
+        <div class="mg__fade" style="--d:0.08s">
+          <h3 class="mg-h3">Dress</h3>
+          <p>Long sleeves and long trousers or a long skirt, for everyone. Women cover their
+            hair with a scarf. Nothing sheer, nothing tight. Scarves can usually be borrowed or
+            bought at the entrance, but bringing your own is one less thing to do.</p>
+        </div>
+        <div class="mg__fade" style="--d:0.12s">
+          <h3 class="mg-h3">Shoes</h3>
+          <p>Off before you step into any prayer hall — there are racks at every door. The
+            marble courtyard is walked barefoot or shod, as you prefer, though by mid-morning
+            it holds the heat.</p>
+        </div>
+        <div class="mg__fade" style="--d:0.16s">
+          <h3 class="mg-h3">Entry</h3>
+          <p>Free, and there is nothing to book. Arrive close to eight if you want the main hall
+            quiet; by half past nine the coaches have found it. Guides are on hand inside and
+            cost nothing to ask.</p>
+        </div>
+        <div class="mg__fade" style="--d:0.2s">
+          <h3 class="mg-h3">Photography</h3>
+          <p>Welcome, within reason. No photographs of people at prayer, and tripods or anything
+            commercial need permission arranged in advance. Phones are fine everywhere visitors
+            are.</p>
+        </div>
+        <div class="mg__fade" style="--d:0.24s">
+          <h3 class="mg-h3">Getting there</h3>
+          <p>Roughly 15 minutes by taxi from Qurum and 20 to 25 from Mutrah, with a large free
+            car park if you are driving yourself. Most Muscat half-day tours open here, which is
+            the other reason to come early.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= nearby: the map — 334:112 =================
+       Pins carry their position as --x/--y percentages of the plate, so
+       the set scales with the drawing and nothing has to be re-measured.
+       Each pin is the label of a radio, and the card beside the map is
+       six stacked panels of which :checked shows one. -->
+  <section class="mg mgm" aria-labelledby="near-title">
+    <div class="mg__wrap">
+
+      <h2 class="mg-h2" id="near-title">
+        <span class="line"><i>While you are out here</i></span>
+      </h2>
+      <p class="mg-p" style="max-width: 62ch">The mosque closes to visitors at eleven, which leaves
+        the better part of a day. Drag the map, zoom in on the coast, and choose a pin for what is
+        there — everything on it is a drive worth making.</p>
+
+    </div>
+
+    <div class="mgm__stage mg__fade">
+
+      <div class="mgm__pane" role="group" tabindex="0"
+           aria-label="Map of northern Oman — drag it, or use the arrow keys, to move it">
+        <div class="mgm__plate">
+          <img src="assets/map.jpg" loading="lazy"
+               alt="A watercolour map of Oman, showing Muscat on the north-east coast with the
+                    Hajar mountains behind it and the Musandam peninsula to the north." />
+
+          <ul class="mgm__pins">
+
+            <li class="mgm__spot" style="--x:64.5%; --y:34.8%">
+              <input class="mgm__radio" type="radio" name="mgm" id="mgm-mosque" checked />
+              <label class="mgm__pin mgm__pin--here" for="mgm-mosque">
+                <span class="mgm__dot"></span>
+                <span class="mgm__label">Grand Mosque<em>You are here</em></span>
+              </label>
+            </li>
+
+            <li class="mgm__spot mgm__spot--flip" style="--x:54%; --y:16.8%">
+              <input class="mgm__radio" type="radio" name="mgm" id="mgm-musandam" />
+              <label class="mgm__pin" for="mgm-musandam">
+                <span class="mgm__dot"></span>
+                <span class="mgm__label">Musandam</span>
+              </label>
+            </li>
+
+            <li class="mgm__spot mgm__spot--flip" style="--x:59.7%; --y:36.2%">
+              <input class="mgm__radio" type="radio" name="mgm" id="mgm-rustaq" />
+              <label class="mgm__pin" for="mgm-rustaq">
+                <span class="mgm__dot"></span>
+                <span class="mgm__label">Al-Rustaq</span>
+              </label>
+            </li>
+
+            <li class="mgm__spot mgm__spot--flip" style="--x:60.3%; --y:39.4%">
+              <input class="mgm__radio" type="radio" name="mgm" id="mgm-nizwa" />
+              <label class="mgm__pin" for="mgm-nizwa">
+                <span class="mgm__dot"></span>
+                <span class="mgm__label">Nizwa</span>
+              </label>
+            </li>
+
+            <li class="mgm__spot" style="--x:69%; --y:40.6%">
+              <input class="mgm__radio" type="radio" name="mgm" id="mgm-shab" />
+              <label class="mgm__pin" for="mgm-shab">
+                <span class="mgm__dot"></span>
+                <span class="mgm__label">Wadi Shab &amp; Sur</span>
+              </label>
+            </li>
+
+            <li class="mgm__spot mgm__spot--flip" style="--x:66.5%; --y:47.2%">
+              <input class="mgm__radio" type="radio" name="mgm" id="mgm-wahiba" />
+              <label class="mgm__pin" for="mgm-wahiba">
+                <span class="mgm__dot"></span>
+                <span class="mgm__label">Wahiba Sands</span>
+              </label>
+            </li>
+
+          </ul>
+        </div>
+
+        <!-- unhidden by the script: without it there is nothing to
+             zoom, and a dead button is worse than none -->
+        <div class="mgm__tools" hidden>
+          <button class="mgm__zoom" type="button" data-zoom="in" aria-label="Zoom in">
+            <svg viewBox="0 0 13 13" fill="none" aria-hidden="true">
+              <path d="M6.5 0v13M0 6.5h13" stroke="currentColor" stroke-width="1.3" />
+            </svg>
+          </button>
+          <button class="mgm__zoom" type="button" data-zoom="out" aria-label="Zoom out">
+            <svg viewBox="0 0 13 13" fill="none" aria-hidden="true">
+              <path d="M0 6.5h13" stroke="currentColor" stroke-width="1.3" />
+            </svg>
+          </button>
+          <p class="mgm__hint">Drag the map</p>
+        </div>
+      </div>
+
+      <div class="mgm__card">
+
+        <div class="mgm__panel mgm__panel--mosque">
+          <img class="mgm__shot" src="assets/layer-mosque.png" loading="lazy"
+               alt="The arcaded courtyard of the Sultan Qaboos Grand Mosque under a clear sky." />
+          <p class="mgm__from">where you are standing</p>
+          <h3 class="mgm__name">Sultan Qaboos Grand Mosque</h3>
+          <p class="mgm__blurb">Bawshar, twenty minutes west of the old harbour. Mutrah Corniche and
+            its souq, Qurum Beach, Old Muscat and the Royal Opera House are all inside half an hour
+            of the gate.</p>
+        </div>
+
+        <div class="mgm__panel mgm__panel--musandam">
+          <img class="mgm__shot" src="assets/act-sailing.png" loading="lazy"
+               alt="A wooden dhow moored below the bare cliffs of a Musandam fjord." />
+          <p class="mgm__from">1 hr by air from Muscat</p>
+          <h3 class="mgm__name">Musandam</h3>
+          <p class="mgm__blurb">Fjords cut into bare rock at the top of the country, dolphins in the
+            channel, and dhow trips out of Khasab that take most of a day.</p>
+        </div>
+
+        <div class="mgm__panel mgm__panel--rustaq">
+          <img class="mgm__shot" src="assets/f5-fort.png" loading="lazy"
+               alt="The walls and round tower of an Omani hill fort in low sun." />
+          <p class="mgm__from">160 kms from the grand mosque</p>
+          <h3 class="mgm__name">Al-Rustaq</h3>
+          <p class="mgm__blurb">A fort under the Hajar wall, hot springs running below it, and the
+            old souq town wrapped around both. Two hours west, and quiet on a weekday.</p>
+        </div>
+
+        <div class="mgm__panel mgm__panel--nizwa">
+          <img class="mgm__shot" src="assets/pexels-beladiya-nikunj-742323377-38036762.jpg"
+               loading="lazy"
+               alt="Men in dishdashas gathered with hand drums in a fort gateway." />
+          <p class="mgm__from">150 kms from the grand mosque</p>
+          <h3 class="mgm__name">Nizwa</h3>
+          <p class="mgm__blurb">The round fort tower, a date souq under it, and a goat market that
+            happens on Friday mornings and nowhere else. Get there before eight.</p>
+        </div>
+
+        <div class="mgm__panel mgm__panel--shab">
+          <img class="mgm__shot" src="assets/layer-cliff-wadi.png" loading="lazy"
+               alt="Turquoise pools between canyon walls at Wadi Shab." />
+          <p class="mgm__from">140 kms from the grand mosque</p>
+          <h3 class="mgm__name">Wadi Shab &amp; Sur</h3>
+          <p class="mgm__blurb">A boat across, an hour of walking in, then a swim through a slot
+            canyon to a waterfall. Sur and the turtles at Ras Al Jinz are 45 minutes further on.</p>
+        </div>
+
+        <div class="mgm__panel mgm__panel--wahiba">
+          <img class="mgm__shot" src="assets/f2-dunes.png" loading="lazy"
+               alt="Wind-carved dunes running to the horizon in the Wahiba Sands." />
+          <p class="mgm__from">200 kms from the grand mosque</p>
+          <h3 class="mgm__name">Wahiba Sands</h3>
+          <p class="mgm__blurb">Dunes the height of a building, camps in the middle of them, and the
+            best stars you will see on this trip. Stay the night; the drive back is long.</p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="mg__wrap">
+      <a class="mg-back" href="index.html#journey">
+        Back to the journey
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 12h15m-6-7 7 7-7 7" stroke="currentColor" stroke-width="1.6"
+                stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ================= footer ================= -->
+  <footer class="foot">
+    <a class="foot__logo" href="index.html" aria-label="Visit Oman — home">
+      <span class="v">Visit</span><span class="o">Oman</span>
+    </a>
+    <nav class="foot__links" aria-label="Footer">
+      <a href="index.html">About Oman</a>
+      <a href="index.html#useful">Travel Tips</a>
+      <a href="#">Get In Touch</a>
+      <a href="index.html#journey">Plan Your trip</a>
+      <a href="articles.html">Articles</a>
+      <a href="index.html#whats-on">News</a>
+    </nav>
+  </footer>
+
+</div>
+
+<script>
+/* =================================================================
+   Three things.
+
+   The hero plate is the one image on the page that moves: it rises at
+   0.18 of the scroll while the drawn sky behind it holds still, so the
+   building settles into its own horizon instead of sliding off the top
+   with everything else. Everything below the hero is static, by
+   instruction.
+
+   The rest is the reveal the home page uses — a rect read rather than
+   an IntersectionObserver, so a restored scroll position or a deep
+   link counts as "already arrived" instead of "never intersected".
+   ================================================================= */
+(function () {
+
+  var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var wide   = matchMedia("(min-width: 900px)");
+
+  /* ---- 1. the hero plate ---- */
+  var hero  = document.querySelector(".mg-hero");
+  var plate = document.querySelector(".mg-hero__plate");
+
+  function parallax() {
+    if (!hero || !plate) return;
+    /* below 900px the plate is in normal flow and the stylesheet has
+       already refused the transform, so there is nothing to drive */
+    if (reduce || !wide.matches) { plate.style.transform = ""; return; }
+
+    var h = hero.offsetHeight;
+    var p = Math.min(Math.max(-hero.getBoundingClientRect().top / h, 0), 1);
+    plate.style.transform = "translateX(-50%) translateY(" + (-p * h * 0.18).toFixed(1) + "px)";
+  }
+
+  /* ---- 2. sections settling in ---- */
+  var pending = [].slice.call(document.querySelectorAll(".mg-hero, .mg"));
+
+  function reveal() {
+    if (!pending.length) return;
+    var edge = innerHeight * 0.86;
+    pending = pending.filter(function (el) {
+      if (el.getBoundingClientRect().top > edge) return true;
+      el.classList.add("is-revealed");
+      return false;
+    });
+  }
+
+  var queued = false;
+  function onScroll() {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(function () {
+      queued = false;
+      parallax();
+      reveal();
+    });
+  }
+
+  addEventListener("scroll", onScroll, { passive: true });
+  addEventListener("resize", function () { parallax(); reveal(); });
+  if (wide.addEventListener) wide.addEventListener("change", parallax);
+
+  parallax();
+  reveal();
+})();
+
+/* =================================================================
+   The map, 334:112 — moving and zooming it.
+
+   Which pin the card is showing is the radio group's business and the
+   stylesheet's; none of it is here. This adds the two things CSS cannot
+   do: scaling the plate about a point you choose, and sliding it under
+   its window, both clamped so the paper never pulls away from an edge.
+
+   The plate's opening position and size come from its own left/top and
+   width in the stylesheet — the whole map, at the width of the page.
+   This never rewrites those, it only adds a transform on top, so a page
+   with no script gets exactly the frame the stylesheet drew.
+   ================================================================= */
+(function () {
+
+  var pane = document.querySelector(".mgm__pane");
+  if (!pane || !pane.querySelector(".mgm__plate")) return;
+
+  var plate = pane.querySelector(".mgm__plate");
+  var img   = plate.querySelector("img");
+  var tools = pane.querySelector(".mgm__tools");
+  var reduce = matchMedia("(prefers-reduced-motion: reduce)");
+
+  var MIN = 1, MAX = 4, STEP = 1.4;
+  var x = 0, y = 0, z = 1;                /* the transform, in pixels */
+  var baseL = 0, baseT = 0, pw = 0, ph = 0, vw = 0, vh = 0;
+
+  function apply() {
+    plate.style.transform =
+      "translate3d(" + x.toFixed(1) + "px," + y.toFixed(1) + "px,0) scale(" + z.toFixed(4) + ")";
+    /* the pins read this back and divide themselves by it, so they stay
+       the size they were drawn while the country grows */
+    plate.style.setProperty("--z", z.toFixed(4));
+    if (tools) {
+      tools.querySelector('[data-zoom="in"]').disabled  = z >= MAX - 0.001;
+      tools.querySelector('[data-zoom="out"]').disabled = z <= MIN + 0.001;
+    }
+  }
+
+  /* the stylesheet owns where the plate sits and how big it is; read
+     that back with the transform off, so resizing to a new --u never
+     accumulates drift */
+  function measure() {
+    var t = plate.style.transform;
+    plate.style.transform = "none";
+    var b = plate.getBoundingClientRect();
+    var p = pane.getBoundingClientRect();
+    baseL = b.left - p.left;
+    baseT = b.top - p.top;
+    pw = b.width;  ph = b.height;
+    vw = p.width;  vh = p.height;
+    plate.style.transform = t;
+    clamp();
+    apply();
+  }
+
+  /* the paper may never pull away from an edge of its window. At the
+     opening size it is exactly as wide as the window, so there is no
+     sideways travel until someone zooms in — which is the point. */
+  function clamp() {
+    var minX = vw - pw * z - baseL, maxX = -baseL;
+    var minY = vh - ph * z - baseT, maxY = -baseT;
+    x = minX > maxX ? maxX : Math.min(maxX, Math.max(minX, x));
+    y = minY > maxY ? maxY : Math.min(maxY, Math.max(minY, y));
+  }
+
+  /* scale about a point, keeping whatever is under it where it is */
+  function zoomAt(nz, cx, cy) {
+    nz = Math.min(MAX, Math.max(MIN, nz));
+    if (nz === z) return;
+    var wx = (cx - baseL - x) / z, wy = (cy - baseT - y) / z;
+    z = nz;
+    x = cx - baseL - wx * z;
+    y = cy - baseT - wy * z;
+    clamp();
+    if (reduce.matches) { apply(); return; }
+    plate.classList.add("is-easing");
+    apply();
+    setTimeout(function () { plate.classList.remove("is-easing"); }, 750);
+  }
+
+  function zoomStep(dir, e) {
+    var p = pane.getBoundingClientRect();
+    var cx = e && e.clientX != null ? e.clientX - p.left : p.width / 2;
+    var cy = e && e.clientY != null ? e.clientY - p.top  : p.height / 2;
+    zoomAt(dir > 0 ? z * STEP : z / STEP, cx, cy);
+  }
+
+  if (tools) {
+    tools.hidden = false;
+    tools.addEventListener("click", function (e) {
+      var btn = e.target.closest(".mgm__zoom");
+      if (!btn) return;
+      zoomStep(btn.getAttribute("data-zoom") === "in" ? 1 : -1, null);
+    });
+  }
+  pane.addEventListener("dblclick", function (e) { zoomStep(1, e); });
+
+  function ease(to) {
+    if (reduce.matches) { x = to.x; y = to.y; clamp(); apply(); return; }
+    plate.classList.add("is-easing");
+    x = to.x; y = to.y;
+    clamp();
+    apply();
+    setTimeout(function () { plate.classList.remove("is-easing"); }, 750);
+  }
+
+  /* ---- the drag ---- */
+  var down = false, held = false, sx = 0, sy = 0, ox = 0, oy = 0, moved = 0;
+
+  pane.addEventListener("pointerdown", function (e) {
+    if (e.button && e.button !== 0) return;
+    down = true; moved = 0; held = false;
+    sx = e.clientX; sy = e.clientY; ox = x; oy = y;
+    plate.classList.remove("is-easing");
+    pane.classList.add("is-dragging");
+  });
+
+  pane.addEventListener("pointermove", function (e) {
+    if (!down) return;
+    var dx = e.clientX - sx, dy = e.clientY - sy;
+    moved = Math.max(moved, Math.abs(dx) + Math.abs(dy));
+    /* Capture only once this is really a drag. Capturing on pointerdown
+       would retarget the click that follows to the pane, and the pin —
+       a <label> whose whole job is to be clicked — would never reach
+       its radio. So a tap keeps its click, and a drag gets the capture
+       that lets it continue outside the window. */
+    if (!held && moved > 4) {
+      held = true;
+      if (pane.setPointerCapture) pane.setPointerCapture(e.pointerId);
+    }
+    if (!held) return;
+    x = ox + dx; y = oy + dy;
+    clamp();
+    apply();
+  });
+
+  function release(e) {
+    if (!down) return;
+    down = false;
+    held = false;
+    pane.classList.remove("is-dragging");
+    if (pane.hasPointerCapture && pane.hasPointerCapture(e.pointerId)) {
+      pane.releasePointerCapture(e.pointerId);
+    }
+    /* A drag that ends on a pin must not also choose it. The guard goes
+       on the plate, not the pane: the zoom buttons are in the pane too,
+       and swallowing the next click anywhere would eat theirs. It also
+       takes itself off on the next task, so it can never sit waiting
+       for a click that is not coming. */
+    if (moved > 4) {
+      var swallow = function (ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        plate.removeEventListener("click", swallow, true);
+      };
+      plate.addEventListener("click", swallow, true);
+      setTimeout(function () { plate.removeEventListener("click", swallow, true); }, 0);
+    }
+  }
+  pane.addEventListener("pointerup", release);
+  pane.addEventListener("pointercancel", release);
+
+  /* ---- keyboard: arrows nudge the map, and a pin chosen from off the
+     edge is brought in rather than left behind ---- */
+  pane.addEventListener("keydown", function (e) {
+    if (e.key === "+" || e.key === "=") { e.preventDefault(); zoomStep(1, null); return; }
+    if (e.key === "-" || e.key === "_") { e.preventDefault(); zoomStep(-1, null); return; }
+    var step = e.shiftKey ? 160 : 60;
+    var dx = 0, dy = 0;
+    if (e.key === "ArrowLeft")  dx = -step;
+    else if (e.key === "ArrowRight") dx = step;
+    else if (e.key === "ArrowUp")    dy = -step;
+    else if (e.key === "ArrowDown")  dy = step;
+    else return;
+    e.preventDefault();
+    ease({ x: x - dx, y: y - dy });
+  });
+
+  function show(pin) {
+    var b = pin.getBoundingClientRect(), p = pane.getBoundingClientRect();
+    var pad = Math.min(p.width, p.height) * 0.18;
+    var nx = x, ny = y;
+    if (b.left   < p.left + pad)   nx += (p.left + pad) - b.left;
+    if (b.right  > p.right - pad)  nx -= b.right - (p.right - pad);
+    if (b.top    < p.top + pad)    ny += (p.top + pad) - b.top;
+    if (b.bottom > p.bottom - pad) ny -= b.bottom - (p.bottom - pad);
+    if (nx !== x || ny !== y) ease({ x: nx, y: ny });
+  }
+
+  pane.addEventListener("change", function (e) {
+    var input = e.target;
+    if (!input.classList || !input.classList.contains("mgm__radio")) return;
+    var pin = input.nextElementSibling;
+    if (pin) show(pin);
+  });
+
+  /* the browser answers a focus behind the edge by scrolling the pane
+     itself, which the transform knows nothing about — undo that and
+     move the plate instead */
+  pane.addEventListener("scroll", function () { pane.scrollLeft = 0; pane.scrollTop = 0; });
+
+  addEventListener("resize", measure);
+  if (img && !img.complete) img.addEventListener("load", measure);
+  measure();
+})();
+</script>
+
+</body>
+</html>
