@@ -3530,22 +3530,36 @@ body {
   }, { passive: true });
 
   /* drag to pan — pointer events, so mouse, pen and touch are one path */
-  var dragId = null, dragX = 0, dragLeft = 0, dragged = 0;
+  var dragId = null, dragX = 0, dragLeft = 0, dragged = 0, held = false;
   vp.addEventListener("pointerdown", function (e) {
     if (e.pointerType === "touch") return;      /* native panning is better */
     dragId = e.pointerId; dragX = e.clientX; dragLeft = vp.scrollLeft; dragged = 0;
-    vp.setPointerCapture(dragId);
-    vp.classList.add("dragging");
+    held = false;
   });
   vp.addEventListener("pointermove", function (e) {
     if (e.pointerId !== dragId) return;
     var dx = e.clientX - dragX;
     dragged = Math.max(dragged, Math.abs(dx));
+    /* Capture only once this is really a drag — the rule the map on the
+       mosque page already follows. Capturing on pointerdown retargets the
+       click that follows to the viewport, so the one card that is a link
+       never reaches its href. This way a plain click keeps its target and
+       a drag still gets the capture that lets it run outside the rail. */
+    if (!held && dragged > 6) {
+      held = true;
+      if (vp.setPointerCapture) vp.setPointerCapture(dragId);
+      vp.classList.add("dragging");
+    }
+    if (!held) return;
     vp.scrollLeft = dragLeft - dx;
   });
   function endDrag(e) {
     if (e.pointerId !== dragId) return;
+    if (held && vp.releasePointerCapture) {
+      try { vp.releasePointerCapture(dragId); } catch (err) {}
+    }
     dragId = null;
+    held = false;
     vp.classList.remove("dragging");
   }
   vp.addEventListener("pointerup", endDrag);
