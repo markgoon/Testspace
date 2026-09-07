@@ -371,75 +371,115 @@ body {
 
    Without script every card is showing and the tabs are inert, which
    is the honest fallback for a filter: the whole collection. */
-.xp-pick { padding: calc(96 * var(--u)) 0 calc(120 * var(--u)); }
+/* ---- the head, 349:105 / 349:107 / 349:112 ---------------------------
+   The board sets the title at 57/-1.14 rather than the 52/-1.05 the rest
+   of the site uses for a section title, and drops the standfirst from
+   18/30 to 16/26. Both are section-local, so the shared .mg-h2 and .mg-p
+   are left alone and this section carries its own two rules.
 
-.xp-pick__head { width: calc(720 * var(--u)); }
+   Below the title, the standfirst and the pillars share one band: copy
+   left, choice right. */
+.xp-pick { padding: calc(118 * var(--u)) 0 calc(120 * var(--u)); }
 
-.xp-bands {
-  display: flex;
-  align-items: flex-start;
-  gap: calc(54 * var(--u));
-  margin: calc(58 * var(--u)) 0 0;
-  border-bottom: 1px solid rgba(29, 25, 20, 0.18);
+.xp-pick__title {
+  margin: 0;
+  font-family: "Libre Baskerville", serif;
+  font-weight: 400;
+  font-size: calc(57 * var(--u));
+  line-height: normal;
+  letter-spacing: calc(-1.14 * var(--u));
+  color: #000;
 }
+
+.xp-pick__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(60 * var(--u));
+  /* 349:105 to 349:107 is 93 on the board; the mask reveal on the title
+     adds its own 0.14em either side, so the margin carries the rest */
+  margin: calc(16 * var(--u)) 0 0;
+}
+
+.xp-pick__lede {
+  margin: 0;
+  width: calc(367 * var(--u));
+  font-family: "Forum", serif;
+  font-size: calc(16 * var(--u));
+  line-height: calc(26 * var(--u));
+  letter-spacing: calc(-0.32 * var(--u));
+  color: #000;
+}
+
+/* ---- the four pillars, 349:112 ---------------------------------------
+   The board draws the chosen one as a filled pill and the other three as
+   plain words. Rather than give each tab its own background, one pill is
+   parked under the row and moved to whichever tab is chosen — so the
+   fill travels between them instead of blinking off one and on at the
+   next. The script sets its left and width; everything else is here.
+
+   The board spaces the words 26 apart and pads only the chosen one by
+   13. Padding all four by 13 and closing the gap keeps the same 26
+   between words while giving the pill a box to fly to on every tab. */
+.xp-bands {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-shrink: 0;
+}
+
+.xp-bands__pill {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  height: calc(26 * var(--u));
+  border-radius: calc(108 * var(--u));
+  background: #1e4555;
+  transform: translateY(-50%);
+  transition: left 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+              width 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+/* before the script has measured anything there is nothing to point at,
+   so the pill stays out of the way rather than sitting at width 0 on the
+   left edge */
+.xp-bands__pill:not([style*="width"]) { opacity: 0; }
 
 .xp-band {
   position: relative;
+  z-index: 1;
   margin: 0;
-  padding: 0 0 calc(20 * var(--u));
+  padding: 0 calc(13 * var(--u));
   border: 0;
   background: none;
   cursor: pointer;
-  font-family: "Forum", serif;
-  font-size: calc(16 * var(--u));
-  line-height: calc(22 * var(--u));
-  letter-spacing: calc(2.24 * var(--u));
-  text-transform: uppercase;
-  color: rgba(29, 25, 20, 0.5);
-  transition: color 0.3s ease;
-}
-.xp-band:hover { color: rgba(29, 25, 20, 0.82); }
-.xp-band::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -1px;
-  height: calc(2 * var(--u));
-  background: #113240;
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.xp-band[aria-selected="true"] { color: #113240; }
-.xp-band[aria-selected="true"]::after { transform: none; }
-.xp-band:focus-visible { outline: 1px solid rgba(17, 50, 64, 0.6); outline-offset: calc(6 * var(--u)); }
-
-.xp-bands__foot {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: calc(40 * var(--u));
-  margin: calc(26 * var(--u)) 0 0;
-}
-.xp-bands__note {
-  margin: 0;
-  width: calc(720 * var(--u));
-  font-family: "Forum", serif;
-  font-size: calc(18 * var(--u));
-  line-height: calc(28 * var(--u));
-  letter-spacing: calc(-0.36 * var(--u));
-  color: rgba(29, 25, 20, 0.7);
-}
-.xp-bands__count {
-  margin: 0;
-  flex-shrink: 0;
+  white-space: nowrap;
   font-family: "Manrope", sans-serif;
-  font-size: calc(13 * var(--u));
-  line-height: calc(18 * var(--u));
-  letter-spacing: calc(1.1 * var(--u));
-  text-transform: uppercase;
-  color: rgba(29, 25, 20, 0.5);
+  font-weight: 400;
+  font-size: calc(16 * var(--u));
+  line-height: calc(26 * var(--u));
+  letter-spacing: 0;
+  color: #1e4555;
+  transition: color 0.3s ease, opacity 0.3s ease;
+}
+.xp-band:hover { opacity: 0.62; }
+.xp-band[aria-selected="true"] { color: #fff; opacity: 1; }
+.xp-band:focus-visible {
+  outline: 1px solid #1e4555;
+  outline-offset: calc(4 * var(--u));
+  border-radius: calc(108 * var(--u));
+}
+
+/* said aloud when the grid changes, drawn nowhere */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* ---- the collection ---------------------------------------------------
@@ -450,22 +490,23 @@ body {
 .xp-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: calc(40 * var(--u)) calc(34 * var(--u));
-  margin: calc(64 * var(--u)) 0 0;
+  /* 22 between columns on the board; the rows keep a little more air */
+  gap: calc(46 * var(--u)) calc(22 * var(--u));
+  margin: calc(45 * var(--u)) 0 0;
   /* start, not stretch: a card that opens grows on its own instead of
      dragging the two beside it down with it */
   align-items: start;
 }
 
-/* The card is white paper on the section's beige. It gets no border —
-   the colour step does that work — only the shadow the paper would
-   cast, which lifts a little when you are over it. */
+/* 349:72 over 349:74 — a photograph with the name written across the
+   foot of it, sitting on a white block that carries the rest. The board
+   rounds only the two bottom corners; the picture keeps its square top. */
 .xp-card {
   position: relative;
   display: flex;
   flex-direction: column;
   background: #fff;
-  border-radius: calc(4 * var(--u));
+  border-radius: 0 0 calc(12 * var(--u)) calc(12 * var(--u));
   overflow: hidden;
   box-shadow: 0 calc(1 * var(--u)) calc(2 * var(--u)) rgba(29, 25, 20, 0.04),
               0 calc(6 * var(--u)) calc(20 * var(--u)) rgba(29, 25, 20, 0.06);
@@ -484,31 +525,17 @@ body {
   list-style: none;
   cursor: pointer;
 }
-
-/* Everything under the photograph, held to one height across the whole
-   collection so the eight faces line up whatever their copy runs to.
-   The foot is pushed to the bottom of it rather than following the
-   text, which is what keeps the prices on one line across a row. */
-.xp-card__text {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  /* the tallest face in the set measures 302u — a two-line title over
-     a three-line standfirst. Above 900px the whole page is a pure scale
-     of itself, so line counts never change and this floor holds. */
-  min-height: calc(304 * var(--u));
-  padding: calc(24 * var(--u)) calc(26 * var(--u)) calc(24 * var(--u));
-}
 .xp-card > summary::-webkit-details-marker { display: none; }
 .xp-card > summary:focus-visible {
-  outline: 1px solid rgba(17, 50, 64, 0.6);
-  outline-offset: calc(8 * var(--u));
+  outline: 1px solid rgba(30, 69, 85, 0.6);
+  outline-offset: calc(-3 * var(--u));
 }
 
+/* 385 x 422 on the board */
 .xp-card__photo {
   position: relative;
   width: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 385 / 422;
   overflow: hidden;
   background: #e6ded1;
 }
@@ -521,102 +548,118 @@ body {
 }
 .xp-card > summary:hover .xp-card__photo img { transform: scale(1.045); }
 
-/* which band this belongs to, worn on the photo */
-.xp-card__band {
+/* the wash that lets white type sit on a photograph — the board runs it
+   from nothing at two thirds down to 0.81 of the same navy near the foot */
+.xp-card__photo::after {
+  content: "";
   position: absolute;
-  left: calc(14 * var(--u));
-  top: calc(14 * var(--u));
-  padding: calc(7 * var(--u)) calc(14 * var(--u));
-  border-radius: calc(100 * var(--u));
-  background: rgba(17, 50, 64, 0.78);
-  backdrop-filter: blur(6px);
-  font-family: "Manrope", sans-serif;
-  font-size: calc(11 * var(--u));
-  line-height: calc(14 * var(--u));
-  letter-spacing: calc(1 * var(--u));
-  text-transform: uppercase;
-  color: #efdfdf;
+  inset: 0;
+  background: linear-gradient(180deg,
+              rgba(30, 69, 85, 0) 66.5%,
+              rgba(30, 69, 85, 0.81) 83.8%,
+              rgba(30, 69, 85, 0.92) 100%);
+  pointer-events: none;
+}
+
+.xp-card__over {
+  position: absolute;
+  left: calc(22 * var(--u));
+  right: calc(22 * var(--u));
+  bottom: calc(20 * var(--u));
+  z-index: 1;
+  color: #fff;
 }
 
 .xp-card__name {
   margin: 0;
-  font-family: "Baskervville", serif;
-  font-weight: 400;
-  font-size: calc(26 * var(--u));
-  line-height: calc(33 * var(--u));
-  letter-spacing: calc(-0.52 * var(--u));
-  color: #000;
-}
-
-.xp-card__line {
-  margin: calc(12 * var(--u)) 0 0;
   font-family: "Forum", serif;
-  font-size: calc(17 * var(--u));
-  line-height: calc(27 * var(--u));
-  letter-spacing: calc(-0.34 * var(--u));
-  color: rgba(29, 25, 20, 0.74);
+  font-weight: 400;
+  font-size: calc(33 * var(--u));
+  line-height: calc(38 * var(--u));
+  letter-spacing: calc(-0.66 * var(--u));
+  color: #fff;
 }
 
-/* region · duration · season — the three things asked before anything
-   else, so they sit on the face and not inside the fold */
+/* Musandam | 2 hours | Year-round */
 .xp-card__facts {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: calc(10 * var(--u));
-  margin: calc(18 * var(--u)) 0 calc(22 * var(--u));
+  gap: calc(12 * var(--u));
+  margin: calc(10 * var(--u)) 0 0;
   padding: 0;
   list-style: none;
   font-family: "Manrope", sans-serif;
-  font-size: calc(12 * var(--u));
-  line-height: calc(16 * var(--u));
-  letter-spacing: calc(0.9 * var(--u));
-  text-transform: uppercase;
-  color: rgba(29, 25, 20, 0.56);
+  font-weight: 400;
+  font-size: calc(14 * var(--u));
+  line-height: calc(20 * var(--u));
+  letter-spacing: calc(-0.28 * var(--u));
+  color: #fff;
 }
+/* the board sets these as pipes; a hairline reads as one and keeps its
+   weight when the type scales */
 .xp-card__facts .dot {
-  width: calc(3 * var(--u));
-  height: calc(3 * var(--u));
-  border-radius: 50%;
-  background: rgba(29, 25, 20, 0.34);
+  width: 1px;
+  height: calc(13 * var(--u));
+  border-radius: 0;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+/* 349:74 — the white block under the picture */
+.xp-card__text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: calc(175 * var(--u));
+  padding: calc(27 * var(--u)) calc(21 * var(--u)) calc(18 * var(--u));
+}
+
+.xp-card__line {
+  margin: 0;
+  font-family: "Forum", serif;
+  font-size: calc(16 * var(--u));
+  line-height: calc(26 * var(--u));
+  letter-spacing: calc(-0.32 * var(--u));
+  color: #000;
 }
 
 .xp-card__foot {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: calc(20 * var(--u));
   margin: auto 0 0;
-  padding: calc(16 * var(--u)) 0 0;
-  border-top: 1px solid rgba(29, 25, 20, 0.2);
+  padding: calc(10 * var(--u)) 0 0;
+  border-top: 1px solid rgba(30, 69, 85, 0.22);
 }
-.xp-card__price {
-  font-family: "Forum", serif;
-  font-size: calc(16 * var(--u));
-  line-height: calc(22 * var(--u));
-  letter-spacing: calc(1.6 * var(--u));
-  text-transform: uppercase;
-  color: #1d1914;
-}
-.xp-card__price em { font-style: normal; color: rgba(29, 25, 20, 0.5); }
 
+.xp-card__price {
+  font-family: "Manrope", sans-serif;
+  font-weight: 700;
+  font-size: calc(13 * var(--u));
+  line-height: calc(26 * var(--u));
+  letter-spacing: calc(-0.26 * var(--u));
+  text-transform: none;
+  color: #1e4555;
+}
+.xp-card__price em { font-style: normal; color: inherit; }
+
+/* 349:76 — a plus, set large and light, that becomes a close when the
+   booking is open */
 .xp-card__more {
   display: inline-flex;
   align-items: center;
-  gap: calc(9 * var(--u));
+  justify-content: center;
   flex-shrink: 0;
-  font-family: "Manrope", sans-serif;
-  font-size: calc(12 * var(--u));
-  line-height: calc(16 * var(--u));
-  letter-spacing: calc(0.9 * var(--u));
-  text-transform: uppercase;
-  color: #113240;
+  width: calc(26 * var(--u));
+  height: calc(26 * var(--u));
+  color: #1e4555;
 }
 .xp-card__more i {
   position: relative;
   display: block;
-  width: calc(11 * var(--u));
-  height: calc(11 * var(--u));
+  width: calc(19 * var(--u));
+  height: calc(19 * var(--u));
   transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .xp-card__more i::before,
@@ -625,17 +668,18 @@ body {
   position: absolute;
   left: 0; top: 50%;
   width: 100%;
-  height: 1px;
+  height: calc(1.4 * var(--u));
   background: currentColor;
+  transform: translateY(-50%);
 }
-.xp-card__more i::after { transform: rotate(90deg); }
+.xp-card__more i::after { transform: translateY(-50%) rotate(90deg); }
 .xp-card[open] .xp-card__more i { transform: rotate(45deg); }
 .xp-card[open] .xp-card__more .lbl--shut { display: none; }
 .xp-card:not([open]) .xp-card__more .lbl--open { display: none; }
 
 /* ---- the fold: everything a booking needs ---- */
 .xp-book {
-  padding: 0 calc(26 * var(--u)) calc(26 * var(--u));
+  padding: 0 calc(21 * var(--u)) calc(24 * var(--u));
   animation: xp-open 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 @keyframes xp-open {
@@ -873,45 +917,54 @@ body {
   .xp-lede__stats .sep { display: none; }
 
   .xp-pick { padding: clamp(46px, 11vw, 82px) 0 clamp(56px, 14vw, 100px); }
-  .xp-pick__head { width: auto; }
+  .xp-pick__title {
+    font-size: clamp(30px, 8vw, 50px);
+    line-height: 1.14;
+    letter-spacing: -0.028em;
+  }
 
-  /* the four pillars become one scrolling row rather than four stacked
-     buttons — they are a choice, not a menu */
+  /* the row cannot hold both halves at this width, so the standfirst
+     keeps the line and the pillars drop below it */
+  .xp-pick__head {
+    display: block;
+    margin-top: clamp(16px, 4.5vw, 26px);
+  }
+  .xp-pick__lede { width: auto; max-width: 46ch; font-size: 16px; line-height: 1.65; }
+
+  /* four words do not fit across a phone, so the strip scrolls rather
+     than stacking — they are a choice, not a menu */
   .xp-bands {
-    gap: clamp(22px, 6vw, 40px);
-    margin-top: clamp(30px, 8vw, 48px);
+    margin-top: clamp(24px, 7vw, 38px);
     overflow-x: auto;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
   }
   .xp-bands::-webkit-scrollbar { display: none; }
+  .xp-bands__pill { height: 30px; border-radius: 999px; }
   .xp-band {
     flex-shrink: 0;
-    padding-bottom: 14px;
-    font-size: 12px;
-    letter-spacing: 0.13em;
+    padding: 0 13px;
+    font-size: 15px;
+    line-height: 30px;
   }
-  .xp-band::after { height: 2px; }
-
-  .xp-bands__foot { display: block; margin-top: 20px; }
-  .xp-bands__note { width: auto; font-size: 16px; line-height: 1.6; }
-  .xp-bands__count { margin-top: 14px; font-size: 11px; letter-spacing: 0.09em; }
 
   .xp-grid {
     grid-template-columns: 1fr;
     gap: clamp(22px, 6vw, 34px);
     margin-top: clamp(34px, 9vw, 56px);
   }
-  .xp-card__text { min-height: 0; padding: 20px 20px 22px; }
-  .xp-card__name { margin-top: 0; font-size: clamp(21px, 5.4vw, 26px); line-height: 1.28; letter-spacing: -0.018em; }
-  .xp-card__line { margin-top: 10px; font-size: 16px; line-height: 1.62; }
-  .xp-card__facts { margin-top: 15px; font-size: 11px; letter-spacing: 0.08em; }
-  .xp-card__band { left: 12px; top: 12px; padding: 6px 12px; font-size: 10px; letter-spacing: 0.09em; }
-  .xp-card__foot { padding-top: 14px; }
-  .xp-card__facts { margin-bottom: 18px; }
-  .xp-card__price { font-size: 14px; letter-spacing: 0.1em; }
-  .xp-card__more { font-size: 11px; letter-spacing: 0.08em; }
-  .xp-card__more i { width: 11px; height: 11px; }
+  .xp-card { border-radius: 0 0 12px 12px; }
+  .xp-card__over { left: 20px; right: 20px; bottom: 18px; }
+  .xp-card__name { font-size: clamp(25px, 6.6vw, 33px); line-height: 1.16; letter-spacing: -0.02em; }
+  .xp-card__facts { margin-top: 9px; gap: 11px; font-size: 13px; line-height: 1.45; letter-spacing: -0.01em; }
+  .xp-card__facts .dot { height: 12px; }
+  .xp-card__text { min-height: 0; padding: 22px 20px 18px; }
+  .xp-card__line { font-size: 16px; line-height: 1.62; }
+  .xp-card__foot { margin-top: 20px; padding-top: 10px; }
+  .xp-card__price { font-size: 13px; line-height: 1.6; letter-spacing: -0.01em; }
+  .xp-card__more { width: 26px; height: 26px; }
+  .xp-card__more i { width: 19px; height: 19px; }
+  .xp-card__more i::before, .xp-card__more i::after { height: 1.4px; }
   .xp-book { padding: 0 20px 22px; }
   .xp-book__spec { grid-template-columns: 96px 1fr; gap: 9px 14px; }
   .xp-book__spec dt { font-size: 11px; line-height: 1.7; letter-spacing: 0.06em; }
@@ -1038,18 +1091,24 @@ body {
        │    xp-stars.jpg     Milky Way (not Oman)         #37897045    │
        │    xp-dhow.jpg      dhow at sunset (Zanzibar)    #15505785    │
        └──────────────────────────────────────────────────────────────┘ -->
-  <section class="mg mg--cream xp-pick" aria-labelledby="pick-title">
+  <section class="mg mg--sand xp-pick" aria-labelledby="pick-title">
     <div class="mg__wrap">
 
-      <div class="xp-pick__head">
-        <h2 class="mg-h2" id="pick-title">
-          <span class="line"><i>Pick your pace</i></span>
-        </h2>
-        <p class="mg-p mg__fade" style="--d:0.06s">Four ways to spend a day here. Choose the one
-          your trip is short of — most people find they want two of them.</p>
-      </div>
+      <h2 class="xp-pick__title" id="pick-title">
+        <span class="line"><i>Pick your pace</i></span>
+      </h2>
 
-      <div class="xp-bands" role="tablist" aria-label="Kinds of experience">
+      <!-- 349:107 sits on the left of this row and 349:112 on the right,
+           so the standfirst and the four pillars share one band -->
+      <div class="xp-pick__head mg__fade" style="--d:0.06s">
+        <p class="xp-pick__lede">Four ways to spend a day here. Choose the one
+          your trip is short of — most people find they want two of them.</p>
+
+        <div class="xp-bands" role="tablist" aria-label="Kinds of experience">
+          <!-- 349:111 — the one filled pill. It is a single element that
+               travels to whichever tab is chosen rather than a background on
+               each, which is what lets the fill slide between them. -->
+          <span class="xp-bands__pill" aria-hidden="true"></span>
         <button class="xp-band" type="button" role="tab" id="band-pulse"
                 aria-selected="true" aria-controls="xp-collection"
                 data-band="pulse"
@@ -1069,13 +1128,12 @@ body {
                 aria-selected="false" aria-controls="xp-collection" tabindex="-1"
                 data-band="table"
                 data-note="Food, coffee and the people who make both. The part of a trip here that tends to surprise people most.">Around a table</button>
+        </div>
       </div>
 
-      <div class="xp-bands__foot">
-        <p class="xp-bands__note" id="xp-note">The ones you will still be talking about at the
-          airport. Height, speed, water moving faster than you are.</p>
-        <p class="xp-bands__count" id="xp-count">8 experiences</p>
-      </div>
+      <!-- the board carries no count; it is still worth saying out loud when
+           the grid changes under someone who cannot see it happen -->
+      <p class="sr-only" id="xp-count" role="status" aria-live="polite">8 experiences</p>
 
       <div class="xp-grid" id="xp-collection" role="tabpanel" aria-labelledby="band-pulse">
 
@@ -1085,23 +1143,25 @@ body {
             <div class="xp-card__photo">
               <img src="assets/xp-skydive.jpg" loading="lazy"
                    alt="A ridge of golden dune seen from directly above, one walker small against it." />
-              <span class="xp-card__band">Heart-racing</span>
+
+              <div class="xp-card__over">
+                <h3 class="xp-card__name">Skydive over the Wahiba Sands</h3>
+                <ul class="xp-card__facts">
+                  <li>Wahiba Sands</li><li class="dot" aria-hidden="true"></li>
+                  <li>Half day</li><li class="dot" aria-hidden="true"></li>
+                  <li>Oct – Apr</li>
+                </ul>
+              </div>
             </div>
 
             <div class="xp-card__text">
-              <h3 class="xp-card__name">Skydive over the Wahiba Sands</h3>
               <p class="xp-card__line">Twelve thousand feet above an ocean of dunes, and about forty
                 seconds where the horizon is the only thing holding still.</p>
-              <ul class="xp-card__facts">
-                <li>Wahiba Sands</li><li class="dot" aria-hidden="true"></li>
-                <li>Half day</li><li class="dot" aria-hidden="true"></li>
-                <li>Oct – Apr</li>
-              </ul>
               <div class="xp-card__foot">
                 <span class="xp-card__price"><em>From</em> 145 OMR</span>
                 <span class="xp-card__more">
-                  <span class="lbl lbl--shut">Booking</span>
-                  <span class="lbl lbl--open">Close</span>
+                  <span class="sr-only lbl--shut">Booking details</span>
+                  <span class="sr-only lbl--open">Close booking details</span>
                   <i aria-hidden="true"></i>
                 </span>
               </div>
@@ -1128,23 +1188,25 @@ body {
             <div class="xp-card__photo">
               <img src="assets/xp-fjord.jpg" loading="lazy"
                    alt="Bare rock headlands dropping into the still water of a Musandam fjord." />
-              <span class="xp-card__band">Heart-racing</span>
+
+              <div class="xp-card__over">
+                <h3 class="xp-card__name">Zipline the Musandam fjords</h3>
+                <ul class="xp-card__facts">
+                  <li>Musandam</li><li class="dot" aria-hidden="true"></li>
+                  <li>2 hours</li><li class="dot" aria-hidden="true"></li>
+                  <li>Year-round</li>
+                </ul>
+              </div>
             </div>
 
             <div class="xp-card__text">
-              <h3 class="xp-card__name">Zipline the Musandam fjords</h3>
               <p class="xp-card__line">A kilometre of steel strung between two bare cliffs, with the
                 sea a long way down and going nowhere.</p>
-              <ul class="xp-card__facts">
-                <li>Musandam</li><li class="dot" aria-hidden="true"></li>
-                <li>2 hours</li><li class="dot" aria-hidden="true"></li>
-                <li>Year-round</li>
-              </ul>
               <div class="xp-card__foot">
                 <span class="xp-card__price"><em>From</em> 45 OMR</span>
                 <span class="xp-card__more">
-                  <span class="lbl lbl--shut">Booking</span>
-                  <span class="lbl lbl--open">Close</span>
+                  <span class="sr-only lbl--shut">Booking details</span>
+                  <span class="sr-only lbl--open">Close booking details</span>
                   <i aria-hidden="true"></i>
                 </span>
               </div>
@@ -1171,23 +1233,25 @@ body {
             <div class="xp-card__photo">
               <img src="assets/xp-wadi-shab.jpg" loading="lazy"
                    alt="Canyon walls rising either side of a dry wadi bed, date palms along the floor." />
-              <span class="xp-card__band">Deep breath</span>
+
+              <div class="xp-card__over">
+                <h3 class="xp-card__name">Swim into Wadi Shab</h3>
+                <ul class="xp-card__facts">
+                  <li>Ash Sharqiyah</li><li class="dot" aria-hidden="true"></li>
+                  <li>Full day</li><li class="dot" aria-hidden="true"></li>
+                  <li>Oct – May</li>
+                </ul>
+              </div>
             </div>
 
             <div class="xp-card__text">
-              <h3 class="xp-card__name">Swim into Wadi Shab</h3>
               <p class="xp-card__line">A boat across, an hour of walking in, then a swim through a
                 slot in the rock barely wider than you are — to a waterfall inside a cave.</p>
-              <ul class="xp-card__facts">
-                <li>Ash Sharqiyah</li><li class="dot" aria-hidden="true"></li>
-                <li>Full day</li><li class="dot" aria-hidden="true"></li>
-                <li>Oct – May</li>
-              </ul>
               <div class="xp-card__foot">
                 <span class="xp-card__price"><em>From</em> 38 OMR</span>
                 <span class="xp-card__more">
-                  <span class="lbl lbl--shut">Booking</span>
-                  <span class="lbl lbl--open">Close</span>
+                  <span class="sr-only lbl--shut">Booking details</span>
+                  <span class="sr-only lbl--open">Close booking details</span>
                   <i aria-hidden="true"></i>
                 </span>
               </div>
@@ -1214,23 +1278,25 @@ body {
             <div class="xp-card__photo">
               <img src="assets/xp-scuba.jpg" loading="lazy"
                    alt="A turtle resting on coral at the foot of a reef wall." />
-              <span class="xp-card__band">Deep breath</span>
+
+              <div class="xp-card__over">
+                <h3 class="xp-card__name">Dive the Daymaniyat Islands</h3>
+                <ul class="xp-card__facts">
+                  <li>Al Batinah</li><li class="dot" aria-hidden="true"></li>
+                  <li>Full day</li><li class="dot" aria-hidden="true"></li>
+                  <li>Sep – May</li>
+                </ul>
+              </div>
             </div>
 
             <div class="xp-card__text">
-              <h3 class="xp-card__name">Dive the Daymaniyat Islands</h3>
               <p class="xp-card__line">A protected reserve an hour offshore: turtles, rays, and the
                 odd whale shark passing through between August and November.</p>
-              <ul class="xp-card__facts">
-                <li>Al Batinah</li><li class="dot" aria-hidden="true"></li>
-                <li>Full day</li><li class="dot" aria-hidden="true"></li>
-                <li>Sep – May</li>
-              </ul>
               <div class="xp-card__foot">
                 <span class="xp-card__price"><em>From</em> 72 OMR</span>
                 <span class="xp-card__more">
-                  <span class="lbl lbl--shut">Booking</span>
-                  <span class="lbl lbl--open">Close</span>
+                  <span class="sr-only lbl--shut">Booking details</span>
+                  <span class="sr-only lbl--open">Close booking details</span>
                   <i aria-hidden="true"></i>
                 </span>
               </div>
@@ -1257,23 +1323,25 @@ body {
             <div class="xp-card__photo">
               <img src="assets/xp-jebel.jpg" loading="lazy"
                    alt="A track winding through the dark ridges of the Hajar mountains in haze." />
-              <span class="xp-card__band">Deep breath</span>
+
+              <div class="xp-card__over">
+                <h3 class="xp-card__name">Walk the Jebel Shams balcony</h3>
+                <ul class="xp-card__facts">
+                  <li>Ad Dakhiliyah</li><li class="dot" aria-hidden="true"></li>
+                  <li>Full day</li><li class="dot" aria-hidden="true"></li>
+                  <li>Oct – Apr</li>
+                </ul>
+              </div>
             </div>
 
             <div class="xp-card__text">
-              <h3 class="xp-card__name">Walk the Jebel Shams balcony</h3>
               <p class="xp-card__line">A ledge path cut along the rim of the Grand Canyon of Arabia,
                 ending at an abandoned village nobody has lived in for fifty years.</p>
-              <ul class="xp-card__facts">
-                <li>Ad Dakhiliyah</li><li class="dot" aria-hidden="true"></li>
-                <li>Full day</li><li class="dot" aria-hidden="true"></li>
-                <li>Oct – Apr</li>
-              </ul>
               <div class="xp-card__foot">
                 <span class="xp-card__price"><em>From</em> 55 OMR</span>
                 <span class="xp-card__more">
-                  <span class="lbl lbl--shut">Booking</span>
-                  <span class="lbl lbl--open">Close</span>
+                  <span class="sr-only lbl--shut">Booking details</span>
+                  <span class="sr-only lbl--open">Close booking details</span>
                   <i aria-hidden="true"></i>
                 </span>
               </div>
@@ -1300,23 +1368,25 @@ body {
             <div class="xp-card__photo">
               <img src="assets/xp-yoga.jpg" loading="lazy"
                    alt="A figure holding a handstand on a dune ridge as the sun comes up." />
-              <span class="xp-card__band">Slow down</span>
+
+              <div class="xp-card__over">
+                <h3 class="xp-card__name">Sunrise yoga on the dunes</h3>
+                <ul class="xp-card__facts">
+                  <li>Wahiba Sands</li><li class="dot" aria-hidden="true"></li>
+                  <li>90 minutes</li><li class="dot" aria-hidden="true"></li>
+                  <li>Oct – Apr</li>
+                </ul>
+              </div>
             </div>
 
             <div class="xp-card__text">
-              <h3 class="xp-card__name">Sunrise yoga on the dunes</h3>
               <p class="xp-card__line">An hour on a ridge of sand while the light arrives, which in
                 the desert it does all at once.</p>
-              <ul class="xp-card__facts">
-                <li>Wahiba Sands</li><li class="dot" aria-hidden="true"></li>
-                <li>90 minutes</li><li class="dot" aria-hidden="true"></li>
-                <li>Oct – Apr</li>
-              </ul>
               <div class="xp-card__foot">
                 <span class="xp-card__price"><em>From</em> 25 OMR</span>
                 <span class="xp-card__more">
-                  <span class="lbl lbl--shut">Booking</span>
-                  <span class="lbl lbl--open">Close</span>
+                  <span class="sr-only lbl--shut">Booking details</span>
+                  <span class="sr-only lbl--open">Close booking details</span>
                   <i aria-hidden="true"></i>
                 </span>
               </div>
@@ -1343,23 +1413,25 @@ body {
             <div class="xp-card__photo">
               <img src="assets/xp-stars.jpg" loading="lazy"
                    alt="The Milky Way standing over low desert scrub on a moonless night." />
-              <span class="xp-card__band">Slow down</span>
+
+              <div class="xp-card__over">
+                <h3 class="xp-card__name">Guided meditation &amp; stargazing</h3>
+                <ul class="xp-card__facts">
+                  <li>Wahiba Sands</li><li class="dot" aria-hidden="true"></li>
+                  <li>Evening</li><li class="dot" aria-hidden="true"></li>
+                  <li>Year-round</li>
+                </ul>
+              </div>
             </div>
 
             <div class="xp-card__text">
-              <h3 class="xp-card__name">Guided meditation &amp; stargazing</h3>
               <p class="xp-card__line">A silent hour on the sand, then somebody who knows the sky
                 points at it. There is no light for two hundred kilometres.</p>
-              <ul class="xp-card__facts">
-                <li>Wahiba Sands</li><li class="dot" aria-hidden="true"></li>
-                <li>Evening</li><li class="dot" aria-hidden="true"></li>
-                <li>Year-round</li>
-              </ul>
               <div class="xp-card__foot">
                 <span class="xp-card__price"><em>From</em> 30 OMR</span>
                 <span class="xp-card__more">
-                  <span class="lbl lbl--shut">Booking</span>
-                  <span class="lbl lbl--open">Close</span>
+                  <span class="sr-only lbl--shut">Booking details</span>
+                  <span class="sr-only lbl--open">Close booking details</span>
                   <i aria-hidden="true"></i>
                 </span>
               </div>
@@ -1386,23 +1458,25 @@ body {
             <div class="xp-card__photo">
               <img src="assets/xp-dhow.jpg" loading="lazy"
                    alt="A lateen-rigged dhow in silhouette against the sun going down over the water." />
-              <span class="xp-card__band">Around a table</span>
+
+              <div class="xp-card__over">
+                <h3 class="xp-card__name">Dinner on a dhow at sunset</h3>
+                <ul class="xp-card__facts">
+                  <li>Muscat</li><li class="dot" aria-hidden="true"></li>
+                  <li>Evening</li><li class="dot" aria-hidden="true"></li>
+                  <li>Year-round</li>
+                </ul>
+              </div>
             </div>
 
             <div class="xp-card__text">
-              <h3 class="xp-card__name">Dinner on a dhow at sunset</h3>
               <p class="xp-card__line">A wooden boat out of Mutrah, the old harbour going gold behind
                 you, and dinner served somewhere off the cliffs.</p>
-              <ul class="xp-card__facts">
-                <li>Muscat</li><li class="dot" aria-hidden="true"></li>
-                <li>Evening</li><li class="dot" aria-hidden="true"></li>
-                <li>Year-round</li>
-              </ul>
               <div class="xp-card__foot">
                 <span class="xp-card__price"><em>From</em> 42 OMR</span>
                 <span class="xp-card__more">
-                  <span class="lbl lbl--shut">Booking</span>
-                  <span class="lbl lbl--open">Close</span>
+                  <span class="sr-only lbl--shut">Booking details</span>
+                  <span class="sr-only lbl--open">Close booking details</span>
                   <i aria-hidden="true"></i>
                 </span>
               </div>
@@ -1583,7 +1657,7 @@ body {
   var bands = [].slice.call(document.querySelectorAll(".xp-band"));
   var cards = [].slice.call(document.querySelectorAll(".xp-card"));
   var panel = document.getElementById("xp-collection");
-  var note  = document.getElementById("xp-note");
+  var pill  = document.querySelector(".xp-bands__pill");
   var count = document.getElementById("xp-count");
   if (!bands.length || !cards.length || !panel) return;
 
@@ -1605,8 +1679,39 @@ body {
     });
 
     panel.setAttribute("aria-labelledby", tab.id);
-    if (note)  note.textContent  = tab.getAttribute("data-note") || "";
     if (count) count.textContent = shown + (shown === 1 ? " experience" : " experiences");
+    movePill(tab);
+  }
+
+  /* The pill is measured off the tab it belongs to rather than given a
+     width in the stylesheet, because the four words are different lengths
+     and the fill has to take the shape of whichever one is chosen.
+     offsetLeft is relative to .xp-bands, which is the offset parent of
+     the pill, so no arithmetic is needed. */
+  function movePill(tab) {
+    if (!pill) return;
+    pill.style.left  = tab.offsetLeft + "px";
+    pill.style.width = tab.offsetWidth + "px";
+    keepInView(tab);
+  }
+
+  /* Below 900px the four words do not fit and the strip scrolls, which
+     means the chosen one can be sitting outside it — the fill would then
+     be somewhere off to the right where nobody can see which pillar they
+     are on. This brings it back into the strip, and only the strip: it
+     writes scrollLeft rather than calling scrollIntoView, which would
+     take the whole page with it. */
+  var strip = bands[0] && bands[0].parentNode;
+  function keepInView(tab) {
+    if (!strip || strip.scrollWidth <= strip.clientWidth) return;
+    var pad  = 16;
+    var left = tab.offsetLeft - pad;
+    var right = tab.offsetLeft + tab.offsetWidth + pad;
+    if (left < strip.scrollLeft) {
+      strip.scrollLeft = left;
+    } else if (right > strip.scrollLeft + strip.clientWidth) {
+      strip.scrollLeft = right - strip.clientWidth;
+    }
   }
 
   bands.forEach(function (tab, i) {
@@ -1618,14 +1723,30 @@ body {
       e.preventDefault();
       var next = bands[(i + step + bands.length) % bands.length];
       next.focus();
+      chosen = next;
       show(next);
     });
   });
 
   /* whichever tab the markup already marks as chosen, so the count and
-     the note are right before anything is clicked */
+     the pill are right before anything is clicked */
   var initial = bands.filter(function (b) { return b.getAttribute("aria-selected") === "true"; })[0];
-  show(initial || bands[0]);
+  var chosen  = initial || bands[0];
+  bands.forEach(function (b) {
+    b.addEventListener("click", function () { chosen = b; });
+  });
+  show(chosen);
+
+  /* the words are set in --u, so all four widths change with the window
+     and the pill has to be re-measured against them */
+  addEventListener("resize", function () { movePill(chosen); });
+
+  /* Manrope arriving after first paint reflows the row underneath, which
+     would otherwise leave the pill at the width it measured against the
+     fallback face */
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function () { movePill(chosen); });
+  }
 })();
 </script>
 
